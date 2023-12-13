@@ -1,7 +1,10 @@
 package org.example.lesson1;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+
+import static org.example.lesson1.Constants.PATH_IN;
+import static org.example.lesson1.Constants.PATH_OUT;
 
 /*Создайте java-приложение, которое будет считывать данные из источника (файл in.txt) и выполнять их сортировку.
 Данные имеют табличную структуру. Строки разделены переносом строки. Столбцы – знаком табуляции.
@@ -11,14 +14,13 @@ import java.util.Collections;
 При этом: любое число в колонке выше любого не числа, числа отсортированы по возрастанию, строки в лексикографическом порядке.
 */
 public class Main {
+
     public static void main(String[] args) {
-        FileManager fileManager = new FileManager();
-        String pathToInputFile = "src/main/resources/in.txt";
-        String pathToOutputFile = "src/main/resources/out.txt";
-        ArrayList<StringContainer> data = fileManager.readFile(pathToInputFile, "\\s+");
 
+        DataComparator.lastSortColumnIndex = 1;
+        List<DataComparator> data = FileManager.readFile(PATH_IN, "\t");
         Collections.sort(data);
+        FileManager.writeFile(PATH_OUT, data);
 
-        fileManager.writeFile(pathToOutputFile, data);
     }
 }

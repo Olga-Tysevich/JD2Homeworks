@@ -4,36 +4,32 @@ import java.io.*;
 import java.nio.file.InvalidPathException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class FileManager {
 
-    public ArrayList<StringContainer> readFile(String path, String columnSeparator) {
-        ArrayList<ArrayList<String>> data = new ArrayList<>();
-        ArrayList<String> strings;
-        File file = new File(path);
+    public static List<DataComparator> readFile(String inFilePath, String columnSeparator) {
+        List<DataComparator> data = new ArrayList<>();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))){
+        try (BufferedReader reader = new BufferedReader(new FileReader(inFilePath))) {
             while (reader.ready()) {
-                strings = Arrays.stream(reader.readLine().split(columnSeparator)).collect(Collectors.toCollection(ArrayList::new));
-                data.add(strings);
+                data.add(new DataComparator(
+                        Arrays.stream(reader.readLine()
+                                        .split(columnSeparator))
+                                .collect(Collectors.toCollection(ArrayList::new))));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        ArrayList<StringContainer> result = new ArrayList<>();
-        data.forEach(s -> result.add(new StringContainer(s)));
-        return result;
+        return data;
     }
 
-    public void writeFile(String path, ArrayList<StringContainer> data) {
-        File file = new File(path);
-
-        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+    public static void writeFile(String outFilePath, List<DataComparator> data) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(outFilePath))) {
             data.forEach(sc -> writer.println(sc.toString()));
         } catch (IOException e) {
-            throw new InvalidPathException(path, "Invalid path");
+            throw new InvalidPathException(outFilePath, "Invalid path");
         }
     }
 
