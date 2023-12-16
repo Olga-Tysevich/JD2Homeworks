@@ -1,4 +1,4 @@
-package org.example.lesson2.models;
+package org.example.lesson2.task1scientists.models;
 
 import java.util.HashSet;
 import java.util.Set;

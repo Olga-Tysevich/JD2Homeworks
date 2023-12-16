@@ -1,15 +1,15 @@
-package org.example.lesson2;
+package org.example.lesson2.task1scientists;
 
-import org.example.lesson2.models.Factory;
-import org.example.lesson2.models.RobotParts;
-import org.example.lesson2.models.Scientist;
+import org.example.lesson2.task1scientists.models.Factory;
+import org.example.lesson2.task1scientists.models.RobotParts;
+import org.example.lesson2.task1scientists.models.Scientist;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
-import static org.example.lesson2.Constants.*;
+import static org.example.lesson2.task1scientists.Constants.*;
 /*Двое безумных учёных устроили соревнование, кто из них соберёт больше роботов за 100 ночей.
 Для этого каждую ночь каждый из них отправляет своего прислужника на свалку фабрики роботов за деталями.
 Чтобы собрать одного робота им нужно:
@@ -27,18 +27,19 @@ import static org.example.lesson2.Constants.*;
 
 public class Competition {
     private List<RobotParts> dump;
-    private List<Scientist> scientist = new ArrayList<>();
+    private List<Scientist> scientists = new ArrayList<>();
     private Factory factory;
 
     public Competition() {
         this.factory = new Factory(this);
         for (int i = 1; i <= NUMBER_OF_SCIENTIST; i++) {
-            scientist.add(new Scientist(i, this));
+            scientists.add(new Scientist("Scientist №" + i, this));
         }
         dump = factory.getRandomPart(INITIAL_NUMBER_OF_PARTS);
     }
-    public synchronized void putParts(List<RobotParts> parts) {
-        dump.addAll(parts);
+
+    public synchronized void putPart(RobotParts part) {
+        dump.add(part);
     }
 
     public synchronized RobotParts getPart() {
@@ -47,23 +48,41 @@ public class Competition {
     }
 
     public void startCompetition() {
-        for (int i = 0; i < NUMBER_OF_NIGHTS; i++) {
-            new Thread(factory).start();
-            scientist.forEach(sc -> new Thread(sc.getServant()).start());
-            try {
-                Thread.sleep(DAY_LENGTH);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        if (scientists.size() != 1) {
+            for (int i = 0; i < NUMBER_OF_NIGHTS; i++) {
+                new Thread(factory).start();
+                scientists.forEach(sc -> new Thread(sc.getServant()).start());
+                try {
+                    Thread.sleep(DAY_LENGTH);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
+            determineWinner();
+        } else {
+            System.out.println("You've already won! 'Cause you played alone...");
         }
-        printResult();
     }
 
-    private void printResult() {
-        scientist.forEach(s -> System.out.println(s.getName() + ", robotParts: " + s.getServant().getRobotParts().size()));
-        Scientist winner = scientist.stream().max(Comparator.comparingInt(Scientist::getNumberOfRobots)).orElse(null);
-        scientist.forEach(sc -> System.out.println("Number of robots a " + sc.getName() + " has: " + sc.getNumberOfRobots()));
-        assert winner != null;
-        System.out.println("Winner: " + winner.getName());
+    private void determineWinner() {
+        Scientist winner = null;
+        boolean gameDraw = true;
+        for (int i = 0; i < scientists.size()-1; i++) {
+            if (scientists.get(i).getNumberOfRobots() != scientists.get(i + 1).getNumberOfRobots()) {
+                gameDraw = false;
+                break;
+            }
+        }
+        if (!gameDraw) {
+            winner = scientists.stream().max(Comparator.comparingInt(Scientist::getNumberOfRobots)).orElse(null);
+        }
+        printResult(winner);
+    }
+
+    private void printResult(Scientist winner) {
+        scientists.forEach(sc -> System.out.println("Number of robots a " + sc.getName() + " has: " + sc.getNumberOfRobots()));
+        if (winner != null) {
+            System.out.println("Winner: " + winner.getName());
+        }
     }
 }

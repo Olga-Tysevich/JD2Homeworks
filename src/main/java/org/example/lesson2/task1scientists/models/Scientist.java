@@ -1,6 +1,6 @@
-package org.example.lesson2.models;
+package org.example.lesson2.task1scientists.models;
 
-import org.example.lesson2.Competition;
+import org.example.lesson2.task1scientists.Competition;
 
 import java.util.*;
 
@@ -9,8 +9,8 @@ public class Scientist {
     private List<Robot> robots;
     private Servant servant;
 
-    public Scientist(int number, Competition competition) {
-        this.name = "Scientist" + number;
+    public Scientist(String number, Competition competition) {
+        this.name =  number;
         this.robots = new ArrayList<>();
         this.servant = new Servant(competition);
     }

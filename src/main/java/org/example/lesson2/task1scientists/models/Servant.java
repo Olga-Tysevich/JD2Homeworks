@@ -1,17 +1,16 @@
-package org.example.lesson2.models;
+package org.example.lesson2.task1scientists.models;
 
-import org.example.lesson2.Competition;
+import org.example.lesson2.task1scientists.Competition;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static org.example.lesson2.Constants.NUMBER_OF_RANDOM_PARTS;
+import static org.example.lesson2.task1scientists.Constants.NUMBER_OF_RANDOM_PARTS;
 
 public class Servant implements Runnable {
     private Competition competition;
     private List<RobotParts> robotParts = new ArrayList<>();
-    private int dayCounter;
 
     public Servant(Competition competition) {
         this.competition = competition;
@@ -26,8 +25,6 @@ public class Servant implements Runnable {
                 robotParts.add(randomPart);
             }
         }
-        dayCounter++;
-        System.out.println("Day: " + dayCounter + ", " + Thread.currentThread().getName() + " max number: " + maxNumberOfParts);
     }
 
     public List<RobotParts> getRobotParts() {
