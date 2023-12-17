@@ -83,6 +83,8 @@ public class Competition {
         scientists.forEach(sc -> System.out.println("Number of robots a " + sc.getName() + " has: " + sc.getNumberOfRobots()));
         if (winner != null) {
             System.out.println("Winner: " + winner.getName());
+        } else {
+            System.out.println("Game draw!");
         }
     }
 }
