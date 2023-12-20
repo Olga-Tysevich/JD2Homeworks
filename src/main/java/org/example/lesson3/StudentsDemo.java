@@ -15,9 +15,9 @@ public class StudentsDemo {
     public static void main(String[] args) {
         Skill skill = new Skill("java core", 66);
         List<Student> students = new ArrayList<>();
-        students.addAll(generateStudents(3, new Type1(3, 1)));
-        students.addAll(generateStudents(3, new Type2(2, 2)));
-        students.addAll(generateStudents(3, new Type3(1, 3)));
+        students.addAll(generateStudents(3, new Type1()));
+        students.addAll(generateStudents(3, new Type2()));
+        students.addAll(generateStudents(3, new Type3()));
         students.forEach(student -> student.study(skill));
     }
 

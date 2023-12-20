@@ -16,11 +16,8 @@ import static org.example.lesson1.Constants.PATH_OUT;
 public class Main {
 
     public static void main(String[] args) {
-
-        DataComparator.lastSortColumnIndex = 1;
         List<DataComparator> data = FileManager.readFile(PATH_IN, "\t");
         Collections.sort(data);
         FileManager.writeFile(PATH_OUT, data);
-
     }
 }

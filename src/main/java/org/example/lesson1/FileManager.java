@@ -20,7 +20,7 @@ public class FileManager {
                                 .collect(Collectors.toCollection(ArrayList::new))));
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new InvalidPathException(inFilePath, "Invalid path");
         }
         return data;
     }
