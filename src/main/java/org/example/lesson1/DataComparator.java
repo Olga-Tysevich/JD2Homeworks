@@ -3,9 +3,9 @@ package org.example.lesson1;
 import java.util.List;
 
 import static java.lang.Math.min;
+import static org.example.lesson1.Constants.LAST_SORT_COLUMN_INDEX;
 
 public class DataComparator implements Comparable<DataComparator> {
-    public static Integer lastSortColumnIndex;
     private List<String> row;
 
     public DataComparator(List<String> row) {
@@ -15,8 +15,7 @@ public class DataComparator implements Comparable<DataComparator> {
     @Override
     public int compareTo(DataComparator anotherRow) {
         int currentIndex = 0;
-        int maxIndex = min(min(row.size() - 1, anotherRow.getRow().size() - 1),
-                lastSortColumnIndex == null? min(row.size() - 1, anotherRow.getRow().size() - 1) : lastSortColumnIndex);
+        int maxIndex = min(min(row.size() - 1, anotherRow.getRow().size() - 1), LAST_SORT_COLUMN_INDEX);
         int result;
 
         do {
