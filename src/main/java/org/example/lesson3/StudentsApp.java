@@ -9,22 +9,22 @@ import org.example.lesson3.strategies.Type3;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudentsDemo {
+public class StudentsApp {
     private static int studentCounter;
 
     public static void main(String[] args) {
-        Skill skill = new Skill("java core", 66);
+        Skill skill = new Skill("java core", 198);
         List<Student> students = new ArrayList<>();
         students.addAll(generateStudents(3, new Type1()));
         students.addAll(generateStudents(3, new Type2()));
         students.addAll(generateStudents(3, new Type3()));
-        students.forEach(student -> student.study(skill));
+        students.forEach(student -> System.out.println(student.study(skill)));
     }
 
     public static List<Student> generateStudents(int numberOfStudents, LearningStrategy strategyType) {
         List<Student> students = new ArrayList<>();
         for (int i = 0; i < numberOfStudents ; i++) {
-            students.add(new Student("Student" + ++studentCounter, strategyType));
+            students.add(new Student("Студент №" + ++studentCounter, strategyType));
         }
         return students;
     }
