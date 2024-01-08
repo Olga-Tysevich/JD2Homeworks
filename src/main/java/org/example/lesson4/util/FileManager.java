@@ -1,10 +1,10 @@
-package org.example.lesson4;
+package org.example.lesson4.util;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FieManager {
+public class FileManager {
     public static <T extends Serializable> void writeObjects(List<T> objects, String outFilePath) {
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(outFilePath))) {
             for (T o : objects) {

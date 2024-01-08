@@ -1,4 +1,4 @@
-package org.example.lesson4;
+package org.example.lesson4.util;
 
 public enum Surnames {
     SMITH,

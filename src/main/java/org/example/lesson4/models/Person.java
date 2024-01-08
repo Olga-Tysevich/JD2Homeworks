@@ -1,4 +1,4 @@
-package org.example.lesson4;
+package org.example.lesson4.models;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -40,11 +40,9 @@ public class Person implements Serializable {
 
     @Override
     public String toString() {
-        return "Person{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", age=" + age +
-                '}';
+        return "Name='" + name +
+                ", surname='" + surname +
+                ", age=" + age;
     }
 
     @Override
