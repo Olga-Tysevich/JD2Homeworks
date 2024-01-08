@@ -20,7 +20,6 @@ public class Factory extends Thread{
             for (int j = 0; j < new Random().nextInt(NUMBER_OF_RANDOM_PARTS) + 1; j++) {
                 competition.putPart(RobotParts.values()[new Random().nextInt(RobotParts.values().length)]);
             }
-//            System.out.println("Factory: " + Thread.currentThread().getName() + " night №" + i);
             try {
                 Thread.sleep(DAY_LENGTH);
             } catch (InterruptedException e) {

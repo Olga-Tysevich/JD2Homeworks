@@ -54,8 +54,8 @@ public class Competition {
                 scientists.forEach(sc -> threads.add(new Thread(sc.getServant())));
                 threads.forEach(Thread::start);
                 factory.start();
-                for (Thread thr : threads) {
-                    thr.join();
+                for (Thread thread : threads) {
+                    thread.join();
                 }
                 factory.join();
             } catch (InterruptedException e) {
