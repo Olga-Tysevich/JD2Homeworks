@@ -35,7 +35,7 @@ public class Competition {
         for (int i = 1; i <= NUMBER_OF_SCIENTIST; i++) {
             scientists.add(new Scientist("Scientist №" + i, this));
         }
-        dump = factory.getRandomPart(INITIAL_NUMBER_OF_PARTS);
+        dump = factory.getRandomParts(INITIAL_NUMBER_OF_PARTS);
     }
 
     public synchronized void putPart(RobotParts part) {
@@ -49,14 +49,17 @@ public class Competition {
 
     public void startCompetition() {
         if (scientists.size() != 1) {
-            for (int i = 0; i < NUMBER_OF_NIGHTS; i++) {
-                new Thread(factory).start();
-                scientists.forEach(sc -> new Thread(sc.getServant()).start());
-                try {
-                    Thread.sleep(DAY_LENGTH);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            try {
+                List<Thread> threads = new ArrayList<>();
+                scientists.forEach(sc -> threads.add(new Thread(sc.getServant())));
+                threads.forEach(Thread::start);
+                factory.start();
+                for (Thread thr : threads) {
+                    thr.join();
                 }
+                factory.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
             determineWinner();
         } else {
@@ -67,7 +70,7 @@ public class Competition {
     private void determineWinner() {
         Scientist winner = null;
         boolean gameDraw = true;
-        for (int i = 0; i < scientists.size()-1; i++) {
+        for (int i = 0; i < scientists.size() - 1; i++) {
             if (scientists.get(i).getNumberOfRobots() != scientists.get(i + 1).getNumberOfRobots()) {
                 gameDraw = false;
                 break;

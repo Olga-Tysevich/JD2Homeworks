@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static org.example.lesson2.task1scientists.Constants.NUMBER_OF_RANDOM_PARTS;
+import static org.example.lesson2.task1scientists.Constants.*;
 
 public class Servant implements Runnable {
     private Competition competition;
@@ -18,12 +18,20 @@ public class Servant implements Runnable {
 
     @Override
     public void run() {
-        int maxNumberOfParts = new Random().nextInt(NUMBER_OF_RANDOM_PARTS) + 1;
-        for (int i = 0; i < maxNumberOfParts; i++) {
-            RobotParts randomPart = competition.getPart();
-            if (randomPart != null) {
-                robotParts.add(randomPart);
+        for (int i = 1; i <= NUMBER_OF_NIGHTS; i++) {
+            int maxNumberOfParts = new Random().nextInt(NUMBER_OF_RANDOM_PARTS) + 1;
+            for (int j = 0; j < maxNumberOfParts; j++) {
+                RobotParts randomPart = competition.getPart();
+                if (randomPart != null) {
+                    robotParts.add(randomPart);
+                }
             }
+            try {
+                Thread.sleep(DAY_LENGTH);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Servant: " + Thread.currentThread().getName() + " night №" + i);
         }
     }
 
