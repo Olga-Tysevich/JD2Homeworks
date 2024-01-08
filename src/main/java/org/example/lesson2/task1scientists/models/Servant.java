@@ -31,7 +31,6 @@ public class Servant implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("Servant: " + Thread.currentThread().getName() + " night №" + i);
         }
     }
 
