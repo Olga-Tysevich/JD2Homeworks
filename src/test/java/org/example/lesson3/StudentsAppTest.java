@@ -1,4 +1,4 @@
-package lesson3;
+package org.example.lesson3;
 
 import org.example.lesson3.models.Skill;
 import org.example.lesson3.models.Student;
