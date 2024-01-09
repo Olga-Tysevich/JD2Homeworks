@@ -38,8 +38,8 @@ public class Competition {
         dump = factory.getRandomParts(INITIAL_NUMBER_OF_PARTS);
     }
 
-    public synchronized void putPart(RobotParts part) {
-        dump.add(part);
+    public synchronized void putParts(List<RobotParts> parts) {
+        dump.addAll(parts);
     }
 
     public synchronized RobotParts getPart() {

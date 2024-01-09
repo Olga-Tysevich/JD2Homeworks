@@ -20,12 +20,15 @@ public class Servant implements Runnable {
     public void run() {
         for (int i = 1; i <= NUMBER_OF_NIGHTS; i++) {
             int maxNumberOfParts = new Random().nextInt(NUMBER_OF_RANDOM_PARTS) + 1;
+            List<RobotParts> todayRobotParts = new ArrayList<>();
             for (int j = 0; j < maxNumberOfParts; j++) {
                 RobotParts randomPart = competition.getPart();
                 if (randomPart != null) {
-                    robotParts.add(randomPart);
+                    todayRobotParts.add(randomPart);
                 }
             }
+            robotParts.addAll(todayRobotParts);
+            System.out.println("Day " + i + " Servant " + Thread.currentThread().getName() + " get " + todayRobotParts.size() + " robot parts");
             try {
                 Thread.sleep(DAY_LENGTH);
             } catch (InterruptedException e) {

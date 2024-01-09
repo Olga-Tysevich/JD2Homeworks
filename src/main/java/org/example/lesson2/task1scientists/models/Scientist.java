@@ -14,6 +14,14 @@ public class Scientist {
         this.robots = new ArrayList<>();
         this.servant = new Servant(competition);
     }
+    public int getNumberOfRobots() {
+        boolean isRobotAssembled;
+        do {
+            isRobotAssembled = createRobot();
+        } while (isRobotAssembled);
+        return robots.size();
+    }
+
     private boolean createRobot() {
         List<RobotParts> parts = new ArrayList<>(servant.getRobotParts());
         Robot robot = new Robot();
@@ -26,14 +34,6 @@ public class Scientist {
             }
         }
         return false;
-    }
-
-    public int getNumberOfRobots() {
-        boolean isRobotAssembled;
-        do {
-            isRobotAssembled = createRobot();
-        } while (isRobotAssembled);
-        return robots.size();
     }
 
     public String getName() {
