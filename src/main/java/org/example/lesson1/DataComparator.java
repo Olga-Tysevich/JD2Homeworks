@@ -36,7 +36,7 @@ public class DataComparator implements Comparable<DataComparator> {
         } else if (!isFirstElNumber && !isSecondElNumber) {
             return firstElement.compareTo(secondElement);
         } else {
-            return !isFirstElNumber? 1 : -1;
+            return !isFirstElNumber ? 1 : -1;
         }
     }
 
