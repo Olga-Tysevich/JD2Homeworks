@@ -4,6 +4,7 @@ import org.example.lesson4.models.Person;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PersonsGenerator {
@@ -18,7 +19,7 @@ public class PersonsGenerator {
     public  List<Person> generatePersonsGroup(int groupSize) {
         return Stream.generate(this::generatePerson)
                 .limit(groupSize)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     private Person generatePerson() {

@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -37,17 +38,29 @@ public class FileManagerTest {
         List<Person> expected = new ArrayList<>(List.of(PERSON_1, PERSON_2));
         FileManager.writeObjects(expected, FILE_PATH);
 
-        long isFilesTheSame = 0;
-        try {
-            isFilesTheSame =  Files.mismatch(Path.of(OBJECTS_FILE_PATH), Path.of(FILE_PATH));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        long isFilesTheSame = compareFiles(OBJECTS_FILE_PATH, FILE_PATH);
 
-        List<Person> actual = FileManager.readObjects(FILE_PATH).stream().map(p -> (Person) p).toList();
+        List<Person> actual = FileManager.readObjects(FILE_PATH).stream().map(p -> (Person) p).collect(Collectors.toList());
         assertTrue(new File(FILE_PATH).exists());
         assertEquals(-1L, isFilesTheSame);
         assertEquals(expected, actual);
+    }
+
+    private long compareFiles(String path1, String path2) {
+        try (BufferedInputStream fis1 = new BufferedInputStream(new FileInputStream(path1));
+             BufferedInputStream fis2 = new BufferedInputStream(new FileInputStream(path2))) {
+            int currentByte;
+            long currentPos = 1;
+            while ((currentByte = fis1.read()) != -1) {
+                if (currentByte != fis2.read()) {
+                    return currentPos;
+                }
+                currentPos++;
+            }
+            return fis2.read() == -1? -1 : currentPos;
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
     }
 
     @AfterAll

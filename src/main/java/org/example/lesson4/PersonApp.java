@@ -6,6 +6,8 @@ import org.example.lesson4.models.Person;
 import org.example.lesson4.util.PersonsGenerator;
 import org.example.lesson4.util.PersonsManager;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.example.lesson4.Constants.*;
 import static org.example.lesson4.Constants.FILE_PATH;
 
@@ -32,7 +34,7 @@ public class PersonApp {
 
         List<Person> persons =  FileManager.readObjects(FILE_PATH).stream()
                 .map(p -> (Person) p)
-                .toList();
+                .collect(Collectors.toList());
 
         List<String> surnamesAndNames = PersonsManager.getSurnamesAndNames(persons);
         surnamesAndNames.forEach(System.out::println);
