@@ -9,8 +9,8 @@ public class Scientist {
     private List<Robot> robots;
     private Servant servant;
 
-    public Scientist(String number, Competition competition) {
-        this.name =  number;
+    public Scientist(String name, Competition competition) {
+        this.name =  name;
         this.robots = new ArrayList<>();
         this.servant = new Servant(competition);
     }
