@@ -12,18 +12,19 @@ import java.util.List;
 import static org.example.lesson3.Constants.*;
 
 public class StudentsApp {
-    private static int studentCounter;
+    private int studentCounter;
 
     public static void main(String[] args) {
+        StudentsApp app = new StudentsApp();
         Skill skill = new Skill(SKILL_NAME, DURATION_OF_SKILL_LEARNING);
         List<Student> students = new ArrayList<>();
-        students.addAll(generateStudents(NUMBER_OF_STUDENTS_TYPE_1, new Type1()));
-        students.addAll(generateStudents(NUMBER_OF_STUDENTS_TYPE_2, new Type2()));
-        students.addAll(generateStudents(NUMBER_OF_STUDENTS_TYPE_3, new Type3()));
+        students.addAll(app.generateStudents(NUMBER_OF_STUDENTS_TYPE_1, new Type1()));
+        students.addAll(app.generateStudents(NUMBER_OF_STUDENTS_TYPE_2, new Type2()));
+        students.addAll(app.generateStudents(NUMBER_OF_STUDENTS_TYPE_3, new Type3()));
         students.forEach(student -> System.out.println(student.study(skill)));
     }
 
-    public static List<Student> generateStudents(int numberOfStudents, LearningStrategy strategyType) {
+    public List<Student> generateStudents(int numberOfStudents, LearningStrategy strategyType) {
         List<Student> students = new ArrayList<>();
         for (int i = 0; i < numberOfStudents ; i++) {
             students.add(new Student(STUDENT_NUMBER + ++studentCounter, strategyType));
