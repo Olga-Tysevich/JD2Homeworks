@@ -3,6 +3,7 @@ package org.example.lesson1;
 import java.util.List;
 
 import static java.lang.Math.min;
+import static org.example.lesson1.Constants.COLUMN_SEPARATOR;
 import static org.example.lesson1.Constants.LAST_SORT_COLUMN_INDEX;
 
 public class DataComparator implements Comparable<DataComparator> {
@@ -51,7 +52,7 @@ public class DataComparator implements Comparable<DataComparator> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        row.forEach(el -> sb.append(el).append("\t"));
+        row.forEach(el -> sb.append(el).append(COLUMN_SEPARATOR));
         return sb.toString();
     }
 

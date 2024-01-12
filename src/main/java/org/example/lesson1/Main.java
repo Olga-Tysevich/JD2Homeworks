@@ -3,8 +3,7 @@ package org.example.lesson1;
 import java.util.Collections;
 import java.util.List;
 
-import static org.example.lesson1.Constants.PATH_IN;
-import static org.example.lesson1.Constants.PATH_OUT;
+import static org.example.lesson1.Constants.*;
 
 /*Создайте java-приложение, которое будет считывать данные из источника (файл in.txt) и выполнять их сортировку.
 Данные имеют табличную структуру. Строки разделены переносом строки. Столбцы – знаком табуляции.
@@ -16,7 +15,7 @@ import static org.example.lesson1.Constants.PATH_OUT;
 public class Main {
 
     public static void main(String[] args) {
-        List<DataComparator> data = FileManager.readFile(PATH_IN, "\t");
+        List<DataComparator> data = FileManager.readFile(PATH_IN, COLUMN_SEPARATOR);
         Collections.sort(data);
         FileManager.writeFile(PATH_OUT, data);
     }
