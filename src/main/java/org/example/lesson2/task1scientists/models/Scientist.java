@@ -14,7 +14,7 @@ public class Scientist {
         this.robots = new ArrayList<>();
         this.servant = new Servant(competition);
     }
-    public int getNumberOfRobots() {
+    public int createRobots() {
         boolean isRobotAssembled;
         do {
             isRobotAssembled = createRobot();
@@ -42,5 +42,9 @@ public class Scientist {
 
     public Servant getServant() {
         return servant;
+    }
+
+    public int getNumberOfRobots() {
+        return robots.size();
     }
 }

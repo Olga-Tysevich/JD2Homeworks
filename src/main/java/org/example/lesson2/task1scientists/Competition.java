@@ -33,7 +33,7 @@ public class Competition {
     public Competition() {
         this.factory = new Factory(this);
         for (int i = 1; i <= NUMBER_OF_SCIENTIST; i++) {
-            scientists.add(new Scientist("Scientist №" + i, this));
+            scientists.add(new Scientist(SCIENTIST_NAME + i, this));
         }
         dump = factory.getRandomParts(INITIAL_NUMBER_OF_PARTS);
     }
@@ -48,7 +48,7 @@ public class Competition {
     }
 
     public void startCompetition() {
-        if (scientists.size() != 1) {
+        if (scientists.size() > 1) {
             try {
                 List<Thread> threads = new ArrayList<>();
                 scientists.forEach(sc -> threads.add(new Thread(sc.getServant())));
@@ -63,7 +63,7 @@ public class Competition {
             }
             determineWinner();
         } else {
-            System.out.println("You've already won! 'Cause you played alone...");
+            System.out.println(ERROR_MESSAGE);
         }
     }
 
@@ -71,7 +71,7 @@ public class Competition {
         Scientist winner = null;
         boolean gameDraw = true;
         for (int i = 0; i < scientists.size() - 1; i++) {
-            if (scientists.get(i).getNumberOfRobots() != scientists.get(i + 1).getNumberOfRobots()) {
+            if (scientists.get(i).createRobots() != scientists.get(i + 1).createRobots()) {
                 gameDraw = false;
                 break;
             }

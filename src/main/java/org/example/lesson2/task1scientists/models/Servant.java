@@ -11,6 +11,7 @@ import static org.example.lesson2.task1scientists.Constants.*;
 public class Servant implements Runnable {
     private Competition competition;
     private List<RobotParts> robotParts = new ArrayList<>();
+    private Random random = new Random();
 
     public Servant(Competition competition) {
         this.competition = competition;
@@ -19,7 +20,7 @@ public class Servant implements Runnable {
     @Override
     public void run() {
         for (int i = 1; i <= NUMBER_OF_NIGHTS; i++) {
-            int maxNumberOfParts = new Random().nextInt(NUMBER_OF_RANDOM_PARTS) + 1;
+            int maxNumberOfParts = random.nextInt(SERVANT_MAX_NUMBER_OF_PARTS - SERVANT_MIN_NUMBER_OF_PARTS) + SERVANT_MIN_NUMBER_OF_PARTS;
             List<RobotParts> todayRobotParts = new ArrayList<>();
             for (int j = 0; j < maxNumberOfParts; j++) {
                 RobotParts randomPart = competition.getPart();
