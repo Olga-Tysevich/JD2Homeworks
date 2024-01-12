@@ -69,10 +69,10 @@ public class Competition {
 
     private void determineWinner() {
         Scientist winner = null;
-        boolean gameDraw = true;
+        boolean gameDraw = false;
         for (int i = 0; i < scientists.size() - 1; i++) {
-            if (scientists.get(i).createRobots() != scientists.get(i + 1).createRobots()) {
-                gameDraw = false;
+            if (scientists.get(i).createRobots() == scientists.get(i + 1).createRobots()) {
+                gameDraw = true;
                 break;
             }
         }
