@@ -1,6 +1,8 @@
 CREATE DATABASE PEOPLE;
 
+
 USE PEOPLE;
+
 
 CREATE TABLE PERSON(
                        id INT PRIMARY KEY AUTO_INCREMENT,
@@ -14,6 +16,7 @@ CREATE TABLE PERSON(
                        letter TEXT
 );
 
+
 INSERT INTO PERSON(age, salary, passport, address, dateOfBirthday, dateTimeCreate, timeToLunch, letter)
 VALUES (10, 0.0, 'MP12345678', 'г. Минск, ул. Кальварийская, д. 1, кв. 100', '2014-01-11', '2024-01-11 17:46:35', '11:00:00',
         'Не существует скорости, на которой вы ощутите невесомость.'),
@@ -25,6 +28,7 @@ VALUES (10, 0.0, 'MP12345678', 'г. Минск, ул. Кальварийская
         'Если вы падаете свободно, вы чувствуете невесомость.'),
        (25, 1200.0, 'MP26983652', 'г. Минск, ул. Революционная, д. 9, кв. 1', '1999-01-05', '2024-01-11 18:32:01', '12:20:00',
         'Невесомость — это не то, что вы испытываете, когда падаете в одиночку.');
+
 
 SELECT * FROM PERSON
 WHERE age > 21
