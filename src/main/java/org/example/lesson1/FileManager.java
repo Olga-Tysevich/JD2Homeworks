@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.example.lesson1.Constants.ERROR_MESSAGE;
+
 public class FileManager {
 
     public static List<DataComparator> readFile(String inFilePath, String columnSeparator) {
@@ -20,7 +22,7 @@ public class FileManager {
                                 .collect(Collectors.toCollection(ArrayList::new))));
             }
         } catch (IOException e) {
-            throw new InvalidPathException(inFilePath, "Invalid path");
+            throw new InvalidPathException(inFilePath, ERROR_MESSAGE);
         }
         return data;
     }
@@ -29,7 +31,7 @@ public class FileManager {
         try (PrintWriter writer = new PrintWriter(new FileWriter(outFilePath))) {
             data.forEach(sc -> writer.println(sc.toString()));
         } catch (IOException e) {
-            throw new InvalidPathException(outFilePath, "Invalid path");
+            throw new InvalidPathException(outFilePath, ERROR_MESSAGE);
         }
     }
 
