@@ -19,24 +19,28 @@ public class Factory extends Thread {
     @Override
     public void run() {
         for (int i = 1; i <= NUMBER_OF_NIGHTS; i++) {
-            List<RobotParts> parts = getRandomParts(
+            List<RobotParts> parts = createRandomParts(
                     random.nextInt(FACTORY_MAX_NUMBER_OF_PARTS - FACTORY_MIN_NUMBER_OF_PARTS) + FACTORY_MIN_NUMBER_OF_PARTS);
             competition.putParts(parts);
             System.out.println("Day " + i + ", factory put " + parts.size() + " robot parts");
-            try {
-                Thread.sleep(DAY_LENGTH);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            waitNextNight();
         }
     }
 
-    public List<RobotParts> getRandomParts(int numberOfParts) {
+    public List<RobotParts> createRandomParts(int numberOfParts) {
         List<RobotParts> parts = new ArrayList<>();
         for (int i = 0; i < numberOfParts; i++) {
             parts.add(RobotParts.values()[random.nextInt(RobotParts.values().length)]);
         }
         return parts;
+    }
+
+    private void waitNextNight() {
+        try {
+            Thread.sleep(DAY_LENGTH);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -30,11 +30,15 @@ public class Servant implements Runnable {
             }
             robotParts.addAll(todayRobotParts);
             System.out.println("Day " + i + " Servant " + Thread.currentThread().getName() + " get " + todayRobotParts.size() + " robot parts");
-            try {
-                Thread.sleep(DAY_LENGTH);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            waitNextNight();
+        }
+    }
+
+    private void waitNextNight() {
+        try {
+            Thread.sleep(DAY_LENGTH);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

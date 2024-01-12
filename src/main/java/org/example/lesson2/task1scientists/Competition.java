@@ -35,7 +35,7 @@ public class Competition {
         for (int i = 1; i <= NUMBER_OF_SCIENTIST; i++) {
             scientists.add(new Scientist(SCIENTIST_NAME + i, this));
         }
-        dump = factory.getRandomParts(INITIAL_NUMBER_OF_PARTS);
+        dump = factory.createRandomParts(INITIAL_NUMBER_OF_PARTS);
     }
 
     public synchronized void putParts(List<RobotParts> parts) {
