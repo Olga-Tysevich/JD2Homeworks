@@ -7,19 +7,19 @@ import java.util.List;
 public class FileManager {
     public static <T extends Serializable> void writeObjects (List<T> objects, String outFilePath) {
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(outFilePath))) {
-            objects.forEach(o -> writeObject(outputStream, o));
+            objects.forEach(o -> {
+                try {
+                    outputStream.writeObject(o);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static <T extends Serializable> void writeObject(ObjectOutputStream outputStream, T object) {
-        try {
-            outputStream.writeObject(object);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     public static List<Object> readObjects(String inFilePath) {
         List<Object> result = new ArrayList<>();
