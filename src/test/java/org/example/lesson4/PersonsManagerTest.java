@@ -34,27 +34,12 @@ public class PersonsManagerTest {
     @Test
     public void filterPersonsGroupTest() {
         final Predicate<Person> personUnder21 = p -> p.getAge() < 21;
-        List<Person> expected = new ArrayList<>(List.of(PERSON_1, PERSON_2, PERSON_3, PERSON_4));
+        List<Person> expected = new ArrayList<>(List.of(PERSON_4, PERSON_2, PERSON_1));
         List<Person> actual = PersonsManager.filterPersonsGroup(personList, personUnder21);
 
         assertEquals(expected, actual);
     }
 
-    @Test
-    public void sortBySurnameAndNameTest() {
-        List<Person> expected = new ArrayList<>(List.of(PERSON_4, PERSON_2, PERSON_1, PERSON_3, PERSON_5));
-        List<Person> actual = PersonsManager.sortBySurnameAndName(personList);
-
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void removeDuplicatesTest() {
-        List<Person> expected = new ArrayList<>(List.of(PERSON_1, PERSON_2, PERSON_4, PERSON_5));
-        List<Person> actual = PersonsManager.removeDuplicates(personList);
-
-        assertEquals(expected, actual);
-    }
 
     @Test
     public void getSurnamesAndNamesTest() {

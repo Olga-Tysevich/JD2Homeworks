@@ -11,25 +11,16 @@ public class PersonsManager {
     public static List<Person> filterPersonsGroup(List<Person> personList, Predicate<Person> predicate) {
         return personList.stream()
                 .filter(predicate)
-                .collect(Collectors.toList());
-    }
-
-    public static List<Person> sortBySurnameAndName(List<Person> personList) {
-        return  personList.stream()
+                .peek(System.out::println)
                 .sorted(Comparator.comparing(Person::getSurname)
                         .thenComparing(Person::getName))
-                .collect(Collectors.toList());
-    }
-
-    public static List<Person> removeDuplicates(List<Person> personList) {
-        return personList.stream()
                 .distinct()
                 .collect(Collectors.toList());
     }
 
     public static List<String> getSurnamesAndNames(List<Person> personList) {
         return personList.stream()
-                .map(p ->  p.getSurname() + " " + p.getName())
+                .map(p -> p.getSurname() + " " + p.getName())
                 .collect(Collectors.toList());
     }
 }

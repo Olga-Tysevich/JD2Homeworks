@@ -5,11 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileManager {
-    public static <T extends Serializable> void writeObjects(List<T> objects, String outFilePath) {
+    public static <T extends Serializable> void writeObjects (List<T> objects, String outFilePath) {
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(outFilePath))) {
-            for (T o : objects) {
-                outputStream.writeObject(o);
-            }
+            objects.forEach(o -> writeObject(outputStream, o));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static <T extends Serializable> void writeObject(ObjectOutputStream outputStream, T object) {
+        try {
+            outputStream.writeObject(object);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -26,9 +26,6 @@ public class PersonApp {
     public static void main(String[] args) {
         List<Person> personList = new PersonsGenerator(MIN_AGE, MAX_AGE).generatePersonsGroup(GROUP_SIZE);
         personList = PersonsManager.filterPersonsGroup(personList, PERSON_UNDER_21);
-        personList.forEach(System.out::println);
-        personList = PersonsManager.sortBySurnameAndName(personList);
-        personList = PersonsManager.removeDuplicates(personList);
 
         FileManager.writeObjects(personList, FILE_PATH);
 
