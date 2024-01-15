@@ -49,12 +49,10 @@ public class Competition {
     public void startCompetition() {
         if (scientists.size() > 1) {
             try {
-                List<Thread> threads = new ArrayList<>();
-                scientists.forEach(sc -> threads.add(new Thread(sc.getServant())));
-                threads.forEach(Thread::start);
+                scientists.forEach(Thread::start);
                 factory.start();
-                for (Thread thread : threads) {
-                    thread.join();
+                for (Scientist scientist : scientists) {
+                    scientist.join();
                 }
                 factory.join();
             } catch (InterruptedException e) {
@@ -67,7 +65,6 @@ public class Competition {
     }
 
     private void determineWinner() {
-        scientists.forEach(Scientist::createRobots);
         int maxAmountOfRobots = scientists.stream()
                 .map(Scientist::getNumberOfRobots)
                 .max(Integer::compareTo)
@@ -82,16 +79,15 @@ public class Competition {
     }
 
     private void printResult(List<Scientist> winners) {
-        scientists.forEach(sc -> System.out.println("Number of robots a " + sc.getName() + " has: " + sc.getNumberOfRobots()));
-        if (winners.size() == 1) {
-            System.out.println("Winner: " + winners.get(0).getName());
-        } else if (winners.size() == 2 && scientists.size() == 2){
-            System.out.println("Game draw!");
-        } else if (winners.size() != 0){
-            System.out.println("Winners:");
-            winners.forEach(w -> System.out.println(w.getName()));
+        scientists.forEach(PRINT_NUMBER_OF_ROBOTS);
+        if (HAS_ONE_WINNER.test(winners)) {
+            PRINT_ONE_WINNER.accept(winners);
+        } else if (scientists.size() == winners.size()){
+            PRINT_GAME_DRAW.accept(winners);
+        } else if (HAS_MANY_WINNER.test(winners)){
+            PRINT_ALL_WINNERS.accept(winners);
         } else {
-            System.out.println("Nobody won!");
+            System.out.println(NOBODY_WON_MESSAGE);
         }
     }
 }

@@ -13,4 +13,8 @@ public class Robot {
     public boolean isRobotAssembled() {
         return parts.size() == RobotParts.values().length;
     }
+
+    public void resetRobot() {
+        parts.clear();
+    }
 }
