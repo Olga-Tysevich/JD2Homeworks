@@ -71,7 +71,7 @@ public class Competition {
                 .orElse(-1);
         List<Scientist> winners = new ArrayList<>();
         scientists.forEach(s -> {
-            if (s.getNumberOfRobots() == maxAmountOfRobots){
+            if (s.getNumberOfRobots() == maxAmountOfRobots) {
                 winners.add(s);
             }
         });
@@ -79,13 +79,14 @@ public class Competition {
     }
 
     private void printResult(List<Scientist> winners) {
-        scientists.forEach(PRINT_NUMBER_OF_ROBOTS);
+        scientists.forEach(scientist -> System.out.printf(NUMBER_OF_ROBOTS_MESSAGE, scientist.getName(), scientist.getNumberOfRobots()));
         if (HAS_ONE_WINNER.test(winners)) {
-            PRINT_ONE_WINNER.accept(winners);
-        } else if (scientists.size() == winners.size()){
-            PRINT_GAME_DRAW.accept(winners);
-        } else if (HAS_MANY_WINNER.test(winners)){
-            PRINT_ALL_WINNERS.accept(winners);
+            System.out.printf(ONE_WINNER_MESSAGE, winners.get(WINNER).getName());
+        } else if (scientists.size() == winners.size()) {
+            System.out.println(GAME_DRAW_MESSAGE);
+        } else if (HAS_MANY_WINNER.test(winners)) {
+            System.out.println(MANY_WINNERS_MESSAGE);
+            winners.forEach(w -> System.out.println(w.getName()));
         } else {
             System.out.println(NOBODY_WON_MESSAGE);
         }
