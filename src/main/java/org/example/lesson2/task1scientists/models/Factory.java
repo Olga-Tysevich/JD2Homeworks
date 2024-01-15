@@ -24,7 +24,7 @@ public class Factory extends Thread {
                             - FACTORY_MIN_NUMBER_OF_PARTS)
                             + FACTORY_MIN_NUMBER_OF_PARTS);
             competition.putParts(parts);
-            System.out.println("Day " + i + ", factory put " + parts.size() + " robot parts");
+            System.out.printf(FACTORY_WORK, i, parts.size());
             waitNextNight();
         }
     }

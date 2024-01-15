@@ -1,11 +1,7 @@
 package org.example.lesson2.task1scientists;
 
-
-import org.example.lesson2.task1scientists.models.Factory;
 import org.example.lesson2.task1scientists.models.Scientist;
-
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class Constants {
@@ -26,11 +22,13 @@ public class Constants {
     //factory
     public static final int FACTORY_MIN_NUMBER_OF_PARTS = 1;
     public static final int FACTORY_MAX_NUMBER_OF_PARTS = 4;
+    public static final String FACTORY_WORK = "Day %d, factory put %d robot parts\n";
 
-    //servant
+    //scientist
     public static final int SERVANT_MIN_NUMBER_OF_PARTS = 1;
     public static final int SERVANT_MAX_NUMBER_OF_PARTS = 4;
-
+    public static final String SERVANT_WORK = "Day %d servant %s  get %d robot parts\n";
+    public static final String SCIENTIST_WORK = "Day %d %s  created %d robots\n";
 
     //common
     public static final int NUMBER_OF_NIGHTS = 100;

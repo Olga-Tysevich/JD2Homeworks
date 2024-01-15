@@ -4,8 +4,7 @@ import org.example.lesson2.task1scientists.Competition;
 
 import java.util.*;
 
-import static org.example.lesson2.task1scientists.Constants.DAY_LENGTH;
-import static org.example.lesson2.task1scientists.Constants.NUMBER_OF_NIGHTS;
+import static org.example.lesson2.task1scientists.Constants.*;
 
 public class Scientist extends Thread {
     private List<RobotParts> robotParts = new ArrayList<>();
@@ -23,7 +22,7 @@ public class Scientist extends Thread {
         for (int i = 1; i <= NUMBER_OF_NIGHTS; i++) {
             List<RobotParts> todayRobotParts = new ArrayList<>(servant.pickUpRobotParts());
             robotParts.addAll(todayRobotParts);
-            System.out.println("Day " + i + " Servant " + super.getName() + " get " + todayRobotParts.size() + " robot parts");
+            System.out.printf(SERVANT_WORK, i, super.getName(), todayRobotParts.size());
             createRobots(i);
             waitNextNight();
         }
@@ -36,12 +35,11 @@ public class Scientist extends Thread {
             isRobotAssembled = createRobot();
             robotsCounter = isRobotAssembled ? ++robotsCounter : robotsCounter;
         } while (isRobotAssembled);
-        System.out.println("Day " + day + " " + super.getName() + " created " + robotsCounter + " robots");
+        System.out.printf(SCIENTIST_WORK, day, super.getName(), robotsCounter);
     }
 
     private boolean createRobot() {
         List<RobotParts> parts = new ArrayList<>(robotParts);
-//        Robot robot = new Robot();
         for (RobotParts part : parts) {
             if (currentRobot.addPart(part)) {
                 robotParts.remove(part);
