@@ -5,7 +5,6 @@ import org.example.lesson2.task1scientists.models.RobotParts;
 import org.example.lesson2.task1scientists.models.Scientist;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -29,6 +28,7 @@ public class Competition {
     private List<RobotParts> dump;
     private List<Scientist> scientists = new ArrayList<>();
     private Factory factory;
+    private Random random = new Random();
 
     public Competition() {
         this.factory = new Factory(this);
@@ -43,8 +43,7 @@ public class Competition {
     }
 
     public synchronized RobotParts getPart() {
-        int randomPartIndex = dump.size() != 0 ? new Random().nextInt(dump.size()) : 0;
-        return dump.size() != 0 ? dump.remove(randomPartIndex) : null;
+        return !dump.isEmpty() ? dump.remove(random.nextInt(dump.size())) : null;
     }
 
     public void startCompetition() {
@@ -68,26 +67,31 @@ public class Competition {
     }
 
     private void determineWinner() {
-        Scientist winner = null;
-        boolean gameDraw = false;
-        for (int i = 0; i < scientists.size() - 1; i++) {
-            if (scientists.get(i).createRobots() == scientists.get(i + 1).createRobots()) {
-                gameDraw = true;
-                break;
+        scientists.forEach(Scientist::createRobots);
+        int maxAmountOfRobots = scientists.stream()
+                .map(Scientist::getNumberOfRobots)
+                .max(Integer::compareTo)
+                .orElse(-1);
+        List<Scientist> winners = new ArrayList<>();
+        scientists.forEach(s -> {
+            if (s.getNumberOfRobots() == maxAmountOfRobots){
+                winners.add(s);
             }
-        }
-        if (!gameDraw) {
-            winner = scientists.stream().max(Comparator.comparingInt(Scientist::getNumberOfRobots)).orElse(null);
-        }
-        printResult(winner);
+        });
+        printResult(winners);
     }
 
-    private void printResult(Scientist winner) {
+    private void printResult(List<Scientist> winners) {
         scientists.forEach(sc -> System.out.println("Number of robots a " + sc.getName() + " has: " + sc.getNumberOfRobots()));
-        if (winner != null) {
-            System.out.println("Winner: " + winner.getName());
-        } else {
+        if (winners.size() == 1) {
+            System.out.println("Winner: " + winners.get(0).getName());
+        } else if (winners.size() == 2 && scientists.size() == 2){
             System.out.println("Game draw!");
+        } else if (winners.size() != 0){
+            System.out.println("Winners:");
+            winners.forEach(w -> System.out.println(w.getName()));
+        } else {
+            System.out.println("Nobody won!");
         }
     }
 }

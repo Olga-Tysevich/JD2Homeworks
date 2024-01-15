@@ -20,7 +20,9 @@ public class Servant implements Runnable {
     @Override
     public void run() {
         for (int i = 1; i <= NUMBER_OF_NIGHTS; i++) {
-            int maxNumberOfParts = random.nextInt(SERVANT_MAX_NUMBER_OF_PARTS - SERVANT_MIN_NUMBER_OF_PARTS) + SERVANT_MIN_NUMBER_OF_PARTS;
+            int maxNumberOfParts = random.nextInt(SERVANT_MAX_NUMBER_OF_PARTS + 1
+                    - SERVANT_MIN_NUMBER_OF_PARTS)
+                    + SERVANT_MIN_NUMBER_OF_PARTS;
             List<RobotParts> todayRobotParts = new ArrayList<>();
             for (int j = 0; j < maxNumberOfParts; j++) {
                 RobotParts randomPart = competition.getPart();

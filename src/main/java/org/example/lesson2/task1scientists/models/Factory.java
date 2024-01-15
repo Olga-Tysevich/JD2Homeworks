@@ -20,7 +20,9 @@ public class Factory extends Thread {
     public void run() {
         for (int i = 1; i <= NUMBER_OF_NIGHTS; i++) {
             List<RobotParts> parts = createRandomParts(
-                    random.nextInt(FACTORY_MAX_NUMBER_OF_PARTS - FACTORY_MIN_NUMBER_OF_PARTS) + FACTORY_MIN_NUMBER_OF_PARTS);
+                    random.nextInt(FACTORY_MAX_NUMBER_OF_PARTS + 1
+                            - FACTORY_MIN_NUMBER_OF_PARTS)
+                            + FACTORY_MIN_NUMBER_OF_PARTS);
             competition.putParts(parts);
             System.out.println("Day " + i + ", factory put " + parts.size() + " robot parts");
             waitNextNight();

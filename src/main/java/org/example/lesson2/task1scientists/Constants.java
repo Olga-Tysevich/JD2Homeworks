@@ -1,10 +1,11 @@
 package org.example.lesson2.task1scientists;
 
+
 public class Constants {
     //competition
-    public static final int INITIAL_NUMBER_OF_PARTS = 20;
+    public static final int INITIAL_NUMBER_OF_PARTS = 200;
     public static final String SCIENTIST_NAME = "Scientist №";
-    public static final int NUMBER_OF_SCIENTIST = 2;
+    public static final int NUMBER_OF_SCIENTIST = 4;
     public static final String ERROR_MESSAGE = "Too few competitors";
 
     //factory
