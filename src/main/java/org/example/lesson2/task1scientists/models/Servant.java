@@ -10,14 +10,13 @@ import static org.example.lesson2.task1scientists.Constants.*;
 
 public class Servant {
     private Competition competition;
-    private Random random = new Random();
 
     public Servant(Competition competition) {
         this.competition = competition;
     }
 
     public List<RobotParts> pickUpRobotParts() {
-        int maxNumberOfParts = random.nextInt(SERVANT_MAX_NUMBER_OF_PARTS + 1
+        int maxNumberOfParts = RANDOM.nextInt(SERVANT_MAX_NUMBER_OF_PARTS + 1
                 - SERVANT_MIN_NUMBER_OF_PARTS)
                 + SERVANT_MIN_NUMBER_OF_PARTS;
         List<RobotParts> todayRobotParts = new ArrayList<>();

@@ -7,7 +7,7 @@ import java.util.*;
 import static org.example.lesson2.task1scientists.Constants.*;
 
 public class Scientist extends Thread {
-    private List<RobotParts> robotParts = new ArrayList<>();
+    private final List<RobotParts> robotParts = new ArrayList<>();
     private Robot currentRobot = new Robot();
     private final List<Robot> robots = new ArrayList<>();
     private final Servant servant;
@@ -46,7 +46,7 @@ public class Scientist extends Thread {
             }
             if (currentRobot.isRobotAssembled()) {
                 robots.add(currentRobot);
-                currentRobot.resetRobot();
+                currentRobot = new Robot();
                 return true;
             }
         }

@@ -2,6 +2,7 @@ package org.example.lesson2.task1scientists;
 
 import org.example.lesson2.task1scientists.models.Scientist;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
 
 public class Constants {
@@ -33,6 +34,7 @@ public class Constants {
     //common
     public static final int NUMBER_OF_NIGHTS = 100;
     public static final int DAY_LENGTH = 100;
+    public static final Random RANDOM = new Random();
 
 
 }

@@ -6,7 +6,6 @@ import org.example.lesson2.task1scientists.models.Scientist;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static org.example.lesson2.task1scientists.Constants.*;
 /*Двое безумных учёных устроили соревнование, кто из них соберёт больше роботов за 100 ночей.
@@ -25,10 +24,9 @@ import static org.example.lesson2.task1scientists.Constants.*;
 */
 
 public class Competition {
-    private List<RobotParts> dump;
-    private List<Scientist> scientists = new ArrayList<>();
-    private Factory factory;
-    private Random random = new Random();
+    private final List<RobotParts> dump;
+    private final List<Scientist> scientists = new ArrayList<>();
+    private final Factory factory;
 
     public Competition() {
         this.factory = new Factory(this);
@@ -43,7 +41,7 @@ public class Competition {
     }
 
     public synchronized RobotParts getPart() {
-        return !dump.isEmpty() ? dump.remove(random.nextInt(dump.size())) : null;
+        return !dump.isEmpty() ? dump.remove(RANDOM.nextInt(dump.size())) : null;
     }
 
     public void startCompetition() {
