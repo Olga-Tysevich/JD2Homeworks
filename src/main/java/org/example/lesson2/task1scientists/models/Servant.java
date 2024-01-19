@@ -8,7 +8,7 @@ import java.util.List;
 import static org.example.lesson2.task1scientists.Constants.*;
 
 public class Servant {
-    private Competition competition;
+    private final Competition competition;
 
     public Servant(Competition competition) {
         this.competition = competition;

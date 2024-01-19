@@ -4,7 +4,6 @@ import org.example.lesson2.task1scientists.Competition;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static org.example.lesson2.task1scientists.Constants.*;
 
