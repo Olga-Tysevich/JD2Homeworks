@@ -5,6 +5,7 @@ import org.example.lesson7.connection.SQLConnection;
 import org.example.lesson7.dao.PersonDAO;
 import org.example.lesson7.dao.PersonDAOImpl;
 import org.example.lesson7.dto.PersonDTO;
+import org.example.lesson7.utils.ThrowingConsumerWrapper;
 import org.example.lesson7.utils.GsonManager;
 
 import java.io.IOException;
@@ -41,17 +42,12 @@ public class PersonApp {
         personDTOList.forEach(System.out::println);
 
         List<PersonDTO> personDTOAfterSave = new ArrayList<>();
-        personDTOList.forEach(p -> {
-            try {
-                personDTOAfterSave.add(personDAO.save(p));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
+
+        personDTOList.forEach(ThrowingConsumerWrapper.accept(p-> personDTOAfterSave.add(personDAO.save(p)), SQLException.class));
         System.out.println("\nPersonList after save: \n");
         personDTOAfterSave.forEach(System.out::println);
 
-        int randomId = RANDOM.nextInt(personDTOAfterSave.size() + 1);
+        int randomId = RANDOM.nextInt(personDTOAfterSave.size()) + 1;
         PersonDTO personDTO1 = personDAO.get(randomId);
 
         System.out.println("\nGet random id: " + randomId + " -> " + personDTO1 + "\n");
