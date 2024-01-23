@@ -3,10 +3,14 @@ package org.example.lesson7.dao;
 
 import org.example.lesson7.connection.SQLConnection;
 import org.example.lesson7.dto.PersonDTO;
+import org.example.lesson7.utils.ThrowingConsumerWrapper;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PersonDAOImpl implements PersonDAO {
     private final String insertPerson = "insert into people.person(age, salary, passport, address, "
@@ -16,6 +20,7 @@ public class PersonDAOImpl implements PersonDAO {
     private final String selectById = "select * from people.person where id = ?";
     private final String selectAll = "select * from people.person";
     private final String deleteById = "delete from people.person where id = ?";
+    private final String insertQueryPattern = "insert [\\w\\p{P}\\sа-яА-Я]+";
 
     @Override
     public PersonDTO save(PersonDTO person) throws SQLException {
@@ -27,6 +32,22 @@ public class PersonDAOImpl implements PersonDAO {
         return person;
     }
 
+    public int saveAll(List<PersonDTO> personDTOList) throws SQLException {
+        Connection connection = SQLConnection.getConnection();
+        connection.setAutoCommit(false);
+        int[] insertRows;
+        try (Statement statement= connection.createStatement()){
+            personDTOList.forEach(ThrowingConsumerWrapper.accept(
+                    p -> statement.addBatch(
+                            getQuery(insertQueryPattern, createUpdateQuery(insertPerson, p).toString())),
+                    SQLException.class));
+            insertRows = statement.executeBatch();
+            connection.commit();
+        }
+        connection.setAutoCommit(true);
+        return Arrays.stream(insertRows).sum();
+    }
+
     @Override
     public int update(PersonDTO person) throws SQLException {
         int result;
@@ -35,6 +56,15 @@ public class PersonDAOImpl implements PersonDAO {
             result = statement.executeUpdate();
         }
         return result;
+    }
+
+    private String getQuery(String regex, String preparedStatement) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(preparedStatement);
+        if (matcher.find()) {
+            return preparedStatement.substring(matcher.start(), matcher.end());
+        }
+        return null;
     }
 
     private PreparedStatement createUpdateQuery(String query, PersonDTO person) throws SQLException {

@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface PersonDAO extends DAO<PersonDTO> {
     List<PersonDTO> getAll() throws SQLException;
+    int saveAll(List<PersonDTO> personDTOList) throws SQLException;
 }

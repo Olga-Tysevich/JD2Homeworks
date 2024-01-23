@@ -65,6 +65,9 @@ public class PersonApp {
 
         gsonManager.writePersonDTOList(PERSONS_OUT_FILE_PATH, personDTOS);
 
+        System.out.println("\nInsert all. Updated rows: " + personDAO.saveAll(personDTOList));
+        personDAO.getAll().forEach(System.out::println);
+
         dropDatabase(); //Это просто для меня, что бы одно задание не мешало тренироваться в другом =)
         SQLConnection.closeConnection();
     }
