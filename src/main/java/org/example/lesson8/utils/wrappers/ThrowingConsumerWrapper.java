@@ -1,4 +1,4 @@
-package org.example.lesson7.utils;
+package org.example.lesson8.utils.wrappers;
 
 import java.util.function.Consumer;
 

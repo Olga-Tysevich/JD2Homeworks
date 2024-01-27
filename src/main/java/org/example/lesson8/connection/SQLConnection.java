@@ -1,4 +1,4 @@
-package org.example.lesson7.connection;
+package org.example.lesson8.connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
