@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.stream.Stream;
 
 import static org.example.lesson8.dao.impl.MockConstants.*;
+import static org.example.lesson8.utils.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DAOImplTest<T> {
@@ -21,7 +22,7 @@ class DAOImplTest<T> {
     @AfterAll
     public static void dropDB() {
         TableManager.dropDatabase(PEOPLE_DATABASE);
-        TableManager.dropDatabase(CITY_DATABASE);
+        TableManager.dropDatabase(DOOR_DATABASE);
     }
 
     @ParameterizedTest()
@@ -114,17 +115,17 @@ class DAOImplTest<T> {
 
                 Arguments.of(null, PersonDTO.class, PEOPLE_DATABASE, CREATE_TABLE_PERSON),
 
-                Arguments.of(MockUtils.buildDoor(DOORS_SIZE.get(0), DOORS_TYPE.get(0)), DoorDTO.class, CITY_DATABASE, CREATE_TABLE_HOUSES),
+                Arguments.of(MockUtils.buildDoor(DOORS_SIZE.get(0), DOORS_TYPE.get(0)), DoorDTO.class, DOOR_DATABASE, CREATE_TABLE_DOORS),
 
-                Arguments.of(MockUtils.buildDoor(DOORS_SIZE.get(1), DOORS_TYPE.get(1)), DoorDTO.class, CITY_DATABASE, CREATE_TABLE_HOUSES),
+                Arguments.of(MockUtils.buildDoor(DOORS_SIZE.get(1), DOORS_TYPE.get(1)), DoorDTO.class, DOOR_DATABASE, CREATE_TABLE_DOORS),
 
-                Arguments.of(MockUtils.buildDoor(DOORS_SIZE.get(2), DOORS_TYPE.get(2)), DoorDTO.class, CITY_DATABASE, CREATE_TABLE_HOUSES),
+                Arguments.of(MockUtils.buildDoor(DOORS_SIZE.get(2), DOORS_TYPE.get(2)), DoorDTO.class, DOOR_DATABASE, CREATE_TABLE_DOORS),
 
-                Arguments.of(MockUtils.buildDoor(DOORS_SIZE.get(3), DOORS_TYPE.get(3)), DoorDTO.class, CITY_DATABASE, CREATE_TABLE_HOUSES),
+                Arguments.of(MockUtils.buildDoor(DOORS_SIZE.get(3), DOORS_TYPE.get(3)), DoorDTO.class, DOOR_DATABASE, CREATE_TABLE_DOORS),
 
-                Arguments.of(MockUtils.buildDoor(DOORS_SIZE.get(4), DOORS_TYPE.get(4)), DoorDTO.class, CITY_DATABASE, CREATE_TABLE_HOUSES),
+                Arguments.of(MockUtils.buildDoor(DOORS_SIZE.get(4), DOORS_TYPE.get(4)), DoorDTO.class, DOOR_DATABASE, CREATE_TABLE_DOORS),
 
-                Arguments.of(null, DoorDTO.class, CITY_DATABASE, CREATE_TABLE_HOUSES)
+                Arguments.of(null, DoorDTO.class, DOOR_DATABASE, CREATE_TABLE_DOORS)
         );
     }
 

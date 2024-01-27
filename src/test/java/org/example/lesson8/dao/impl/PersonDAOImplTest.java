@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.util.stream.Stream;
 
 import static org.example.lesson8.dao.impl.MockConstants.*;
+import static org.example.lesson8.utils.Constants.CREATE_TABLE_PERSON;
+import static org.example.lesson8.utils.Constants.PEOPLE_DATABASE;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PersonDAOImplTest {
