@@ -1,5 +1,6 @@
 package org.example.lesson8.dao.impl;
 
+import org.example.lesson8.dto.DoorDTO;
 import org.example.lesson8.dto.PersonDTO;
 
 import java.sql.Date;
@@ -19,6 +20,13 @@ public class MockUtils {
                 .dateOfBirthday(birthday)
                 .timeToLunch(lunch)
                 .letter(letter)
+                .build();
+    }
+
+    public static DoorDTO buildDoor(double size, String type) {
+        return DoorDTO.builder()
+                .size(size)
+                .type(type)
                 .build();
     }
 
