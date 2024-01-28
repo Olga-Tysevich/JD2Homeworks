@@ -10,14 +10,14 @@ public class SQLConnection {
     private SQLConnection() {
     }
 
-    public static synchronized Connection getConnection() throws SQLException {
+    public static Connection getConnection() throws SQLException {
         if (instance == null) {
             instance = DriverManager.getConnection(JDBCResource.getURL(), JDBCResource.getUSER(), JDBCResource.getPASSWORD());
         }
         return instance;
     }
 
-    public static synchronized void closeConnection() throws SQLException {
+    public static void closeConnection() throws SQLException {
         instance.close();
         instance = null;
     }
