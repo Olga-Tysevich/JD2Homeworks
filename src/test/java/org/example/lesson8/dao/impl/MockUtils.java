@@ -1,6 +1,7 @@
 package org.example.lesson8.dao.impl;
 
 import org.example.lesson8.dto.DoorDTO;
+import org.example.lesson8.dto.HouseDTO;
 import org.example.lesson8.dto.PersonDTO;
 
 import java.sql.Date;
@@ -27,6 +28,14 @@ public class MockUtils {
         return DoorDTO.builder()
                 .size(size)
                 .type(type)
+                .build();
+    }
+
+    public static HouseDTO buildHouse(double size, String color, int rooms) {
+        return HouseDTO.builder()
+                .size(size)
+                .color(color)
+                .roomCount(rooms)
                 .build();
     }
 

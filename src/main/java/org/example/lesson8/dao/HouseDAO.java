@@ -6,5 +6,5 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface HouseDAO extends DAO<HouseDTO> {
-    List<HouseDTO> getAll() throws SQLException;
+    List<HouseDTO> getByColor(String color) throws SQLException;
 }

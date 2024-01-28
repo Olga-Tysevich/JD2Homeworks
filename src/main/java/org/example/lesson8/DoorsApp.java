@@ -29,7 +29,7 @@ public class DoorsApp {
             DEMO_MANAGER.setDAO(DAO);
             List<DoorDTO> doorDTOList = GSON_MANAGER.readDoorsDTOList(DOORS_IN_FILE_PATH);
 
-            if (!doorDTOList.isEmpty()) {
+            if (doorDTOList != null &&!doorDTOList.isEmpty()) {
 
                 DEMO_MANAGER.setDtoList(doorDTOList);
 
@@ -40,11 +40,13 @@ public class DoorsApp {
                 List<DoorDTO> doorDTOS = DEMO_MANAGER.createDemo(DoorDTO.class, List.of(1, 2, 3, 4, 5), test);
 
                 List<DoorDTO> doors = DOORS_DAO.getBySize(900, 1300);
-                if (!doors.isEmpty()) {
-                    System.out.println("Get by size:");
+                if (doors != null && !doors.isEmpty()) {
+                    System.out.println("Get by size from 900 to 1300: ");
                     doors.forEach(System.out::println);
 
                     GSON_MANAGER.writeDoorsDTOList(DOORS_OUT_FILE_PATH, doorDTOS);
+                } else {
+                    System.out.println("Sorry, nothing found");
                 }
             }
 

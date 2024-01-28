@@ -29,7 +29,7 @@ public class HouseApp {
             DEMO_MANAGER.setDAO(DAO);
             List<HouseDTO> housesDTO = GSON_MANAGER.readHousesDTOList(HOUSES_IN_FILE_PATH);
 
-            if (!housesDTO.isEmpty()) {
+            if (housesDTO != null && !housesDTO.isEmpty()) {
                 DEMO_MANAGER.setDtoList(housesDTO);
 
                 int randomId = RANDOM.nextInt(housesDTO.size());
@@ -39,9 +39,13 @@ public class HouseApp {
                 List<HouseDTO> houseDTOList = DEMO_MANAGER.createDemo(HouseDTO.class, List.of(1, 2, 3, 4, 5), test);
 
                 if (!houseDTOList.isEmpty()) {
-                    List<HouseDTO> houses = HOUSE_DAO.getAll();
-                    System.out.println("Get all:");
-                    houses.forEach(System.out::println);
+                    List<HouseDTO> houses = HOUSE_DAO.getByColor("белый");
+                    if (houses != null && !houses.isEmpty()) {
+                        System.out.println("Get by color \"белый\":");
+                        houses.forEach(System.out::println);
+                    } else {
+                        System.out.println("Sorry, nothing found");
+                    }
 
                     GSON_MANAGER.writeHousesDTOList(HOUSES_OUT_FILE_PATH, houseDTOList);
                 }

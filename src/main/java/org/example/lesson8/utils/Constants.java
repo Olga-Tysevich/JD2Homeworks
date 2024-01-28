@@ -27,7 +27,7 @@ public class Constants {
     //dao.PersonDAOImpl
     public static String GET_BY_PASSPORT_PATTERN = "select * from people.person where passport = ?";
     //dao.HouseDAOImpl
-    public static String GET_ALL_HOUSES_PATTERN = "select * from city.houses";
+    public static String GET_HOUSES_BY_COLOR_PATTERN = "select * from city.houses where color = ?";
     //dao.DoorDAOImpl
     public static String GET_DOORS_BY_SIZE_PATTERN = "select * from doors_data.doors where size between ? and ?";
 
