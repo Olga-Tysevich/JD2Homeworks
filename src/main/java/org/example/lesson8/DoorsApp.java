@@ -39,9 +39,9 @@ public class DoorsApp {
                 test.setId(1);
                 List<DoorDTO> doorDTOS = DEMO_MANAGER.createDemo(DoorDTO.class, List.of(1, 2, 3, 4, 5), test);
 
-                List<DoorDTO> doors = DOORS_DAO.getAll();
+                List<DoorDTO> doors = DOORS_DAO.getBySize(900, 1300);
                 if (!doors.isEmpty()) {
-                    System.out.println("Get all:");
+                    System.out.println("Get by size:");
                     doors.forEach(System.out::println);
 
                     GSON_MANAGER.writeDoorsDTOList(DOORS_OUT_FILE_PATH, doorDTOS);

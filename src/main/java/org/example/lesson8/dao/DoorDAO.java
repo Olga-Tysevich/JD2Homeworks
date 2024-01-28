@@ -6,5 +6,5 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface DoorDAO extends DAO<DoorDTO> {
-    List<DoorDTO> getAll() throws SQLException;
+    List<DoorDTO> getBySize(double fromSize, double toSize) throws SQLException;
 }

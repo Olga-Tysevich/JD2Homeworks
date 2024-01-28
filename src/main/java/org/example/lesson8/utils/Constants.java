@@ -29,7 +29,7 @@ public class Constants {
     //dao.HouseDAOImpl
     public static String GET_ALL_HOUSES_PATTERN = "select * from city.houses";
     //dao.DoorDAOImpl
-    public static String GET_ALL_DOORS_PATTERN = "select * from doors_data.doors";
+    public static String GET_DOORS_BY_SIZE_PATTERN = "select * from doors_data.doors where size between ? and ?";
 
     //PersonApp
     public static final String PEOPLE_DATABASE = "people";

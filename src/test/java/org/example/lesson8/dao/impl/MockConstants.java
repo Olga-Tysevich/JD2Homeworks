@@ -16,6 +16,8 @@ public class MockConstants {
             Time.valueOf("13:45:00"), Time.valueOf("12:20:00"));
     public static final List<String> PERSONS_LETTER = List.of("letter1", "letter2", "letter3", "letter4", "letter5");
 
+    public static final double FROM_SIZE = 900;
+    public static final double TO_SIZE = 1300;
     public static final int NUMBER_OF_DOORS = 5;
     public static final List<Double> DOORS_SIZE = List.of(210.5, 1300.0, 950.0, 207.1, 1200.0);
     public static final List<String> DOORS_TYPE = List.of("одностворчатые", "двустворчатые", "полуторные", "another", "test");
