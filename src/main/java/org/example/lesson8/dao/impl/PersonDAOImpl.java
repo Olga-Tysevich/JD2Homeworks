@@ -40,9 +40,9 @@ public class PersonDAOImpl implements PersonDAO {
     public List<Person> saveAll(List<Person> personList) {
         startTransaction();
         personList.stream()
-                .filter(p -> p.getId() != 0)
+                .filter(p -> manager.find(Person.class, p.getId()) != null)
                 .forEach(p -> manager.merge(p));
-        personList.stream().filter(p -> p.getId() == 0)
+        personList.stream().filter(p -> manager.find(Person.class, p.getId()) == null)
                 .forEach(p -> manager.persist(p));
         commit();
         return personList;
