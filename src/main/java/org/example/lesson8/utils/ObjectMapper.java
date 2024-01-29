@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 import static org.example.lesson8.utils.Constants.*;
 
 public class ObjectMapper<T> {
-    private final List<Class<? extends Annotation>> allAnnotations = List.of(Table.class, PrimaryKey.class, Column.class);
 
     public String insert(T object) {
         List<Field> fields = getUngeneratedColumns(getAllFields(object));
