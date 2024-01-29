@@ -6,7 +6,6 @@ import org.example.lesson8.annotations.Table;
 import org.example.lesson8.utils.generators.SQLQueryGenerator;
 import org.example.lesson8.utils.wrappers.ThrowingConsumerWrapper;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -51,17 +50,12 @@ public class ObjectMapper<T> {
     }
 
     public T get(ResultSet resultSet, Class<T> clazz) {
-        try {
-            Constructor<T> constructor = clazz.getConstructor();
-            constructor.setAccessible(true);
-            T instance = constructor.newInstance();
-                List<Field> fields = getAllFields(instance);
-                fields.forEach(ThrowingConsumerWrapper.accept(f -> f.set(instance, resultSet.getObject(f.getName(), f.getType())), Exception.class));
-            return instance;
-        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            e.printStackTrace();
-            return null;
+        T instance = getInstance(clazz);
+        if (instance != null) {
+            List<Field> fields = getAllFields(instance);
+            fields.forEach(ThrowingConsumerWrapper.accept(f -> f.set(instance, resultSet.getObject(f.getName(), f.getType())), Exception.class));
         }
+        return instance;
     }
 
     public String delete(int id, Class<T> clazz) {
@@ -108,6 +102,7 @@ public class ObjectMapper<T> {
     private List<Field> getAllKeys(T object) {
         return getAllFields(object).stream()
                 .filter(f -> f.isAnnotationPresent(PrimaryKey.class))
+                .peek(f -> f.setAccessible(true))
                 .collect(Collectors.toList());
     }
 
