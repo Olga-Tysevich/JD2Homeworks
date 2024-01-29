@@ -3,29 +3,48 @@ package org.example.lesson8.dao.impl;
 
 import org.example.lesson8.dao.PersonDAO;
 import org.example.lesson8.dto.Person;
-import org.example.lesson8.util.HibernateUtil;
+import org.example.lesson8.utils.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PersonDAOImpl implements PersonDAO {
     private EntityManager manager;
 
+//    @Override
+//    public List<Person> getPersonsOverAge(int age) {
+//        startTransaction();
+//        TypedQuery<Person> query = manager.createNamedQuery("select_by_age", Person.class);
+//        query.setParameter("age", age);
+//        List<Person> result = query.getResultList();
+//        commit();
+//        return result;
+//    }
+
     @Override
     public List<Person> getPersonsOverAge(int age) {
-        startTransaction();
-        TypedQuery<Person> query = manager.createNamedQuery("select_by_age", Person.class);
-        query.setParameter("age", age);
-        List<Person> result = query.getResultList();
-        commit();
+        List<Person> result;
+        Session session = HibernateUtil.getEntityManager().unwrap(Session.class);
+        Transaction transaction = session.beginTransaction();
+        session.enableFilter("overAge").setParameter("maxAge", age);
+        result = session.createQuery("from Person", Person.class).getResultList();
+        transaction.commit();
+        session.close();
         return result;
     }
 
     @Override
     public List<Person> saveAll(List<Person> personList) {
         startTransaction();
-        personList.forEach(p -> manager.persist(p));
+        personList.stream()
+                .filter(p -> p.getId() != 0)
+                .forEach(p -> manager.merge(p));
+        personList.stream().filter(p -> p.getId() == 0)
+                .forEach(p -> manager.persist(p));
         commit();
         return personList;
     }

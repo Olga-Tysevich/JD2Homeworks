@@ -3,7 +3,7 @@ package org.example.lesson8.dao.impl;
 
 import org.example.lesson8.dao.PersonDAO;
 import org.example.lesson8.dto.Person;
-import org.example.lesson8.util.HibernateUtil;
+import org.example.lesson8.utils.HibernateUtil;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 

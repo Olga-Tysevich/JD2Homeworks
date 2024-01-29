@@ -3,8 +3,8 @@ package org.example.lesson8;
 import org.example.lesson8.dao.PersonDAO;
 import org.example.lesson8.dao.impl.PersonDAOImpl;
 import org.example.lesson8.dto.Person;
-import org.example.lesson8.util.HibernateUtil;
-import org.example.lesson8.util.JsonManager;
+import org.example.lesson8.utils.HibernateUtil;
+import org.example.lesson8.utils.JsonManager;
 
 import java.util.List;
 
@@ -19,7 +19,9 @@ public class PersonApp {
 
         if (personList != null) {
             personList.forEach(System.out::println);
-
+            PERSON_DAO.saveAll(personList);
+            System.out.println("\nTEST");
+            personList.get(0).setAddress("aaaaaaaaaaaa");
             PERSON_DAO.saveAll(personList);
 
             personList.forEach(System.out::println);
@@ -30,6 +32,7 @@ public class PersonApp {
             personList.forEach(System.out::println);
 
             JsonManager.writePersons(personList, OUT_FILE_PATH);
+
             HibernateUtil.close();
 
         }

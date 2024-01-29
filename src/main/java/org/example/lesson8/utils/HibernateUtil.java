@@ -1,4 +1,4 @@
-package org.example.lesson8.util;
+package org.example.lesson8.utils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

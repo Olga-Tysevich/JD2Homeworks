@@ -1,4 +1,4 @@
-package org.example.lesson8.util;
+package org.example.lesson8.utils;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.core.type.TypeReference;
