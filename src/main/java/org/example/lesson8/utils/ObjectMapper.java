@@ -1,7 +1,6 @@
 package org.example.lesson8.utils;
 
 import org.example.lesson8.annotations.Column;
-import org.example.lesson8.annotations.GeneratedColumn;
 import org.example.lesson8.annotations.PrimaryKey;
 import org.example.lesson8.annotations.Table;
 import org.example.lesson8.utils.generators.SQLQueryGenerator;
@@ -18,14 +17,13 @@ import java.util.stream.Collectors;
 import static org.example.lesson8.utils.Constants.*;
 
 public class ObjectMapper<T> {
-    private final List<Class<? extends Annotation>> allAnnotations = List.of(Table.class, PrimaryKey.class, Column.class, GeneratedColumn.class);
+    private final List<Class<? extends Annotation>> allAnnotations = List.of(Table.class, PrimaryKey.class, Column.class);
 
     public String insert(T object) {
-        List<Field> fields = getFields(object);
-        fields = !fields.isEmpty() ? getUngeneratedColumns(fields) : fields;
+        List<Field> fields = getUngeneratedColumns(getAllFields(object));
 
         if (!fields.isEmpty()) {
-            Map<String, String> columns = getColumns(object, fields);
+            Map<String, String> columns = getFieldsForQuery(object, fields);
             return SQLQueryGenerator.createInsert(getDatabaseName(object.getClass()), getTableName(object.getClass()), columns);
         } else {
             throw new IllegalArgumentException(FIELDS_ERROR);
@@ -33,13 +31,12 @@ public class ObjectMapper<T> {
     }
 
     public String update(T object) {
-        List<Field> fields = getFields(object);
-        List<Field> keysList = getKeys(object);
-        fields = !fields.isEmpty() ? getUngeneratedColumns(fields) : fields;
+        List<Field> fields = getUngeneratedColumns(getAllFields(object));
+        List<Field> keysList = getAllKeys(object);
 
         if (!fields.isEmpty() && keysList.size() == 1) {
-            Map<String, String> columns = getColumns(object, fields);
-            Map<String, String> keys = getColumns(object, keysList);
+            Map<String, String> columns = getFieldsForQuery(object, fields);
+            Map<String, String> keys = getFieldsForQuery(object, keysList);
 
             return SQLQueryGenerator.createUpdate(getDatabaseName(object.getClass()), getTableName(object.getClass()), keys, columns);
 
@@ -59,7 +56,7 @@ public class ObjectMapper<T> {
             Constructor<T> constructor = clazz.getConstructor();
             constructor.setAccessible(true);
             T instance = constructor.newInstance();
-                List<Field> fields = getFields(instance);
+                List<Field> fields = getAllFields(instance);
                 fields.forEach(ThrowingConsumerWrapper.accept(f -> f.set(instance, resultSet.getObject(f.getName(), f.getType())), Exception.class));
             return instance;
         } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
@@ -73,7 +70,7 @@ public class ObjectMapper<T> {
     }
 
     private String createSelectOrDelete(String queryPattern, int id, Class<T> clazz) {
-        List<Field> keys = getKeys(getInstance(clazz));
+        List<Field> keys = getAllKeys(getInstance(clazz));
 
         if (keys.size() == 1) {
             String databaseName = getDatabaseName(clazz);
@@ -96,21 +93,7 @@ public class ObjectMapper<T> {
         }
     }
 
-    private List<Field> getKeys(T object) {
-        return getFields(object).stream()
-                .filter(f -> f.isAnnotationPresent(PrimaryKey.class))
-                .collect(Collectors.toList());
-    }
-
-    private Map<String, String> getColumns(T object, List<Field> columns) {
-        Map<String, String> result = new LinkedHashMap<>();
-        columns.forEach(ThrowingConsumerWrapper.accept(
-                c -> result.put(c.getAnnotation(Column.class).name(), "'" + c.get(object) + "'"),
-                IllegalAccessException.class));
-        return result;
-    }
-
-    private List<Field> getFields(T object) {
+    private List<Field> getAllFields(T object) {
         Class<?> clazz = object.getClass();
         List<Field> fields = Arrays.stream(clazz.getDeclaredFields())
                 .filter(f -> f.isAnnotationPresent(Column.class))
@@ -123,18 +106,25 @@ public class ObjectMapper<T> {
         }
     }
 
+    private List<Field> getAllKeys(T object) {
+        return getAllFields(object).stream()
+                .filter(f -> f.isAnnotationPresent(PrimaryKey.class))
+                .collect(Collectors.toList());
+    }
+
     private List<Field> getUngeneratedColumns(List<Field> fields) {
-        List<Class<? extends Annotation>> temp = new ArrayList<>(allAnnotations);
-        temp.remove(Column.class);
         return fields.stream()
-                .filter(f -> checkAnnotations(f, temp))
+                .filter(f -> !f.isAnnotationPresent(PrimaryKey.class))
                 .peek(f -> f.setAccessible(true))
                 .collect(Collectors.toList());
     }
 
-    private boolean checkAnnotations(Field field, List<Class<? extends Annotation>> annotations) {
-        return annotations.stream()
-                .noneMatch(field::isAnnotationPresent);
+    private Map<String, String> getFieldsForQuery(T object, List<Field> columns) {
+        Map<String, String> result = new LinkedHashMap<>();
+        columns.forEach(ThrowingConsumerWrapper.accept(
+                c -> result.put(c.getAnnotation(Column.class).name(), "'" + c.get(object) + "'"),
+                IllegalAccessException.class));
+        return result;
     }
 
     private String getDatabaseName(Class<?> clazz) {

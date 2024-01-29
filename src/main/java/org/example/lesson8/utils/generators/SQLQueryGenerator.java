@@ -10,7 +10,7 @@ import static org.example.lesson8.utils.Constants.*;
 public class SQLQueryGenerator {
     private static final CustomBinaryOperator<Map<String, String>, String> namesTransformation = (m, c) -> c;
     private static final CustomBinaryOperator<Map<String, String>, String> valuesTransformation = Map::get;
-    private static final CustomBinaryOperator<Map<String, String>, String> parameterTransformation = (m, c) -> c + EQUALS_SIGN + m.get(c);
+    private static final CustomBinaryOperator<Map<String, String>, String> parameterTransformation = (m, c) -> c + " = " + m.get(c);
 
     private static final StringBuilder currentQuery = new StringBuilder();
 
@@ -35,9 +35,8 @@ public class SQLQueryGenerator {
     public static String createSelectOrDelete(String databaseName, String queryPattern, String tableName, String primaryKey, String primaryKeyValue) {
         cleanCurrentQuery();
         currentQuery.append(queryPattern);
-        setParameterValue(databaseName + POINT_SIGN + tableName);
-        setParameterValue(primaryKey + EQUALS_SIGN + primaryKeyValue);
-        String t = currentQuery.toString();
+        setParameterValue(databaseName + "." + tableName);
+        setParameterValue(primaryKey + " = " + primaryKeyValue);
         return currentQuery.toString();
     }
 
@@ -48,7 +47,7 @@ public class SQLQueryGenerator {
     }
 
     private static void setTableName(String queryPattern, String databaseName, String tableName) {
-        currentQuery.append(queryPattern.replaceFirst(PARAMETER_PATTERN, databaseName + POINT_SIGN + tableName));
+        currentQuery.append(queryPattern.replaceFirst(PARAMETER_PATTERN, databaseName + "." + tableName));
     }
 
     private static void setParameterValue(String value) {
