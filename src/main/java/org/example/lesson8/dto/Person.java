@@ -39,7 +39,7 @@ public class Person implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dateOfBirthday;
     @CreationTimestamp
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss.S")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     @Column(name = "date_time_create")
     private Timestamp dateTimeCreate;
     @Column(name = "time_to_lunch")

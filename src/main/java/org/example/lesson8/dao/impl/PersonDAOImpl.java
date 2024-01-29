@@ -33,8 +33,12 @@ public class PersonDAOImpl implements PersonDAO {
     @Override
     public Person save(Person person) {
         startTransaction();
-        manager.persist(person);
-        commit();
+        if (manager.find(Person.class, person.getId()) == null) {
+            manager.persist(person);
+            commit();
+        } else {
+            update(person);
+        }
         return person;
     }
 
