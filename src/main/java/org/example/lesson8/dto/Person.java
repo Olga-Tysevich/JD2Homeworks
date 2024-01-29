@@ -40,11 +40,11 @@ public class Person implements Serializable {
     private int id;
     @Column(name = "age")
     private int age;
-    @Column(name = "salary")
+    @Column(name = "salary", precision = 2)
     private double salary;
-    @Column(name = "passport")
+    @Column(name = "passport", columnDefinition = "char(10)")
     private String passport;
-    @Column(name = "address")
+    @Column(name = "address", length = 200)
     private String address;
     @Column(name = "date_of_birthday")
     @JsonFormat(pattern = "yyyy-MM-dd")
