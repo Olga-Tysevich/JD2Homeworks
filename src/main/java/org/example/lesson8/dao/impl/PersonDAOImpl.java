@@ -39,16 +39,12 @@ public class PersonDAOImpl implements PersonDAO {
 
     @Override
     public List<Person> saveAll(List<Person> personList) {
-        List<Person> personWithId = personList.stream()
-                .filter(p -> p.getId() != 0)
-                .collect(Collectors.toList());
-        List<Person> personWithoutId = personList.stream()
-                .filter(p -> p.getId() == 0)
-                .collect(Collectors.toList());
-
         startTransaction();
-        personWithId.forEach(p -> manager.merge(p));
-        personWithoutId.forEach(p -> manager.persist(p));
+        personList.stream()
+                .filter(p -> p.getId() != 0)
+                .forEach(p -> manager.merge(p));
+        personList.stream().filter(p -> p.getId() == 0)
+                .forEach(p -> manager.persist(p));
         commit();
         return personList;
     }
