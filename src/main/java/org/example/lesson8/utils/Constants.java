@@ -24,44 +24,16 @@ public class Constants {
 
     //dao.DAOImpl
     public static final String PERSON_IS_NULL = "Persons should not be null";
-    //dao.PersonDAOImpl
-    public static String GET_BY_PASSPORT_PATTERN = "select * from people.person where passport = ?";
     //dao.HouseDAOImpl
     public static String GET_HOUSES_BY_COLOR_PATTERN = "select * from city.houses where color = ?";
     //dao.DoorDAOImpl
     public static String GET_DOORS_BY_SIZE_PATTERN = "select * from doors_data.doors where size between ? and ?";
 
-    //PersonApp
-    public static final String PEOPLE_DATABASE = "people";
-    public static final String CREATE_TABLE_PERSON = "create table people.person "
-            + "(id INT PRIMARY KEY AUTO_INCREMENT,"
-            + "age INT, "
-            + "salary DECIMAL, "
-            + "passport CHAR(10), "
-            + "address VARCHAR(200), "
-            + "date_of_birthday DATE, "
-            + "date_time_create TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
-            + "time_to_lunch TIME, "
-            + "letter TEXT)";
-    public static final String PERSONS_IN_FILE_PATH = "src\\main\\resources\\persons.json";
-    public static final String PERSONS_OUT_FILE_PATH = "src\\main\\resources\\personsWithId.json";
-
-    //HouseApp
-    public static final String CITY_DATABASE = "city";
-    public static final String CREATE_TABLE_HOUSES = "create table city.houses"
-            + "(id int primary key auto_increment, "
-            + "size DECIMAL, "
-            + "color VARCHAR(50), "
-            + "room_count INT)";
+//    //HouseApp
     public static final String HOUSES_IN_FILE_PATH = "src\\main\\resources\\houses.json";
     public static final String HOUSES_OUT_FILE_PATH = "src\\main\\resources\\housesWithId.json";
 
     //DoorApp
-    public static final String DOOR_DATABASE = "doors_data";
-    public static final String CREATE_TABLE_DOORS = "create table doors_data.doors"
-            + "(id int primary key auto_increment, "
-            + "size DECIMAL(32, 2), "
-            + "type varchar(50))";
     public static final String DOORS_IN_FILE_PATH = "src\\main\\resources\\doors.json";
     public static final String DOORS_OUT_FILE_PATH = "src\\main\\resources\\doorsWithId.json";
 

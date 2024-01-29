@@ -13,7 +13,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 import java.util.*;
-import java.sql.Date;
 import java.util.stream.Collectors;
 
 import static org.example.lesson8.utils.Constants.*;
@@ -56,12 +55,17 @@ public class ObjectMapper<T> {
     }
 
     public T get(ResultSet resultSet, Class<T> clazz) {
-        T instance = getInstance(clazz);
-        if (instance != null) {
-            List<Field> fields = getFields(instance);
-            fields.forEach(ThrowingConsumerWrapper.accept(f -> setFieldValue(resultSet, f, instance), Exception.class));
+        try {
+            Constructor<T> constructor = clazz.getConstructor();
+            constructor.setAccessible(true);
+            T instance = constructor.newInstance();
+                List<Field> fields = getFields(instance);
+                fields.forEach(ThrowingConsumerWrapper.accept(f -> f.set(instance, resultSet.getObject(f.getName(), f.getType())), Exception.class));
+            return instance;
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            e.printStackTrace();
+            return null;
         }
-        return instance;
     }
 
     public String delete(int id, Class<T> clazz) {
@@ -101,64 +105,9 @@ public class ObjectMapper<T> {
     private Map<String, String> getColumns(T object, List<Field> columns) {
         Map<String, String> result = new LinkedHashMap<>();
         columns.forEach(ThrowingConsumerWrapper.accept(
-                c -> result.put(c.getAnnotation(Column.class).name(), getValue(c, object)),
+                c -> result.put(c.getAnnotation(Column.class).name(), "'" + c.get(object) + "'"),
                 IllegalAccessException.class));
         return result;
-    }
-
-    private String getValue(Field field, T object) {
-        try {
-            return isInteger(field) || isDouble(field) ?
-                    field.get(object).toString() :
-                    QUOTE_SIGN + field.get(object) + QUOTE_SIGN;
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
-    private void setFieldValue(ResultSet resultSet, Field field, T object) {
-        try {
-            if (isDouble(field)) {
-                field.set(object, resultSet.getDouble(field.getAnnotation(Column.class).name()));
-            } else if (isInteger(field)) {
-                field.set(object, resultSet.getInt(field.getAnnotation(Column.class).name()));
-            } else if (isDate(field)) {
-                field.set(object, resultSet.getDate(field.getAnnotation(Column.class).name()));
-            } else if (isTime(field)) {
-                field.set(object, resultSet.getTime(field.getAnnotation(Column.class).name()));
-            } else if (isTimestamp(field)) {
-                field.set(object, resultSet.getTimestamp(field.getAnnotation(Column.class).name()));
-            } else if (isString(field)) {
-                field.set(object, resultSet.getString(field.getAnnotation(Column.class).name()));
-            }
-        } catch (SQLException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private boolean isDate(Field field) {
-        return field.getType().equals(Date.class);
-    }
-
-    private boolean isTime(Field field) {
-        return field.getType().equals(Time.class);
-    }
-
-    private boolean isString(Field field) {
-        return field.getType().equals(String.class) || field.getType().equals(char.class);
-    }
-
-    private boolean isTimestamp(Field field) {
-        return field.getType().equals(Timestamp.class);
-    }
-
-    private boolean isDouble(Field field) {
-        return field.getType().equals(double.class) || field.getType().equals(Double.class);
-    }
-
-    private boolean isInteger(Field field) {
-        return field.getType().equals(int.class) || field.getType().equals(Integer.class);
     }
 
     private List<Field> getFields(T object) {
@@ -184,10 +133,8 @@ public class ObjectMapper<T> {
     }
 
     private boolean checkAnnotations(Field field, List<Class<? extends Annotation>> annotations) {
-        List<Boolean> temp = annotations.stream()
-                .map(field::isAnnotationPresent)
-                .collect(Collectors.toList());
-        return !temp.contains(true);
+        return annotations.stream()
+                .noneMatch(field::isAnnotationPresent);
     }
 
     private String getDatabaseName(Class<?> clazz) {

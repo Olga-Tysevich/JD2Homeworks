@@ -6,12 +6,12 @@ import org.example.lesson8.dao.impl.DAOImpl;
 import org.example.lesson8.dao.HouseDAO;
 import org.example.lesson8.dao.impl.HouseDAOImpl;
 import org.example.lesson8.dto.HouseDTO;
-import org.example.lesson8.utils.DemoManager;
 import org.example.lesson8.utils.GsonManager;
-import org.example.lesson8.utils.TableManager;
+import org.example.lesson8.utils.wrappers.ThrowingConsumerWrapper;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.example.lesson8.utils.Constants.*;
@@ -20,38 +20,38 @@ public class HouseApp {
     private static final GsonManager GSON_MANAGER = new GsonManager();
     private static final HouseDAO HOUSE_DAO = new HouseDAOImpl();
     private static final DAO<HouseDTO> DAO = new DAOImpl<>();
-    private static final DemoManager<HouseDTO> DEMO_MANAGER = new DemoManager<>();
 
     public static void main(String[] args) {
         try {
-            DEMO_MANAGER.setDatabaseName(CITY_DATABASE);
-            DEMO_MANAGER.setCreateTableQuery(CREATE_TABLE_HOUSES);
-            DEMO_MANAGER.setDAO(DAO);
-            List<HouseDTO> housesDTO = GSON_MANAGER.readHousesDTOList(HOUSES_IN_FILE_PATH);
+            List<HouseDTO> houseDTOList = GSON_MANAGER.readHousesDTOList(HOUSES_IN_FILE_PATH);
+            System.out.println("List before save:");
+            houseDTOList.forEach(System.out::println);
 
-            if (housesDTO != null && !housesDTO.isEmpty()) {
-                DEMO_MANAGER.setDtoList(housesDTO);
+            List<HouseDTO> dtoAfterSave = new ArrayList<>();
 
-                int randomId = RANDOM.nextInt(housesDTO.size());
+            houseDTOList.forEach(ThrowingConsumerWrapper.accept(dto -> dtoAfterSave.add(DAO.save(dto, HouseDTO.class)), SQLException.class));
 
-                HouseDTO test = housesDTO.get(randomId);
-                test.setId(1);
-                List<HouseDTO> houseDTOList = DEMO_MANAGER.createDemo(HouseDTO.class, List.of(1, 2, 3, 4, 5), test);
+            if (!dtoAfterSave.isEmpty()) {
+                System.out.println("\nList after save: ");
+                dtoAfterSave.forEach(System.out::println);
 
-                if (!houseDTOList.isEmpty()) {
-                    List<HouseDTO> houses = HOUSE_DAO.getByColor("белый");
-                    if (houses != null && !houses.isEmpty()) {
-                        System.out.println("Get by color \"белый\":");
-                        houses.forEach(System.out::println);
-                    } else {
-                        System.out.println("Sorry, nothing found");
-                    }
+                int randomId = RANDOM.nextInt(dtoAfterSave.size());
 
-                    GSON_MANAGER.writeHousesDTOList(HOUSES_OUT_FILE_PATH, houseDTOList);
+                HouseDTO objectForUpdate = DAO.get(dtoAfterSave.get(randomId).getId(), HouseDTO.class);
+                System.out.println("Get object by id: " + dtoAfterSave.get(randomId).getId() + ": " + objectForUpdate);
+                System.out.println("Updated rows: " + DAO.update(objectForUpdate));
+                System.out.println("Deleted rows: " + DAO.delete(dtoAfterSave.get(randomId).getId(), HouseDTO.class));
+
+                List<HouseDTO> houses = HOUSE_DAO.getByColor("белый");
+                if (houses != null && !houses.isEmpty()) {
+                    System.out.println("Get by color \"белый\": ");
+                    houses.forEach(System.out::println);
+
+                    GSON_MANAGER.writeHousesDTOList(HOUSES_OUT_FILE_PATH, houses);
+                } else {
+                    System.out.println("Sorry, nothing found");
                 }
             }
-
-            TableManager.dropDatabase(CITY_DATABASE);
 
             SQLConnection.closeConnection();
 

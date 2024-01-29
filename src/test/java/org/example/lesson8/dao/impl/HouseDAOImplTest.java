@@ -3,7 +3,6 @@ package org.example.lesson8.dao.impl;
 
 import org.example.lesson8.dao.HouseDAO;
 import org.example.lesson8.dto.HouseDTO;
-import org.example.lesson8.utils.TableManager;
 import org.example.lesson8.utils.wrappers.ThrowingConsumerWrapper;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.example.lesson8.dao.impl.MockConstants.*;
-import static org.example.lesson8.utils.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -24,8 +22,6 @@ class HouseDAOImplTest {
 
     @BeforeAll
     public static void createDB() {
-        TableManager.createDatabase(CITY_DATABASE);
-        TableManager.createTable(CREATE_TABLE_HOUSES);
         houseDTOS.add(MockUtils.buildHouse(HOUSES_SIZE.get(0), HOUSES_COLOR.get(0), HOUSES_ROOM.get(0)));
         houseDTOS.add(MockUtils.buildHouse(HOUSES_SIZE.get(0), HOUSES_COLOR.get(0), HOUSES_ROOM.get(0)));
         houseDTOS.add(MockUtils.buildHouse(HOUSES_SIZE.get(1), HOUSES_COLOR.get(1), HOUSES_ROOM.get(1)));
@@ -35,11 +31,6 @@ class HouseDAOImplTest {
         houseDTOS.add(MockUtils.buildHouse(HOUSES_SIZE.get(3), HOUSES_COLOR.get(3), HOUSES_ROOM.get(3)));
         houseDTOS.add(MockUtils.buildHouse(HOUSES_SIZE.get(3), HOUSES_COLOR.get(3), HOUSES_ROOM.get(3)));
         houseDTOS.add(MockUtils.buildHouse(HOUSES_SIZE.get(4), HOUSES_COLOR.get(4), HOUSES_ROOM.get(4)));
-    }
-
-    @AfterAll
-    public static void dropDB() {
-        TableManager.dropDatabase(CITY_DATABASE);
     }
 
     @Test

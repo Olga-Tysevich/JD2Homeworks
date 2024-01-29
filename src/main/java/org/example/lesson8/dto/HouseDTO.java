@@ -13,7 +13,7 @@ import org.example.lesson8.annotations.Table;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(databaseName = "city", tableName = "houses")
+@Table(databaseName = "lesson8", tableName = "houses")
 public class HouseDTO {
     @PrimaryKey
     @Column(name = "id")

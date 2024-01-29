@@ -4,7 +4,6 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import org.example.lesson8.dto.DoorDTO;
 import org.example.lesson8.dto.HouseDTO;
-import org.example.lesson8.dto.PersonDTO;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,14 +24,6 @@ public class GsonManager {
                 .setDateFormat("yyyy-DD-MM")
                 .create();
     }
-
-    public void writePersonDTOList(String filePath, List<PersonDTO> personDTOList) throws FileNotFoundException {
-        String personsDTOList = gson.toJson(personDTOList);
-        try (PrintWriter writer = new PrintWriter(filePath)) {
-            writer.println(personsDTOList);
-        }
-    }
-
     public void writeHousesDTOList(String filePath, List<HouseDTO> houseDTOList) throws FileNotFoundException {
         String houses = gson.toJson(houseDTOList);
         try (PrintWriter writer = new PrintWriter(filePath)) {
@@ -45,12 +36,6 @@ public class GsonManager {
         try (PrintWriter writer = new PrintWriter(filePath)) {
             writer.println(doorsDTOList);
         }
-    }
-
-    public List<PersonDTO> readPersonDTOList(String filePath) throws IOException {
-        String personDTOList = readAsString(filePath);
-        return gson.fromJson(personDTOList, new TypeToken<List<PersonDTO>>() {
-        }.getType());
     }
 
     public List<HouseDTO> readHousesDTOList(String filePath) throws IOException {

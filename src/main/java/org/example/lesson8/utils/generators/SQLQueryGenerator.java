@@ -37,6 +37,7 @@ public class SQLQueryGenerator {
         currentQuery.append(queryPattern);
         setParameterValue(databaseName + POINT_SIGN + tableName);
         setParameterValue(primaryKey + EQUALS_SIGN + primaryKeyValue);
+        String t = currentQuery.toString();
         return currentQuery.toString();
     }
 
