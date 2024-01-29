@@ -10,7 +10,6 @@ import org.hibernate.Transaction;
 import javax.persistence.EntityManager;
 //import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PersonDAOImpl implements PersonDAO {
     private EntityManager manager;
@@ -54,10 +53,10 @@ public class PersonDAOImpl implements PersonDAO {
         startTransaction();
         if (manager.find(Person.class, person.getId()) == null) {
             manager.persist(person);
-            commit();
         } else {
-            update(person);
+           manager.merge(person);
         }
+        commit();
         return person;
     }
 
