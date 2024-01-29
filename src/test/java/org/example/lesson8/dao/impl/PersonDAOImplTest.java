@@ -39,6 +39,7 @@ class PersonDAOImplTest {
     @Test
     void get() {
         Person person = MockUtils.getPerson();
+        person.setPassport(person.getPassport());
         DAO.save(person);
         Person actual = DAO.get(person.getId(), Person.class);
 

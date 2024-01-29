@@ -15,8 +15,8 @@ public class MockUtils {
     }
 
     public static List<Person> getPersons() {
-        return IntStream.rangeClosed(1, 5).mapToObj(i -> MockUtils.buildPerson(i * 10, i * SALARY, PASSPORT + i,
-                ADDRESS + i))
+        return IntStream.rangeClosed(1, 5).mapToObj(i -> MockUtils.buildPerson(i * 10, SALARY, PASSPORT,
+                ADDRESS))
                 .collect(Collectors.toList());
     }
 
