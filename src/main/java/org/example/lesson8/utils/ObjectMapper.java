@@ -18,31 +18,23 @@ import static org.example.lesson8.utils.Constants.*;
 public class ObjectMapper<T> {
 
     public String insert(T object) {
+        Map<String, String> columns = getFieldsForQuery(object, getUngeneratedColumns(getAllFields(object)));
         List<Field> fields = getUngeneratedColumns(getAllFields(object));
 
-        if (!fields.isEmpty()) {
-            Map<String, String> columns = getFieldsForQuery(object, fields);
-            return SQLQueryGenerator.createInsert(getDatabaseName(object.getClass()), getTableName(object.getClass()), columns);
-        } else {
+        if (fields.isEmpty()) {
             throw new IllegalArgumentException(FIELDS_ERROR);
         }
+        return SQLQueryGenerator.createInsert(getDatabaseName(object.getClass()), getTableName(object.getClass()), columns);
     }
 
     public String update(T object) {
-        List<Field> fields = getUngeneratedColumns(getAllFields(object));
-        List<Field> keysList = getAllKeys(object);
+        Map<String, String> columns = getFieldsForQuery(object, getUngeneratedColumns(getAllFields(object)));
+        Map<String, String> keys = getFieldsForQuery(object, getAllKeys(object));
 
-        if (!fields.isEmpty() && keysList.size() == 1) {
-            Map<String, String> columns = getFieldsForQuery(object, fields);
-            Map<String, String> keys = getFieldsForQuery(object, keysList);
-
-            return SQLQueryGenerator.createUpdate(getDatabaseName(object.getClass()), getTableName(object.getClass()), keys, columns);
-
-        } else if (fields.isEmpty()) {
-            throw new IllegalArgumentException(FIELDS_ERROR);
-        } else {
-            throw new IllegalArgumentException(PRIMARY_KEY_ERROR);
+        if (columns.isEmpty() || keys.size() != 1) {
+            throw new IllegalArgumentException(columns.isEmpty()? FIELDS_ERROR : PRIMARY_KEY_ERROR);
         }
+        return SQLQueryGenerator.createUpdate(getDatabaseName(object.getClass()), getTableName(object.getClass()), keys, columns);
     }
 
     public String createGet(int id, Class<T> clazz) {
