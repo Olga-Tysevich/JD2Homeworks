@@ -21,7 +21,7 @@ public class PersonApp {
             personList.forEach(System.out::println);
             PERSON_DAO.saveAll(personList);
             System.out.println("\nTEST");
-            personList.get(0).setAddress("aaaaaaaaaaaa");
+            personList.get(0).setAddress("test update");
             PERSON_DAO.saveAll(personList);
 
             personList.forEach(System.out::println);
@@ -34,7 +34,6 @@ public class PersonApp {
             JsonManager.writePersons(personList, OUT_FILE_PATH);
 
             HibernateUtil.close();
-
         }
     }
 }

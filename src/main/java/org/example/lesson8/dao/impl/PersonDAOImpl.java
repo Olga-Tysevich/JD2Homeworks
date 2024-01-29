@@ -8,7 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
+//import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,12 +39,16 @@ public class PersonDAOImpl implements PersonDAO {
 
     @Override
     public List<Person> saveAll(List<Person> personList) {
-        startTransaction();
-        personList.stream()
+        List<Person> personWithId = personList.stream()
                 .filter(p -> p.getId() != 0)
-                .forEach(p -> manager.merge(p));
-        personList.stream().filter(p -> p.getId() == 0)
-                .forEach(p -> manager.persist(p));
+                .collect(Collectors.toList());
+        List<Person> personWithoutId = personList.stream()
+                .filter(p -> p.getId() == 0)
+                .collect(Collectors.toList());
+
+        startTransaction();
+        personWithId.forEach(p -> manager.merge(p));
+        personWithoutId.forEach(p -> manager.persist(p));
         commit();
         return personList;
     }
