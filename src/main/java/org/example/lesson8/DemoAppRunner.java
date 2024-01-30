@@ -1,12 +1,10 @@
 package org.example.lesson8;
 
-import com.google.gson.reflect.TypeToken;
 import org.example.lesson8.annotations.PrimaryKey;
 import org.example.lesson8.connection.SQLConnection;
 import org.example.lesson8.dao.DAO;
 import org.example.lesson8.dao.DoorDAO;
 import org.example.lesson8.dao.HouseDAO;
-import org.example.lesson8.dao.impl.DAOImpl;
 import org.example.lesson8.dao.impl.DoorDAOImpl;
 import org.example.lesson8.dao.impl.HouseDAOImpl;
 import org.example.lesson8.dto.DoorDTO;
@@ -14,9 +12,7 @@ import org.example.lesson8.dto.HouseDTO;
 import org.example.lesson8.utils.GsonManager;
 import org.example.lesson8.utils.wrappers.ThrowingConsumerWrapper;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -43,14 +39,14 @@ public class DemoAppRunner<T> {
     }
 
 
-    private void runner(String inFilePath, String outFilePath, Class<T> clazz, DAO<T> DAO, Method method, Object... methodParameters) {
+    private void runner(String inFilePath, String outFilePath, Class<T> clazz, DAO<T> dao, Method method, Object... methodParameters) {
         try {
-            List<T> DTOList = GSON_MANAGER.readDTOList(inFilePath, clazz);
+            List<T> dtoList = GSON_MANAGER.readDTOList(inFilePath, clazz);
             System.out.println("List before save:");
-            DTOList.forEach(System.out::println);
+            dtoList.forEach(System.out::println);
 
             List<T> dtoAfterSave = new ArrayList<>();
-            DTOList.forEach(ThrowingConsumerWrapper.accept(dto -> dtoAfterSave.add(DAO.save(dto, clazz)), SQLException.class));
+            dtoList.forEach(ThrowingConsumerWrapper.accept(dto -> dtoAfterSave.add(dao.save(dto, clazz)), SQLException.class));
 
             if (!dtoAfterSave.isEmpty()) {
                 System.out.println("\nList after save: ");
@@ -61,14 +57,14 @@ public class DemoAppRunner<T> {
             Object id = getId(dtoAfterSave.get(randomObject));
             int randomObjectId = id != null ? (int) id : 1;
 
-            T objectForUpdate = DAO.get(randomObjectId, clazz);
+            T objectForUpdate = dao.get(randomObjectId, clazz);
 
             System.out.println("Get object by id: " + randomObjectId + ": " + objectForUpdate);
-            System.out.println("Updated rows: " + DAO.update(objectForUpdate));
-            System.out.println("Deleted rows: " + DAO.delete(randomObjectId, clazz));
+            System.out.println("Updated rows: " + dao.update(objectForUpdate));
+            System.out.println("Deleted rows: " + dao.delete(randomObjectId, clazz));
 
-            if (method.getParameterCount() != 0 ){
-                var result = method.invoke(DAO, methodParameters);
+            if (method.getParameterCount() != 0) {
+                var result = method.invoke(dao, methodParameters);
                 System.out.println("Unique method: " + method.getName());
                 if (result != null) {
                     System.out.println(result);

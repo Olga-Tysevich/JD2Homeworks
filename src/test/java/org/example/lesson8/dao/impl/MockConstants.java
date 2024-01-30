@@ -15,7 +15,6 @@ public class MockConstants {
 
     public static final String DATABASE = "lesson8";
     public static final String CREATE_DATABASE_PATTERN = "create database ?";
-    public static final String DROP_DATABASE_PATTERN = "drop database ?";
     public static final String CREATE_TABLE_HOUSES = "create table lesson8.houses"
             + "(id int primary key auto_increment, "
             + "size decimal(32,2), "

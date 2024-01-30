@@ -2,8 +2,6 @@ package org.example.lesson8.utils;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import org.example.lesson8.dto.DoorDTO;
-import org.example.lesson8.dto.HouseDTO;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,13 +23,6 @@ public class GsonManager {
                 .registerTypeAdapter(Time.class, new TimeDeserializer())
                 .setDateFormat("yyyy-DD-MM")
                 .create();
-    }
-
-    public<T> void writeDTOList(String filePath, List<T> doorDTOList) throws FileNotFoundException {
-        String doorsDTOList = gson.toJson(doorDTOList);
-        try (PrintWriter writer = new PrintWriter(filePath)) {
-            writer.println(doorsDTOList);
-        }
     }
 
     public<T> void writeDTOList(String filePath, Object dtoList) throws FileNotFoundException {

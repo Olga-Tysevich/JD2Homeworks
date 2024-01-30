@@ -17,22 +17,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class DAOImplTest<T> {
     private final DAO<T> DAO = new DAOImpl<>();
 
-    @AfterAll
-    public static void dropDB() {
-        MockUtils.dropDatabase(DATABASE);
-    }
-
     @ParameterizedTest()
     @MethodSource("cases")
     public void saveTest(T expected, Class<T> clazz, String databaseName, String query) {
         try {
-            MockUtils.dropDatabase(databaseName);
             MockUtils.createDatabase(databaseName);
             MockUtils.createTable(query);
 
             if (expected != null) {
                 T actual = DAO.save(expected, clazz);
-                assertNotNull(actual);
+                deleteTestObject(actual, clazz);
+                assertNotNull(actual, "Object: " + actual);
             } else {
                 assertThrows(IllegalArgumentException.class, () -> DAO.save(expected, clazz));
             }
@@ -46,7 +41,6 @@ class DAOImplTest<T> {
     @MethodSource("cases")
     public void updateTest(T dto, Class<T> clazz, String databaseName, String query) {
         try {
-            MockUtils.dropDatabase(databaseName);
             MockUtils.createDatabase(databaseName);
             MockUtils.createTable(query);
             int expectedRows = 1;
@@ -56,7 +50,9 @@ class DAOImplTest<T> {
 
                 int actualRows = DAO.update(dto2);
 
-                assertEquals(expectedRows, actualRows);
+                deleteTestObject(dto2, clazz);
+
+                assertEquals(expectedRows, actualRows, "Expected rows: " + expectedRows + ", actual: " + actualRows);
             } else {
                 assertThrows(IllegalArgumentException.class, () -> DAO.save(dto, clazz));
             }
@@ -69,16 +65,16 @@ class DAOImplTest<T> {
     @ParameterizedTest()
     @MethodSource("cases")
     public void deleteTest(T dto, Class<T> clazz, String databaseName, String query) {
-        MockUtils.dropDatabase(databaseName);
         MockUtils.createDatabase(databaseName);
         MockUtils.createTable(query);
         try {
             if (dto != null) {
-                DAO.save(dto, clazz);
+                T result = DAO.save(dto, clazz);
                 int deletedRow = DAO.delete(1, clazz);
                 int expected = 1;
+                deleteTestObject(result, clazz);
 
-                assertEquals(expected, deletedRow);
+                assertEquals(expected, deletedRow, "Expected rows: " + expected + ", actual: " + deletedRow);
             } else {
                 assertThrows(IllegalArgumentException.class, () -> DAO.save(dto, clazz));
             }
@@ -86,6 +82,14 @@ class DAOImplTest<T> {
             throwables.printStackTrace();
         }
 
+    }
+
+    private void deleteTestObject(T object, Class<T> clazz) throws SQLException {
+
+        Object idForDelete = MockUtils.getId(object);
+        if (idForDelete != null) {
+            DAO.delete((int) idForDelete, clazz);
+        }
     }
 
     static Stream<Arguments> cases() {

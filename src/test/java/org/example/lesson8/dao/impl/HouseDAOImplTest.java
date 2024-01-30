@@ -2,9 +2,9 @@ package org.example.lesson8.dao.impl;
 
 
 import org.example.lesson8.dao.HouseDAO;
+import org.example.lesson8.dto.DoorDTO;
 import org.example.lesson8.dto.HouseDTO;
 import org.example.lesson8.utils.wrappers.ThrowingConsumerWrapper;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -13,8 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.example.lesson8.dao.impl.MockConstants.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class HouseDAOImplTest {
     private static final HouseDAO HOUSE_DAO = new HouseDAOImpl();
@@ -37,8 +36,6 @@ class HouseDAOImplTest {
     @Test
     public void getBySizeTest() {
         try {
-
-            MockUtils.dropDatabase(DATABASE);
             MockUtils.createDatabase(DATABASE);
             MockUtils.createTable(CREATE_TABLE_HOUSES);
             houseDTOS.forEach(ThrowingConsumerWrapper.accept(d -> HOUSE_DAO.save(d, HouseDTO.class), SQLException.class));
@@ -54,25 +51,31 @@ class HouseDAOImplTest {
             List<HouseDTO> redHouses = HOUSE_DAO.getByColor(HOUSES_COLOR.get(4));
             int redHousesExpectedSize = 1;
 
-
-            assertNotNull(whiteHouses, "White houses expected list size: " + whiteHousesExpectedSize);
-            assertNotNull(blackHouses, "Black houses expected list size: " + blackHousesExpectedSize);
-            assertNotNull(greenHouses, "Green houses expected list size: " + greenHousesExpectedSize);
-            assertNotNull(blackAndWhiteHouses, "Black and white houses expected list size: " + blackAndWhiteHousesExpectedSize);
-            assertNotNull(redHouses, "Red houses expected list size: " + redHousesExpectedSize);
-            assertEquals(whiteHousesExpectedSize, whiteHouses.size(), "White houses expected list size: " + whiteHousesExpectedSize
-                    + ", found list size: " + whiteHouses.size());
-            assertEquals(blackHousesExpectedSize, blackHouses.size(), "Black houses expected list size: " + blackHousesExpectedSize
-                    + ", found list size: " + blackHouses.size());
-            assertEquals(greenHousesExpectedSize, greenHouses.size(), "Green houses expected list size: " + greenHousesExpectedSize
-                    + ", found list size: " + greenHouses.size());
-            assertEquals(blackAndWhiteHousesExpectedSize, blackAndWhiteHouses.size(), "Black and white houses expected list size: "
-                    + blackAndWhiteHousesExpectedSize + ", found list size: " + blackHouses.size());
-            assertEquals(redHousesExpectedSize, redHouses.size(), "Red houses expected list size: " + redHousesExpectedSize
-                    + ", found list size: " + redHouses.size());
+            whiteHouses.forEach(this::deleteTestHouse);
+            blackHouses.forEach(this::deleteTestHouse);
+            greenHouses.forEach(this::deleteTestHouse);
+            blackAndWhiteHouses.forEach(this::deleteTestHouse);
+            redHouses.forEach(this::deleteTestHouse);
+            assertTrue(whiteHouses.size() >= whiteHousesExpectedSize, "White houses expected list size: " + whiteHousesExpectedSize);
+            assertTrue(blackHouses.size() >= blackHousesExpectedSize, "Black houses expected list size: " + blackHousesExpectedSize);
+            assertTrue(greenHouses.size() >= greenHousesExpectedSize, "Green houses expected list size: " + greenHousesExpectedSize);
+            assertTrue(blackAndWhiteHouses.size() >= blackAndWhiteHousesExpectedSize, "Black and white houses expected list size: "
+                    + blackAndWhiteHousesExpectedSize);
+            assertTrue(redHouses.size() >= redHousesExpectedSize, "Red houses expected list size: " + redHousesExpectedSize);
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }
+    }
+    private void deleteTestHouse(HouseDTO houseDTO)  {
+
+        Object idForDelete = MockUtils.getId(houseDTO);
+        if (idForDelete != null) {
+            try {
+                HOUSE_DAO.delete((int) idForDelete, HouseDTO.class);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     }
 

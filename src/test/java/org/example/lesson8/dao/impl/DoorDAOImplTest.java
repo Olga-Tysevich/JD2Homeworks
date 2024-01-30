@@ -4,7 +4,6 @@ package org.example.lesson8.dao.impl;
 import org.example.lesson8.dao.DoorDAO;
 import org.example.lesson8.dto.DoorDTO;
 import org.example.lesson8.utils.wrappers.ThrowingConsumerWrapper;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.example.lesson8.dao.impl.MockConstants.*;
-import static org.example.lesson8.utils.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -33,18 +31,30 @@ class DoorDAOImplTest {
     @Test
     public void getBySizeTest() {
         try {
-            MockUtils.dropDatabase(DATABASE);
             MockUtils.createDatabase(DATABASE);
             MockUtils.createTable(CREATE_TABLE_DOORS);
             doorDTOS.forEach(ThrowingConsumerWrapper.accept(d -> DOOR_DAO.save(d, DoorDTO.class), SQLException.class));
 
             List<DoorDTO> doorDTOList = DOOR_DAO.getBySize(FROM_SIZE, TO_SIZE);
             int expected = 3;
+            doorDTOList.forEach(this::deleteTestDoor);
             assertNotNull(doorDTOList);
             assertEquals(expected, doorDTOList.size());
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }
+    }
+
+    private void deleteTestDoor(DoorDTO doorDTO)  {
+
+        Object idForDelete = MockUtils.getId(doorDTO);
+        if (idForDelete != null) {
+            try {
+                DOOR_DAO.delete((int) idForDelete, DoorDTO.class);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     }
 
