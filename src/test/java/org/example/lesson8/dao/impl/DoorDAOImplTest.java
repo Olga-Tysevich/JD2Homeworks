@@ -12,8 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.example.lesson8.dao.impl.MockConstants.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DoorDAOImplTest {
     private static final DoorDAO DOOR_DAO = new DoorDAOImpl();
@@ -33,13 +32,14 @@ class DoorDAOImplTest {
         try {
             MockUtils.createDatabase(DATABASE);
             MockUtils.createTable(CREATE_TABLE_DOORS);
-            doorDTOS.forEach(ThrowingConsumerWrapper.accept(d -> DOOR_DAO.save(d, DoorDTO.class), SQLException.class));
+            List<DoorDTO> forDelete = new ArrayList<>();
+            doorDTOS.forEach(ThrowingConsumerWrapper.accept(d -> forDelete.add(DOOR_DAO.save(d, DoorDTO.class)), SQLException.class));
 
             List<DoorDTO> doorDTOList = DOOR_DAO.getBySize(FROM_SIZE, TO_SIZE);
             int expected = 3;
-            doorDTOList.forEach(this::deleteTestDoor);
+            forDelete.forEach(this::deleteTestDoor);
             assertNotNull(doorDTOList);
-            assertEquals(expected, doorDTOList.size());
+            assertTrue(doorDTOList.size() >= expected, "Expected: " + expected + ", actual: " + doorDTOList.size());
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();

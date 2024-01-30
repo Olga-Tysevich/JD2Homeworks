@@ -70,7 +70,11 @@ class DAOImplTest<T> {
         try {
             if (dto != null) {
                 T result = DAO.save(dto, clazz);
-                int deletedRow = DAO.delete(1, clazz);
+                Object id =MockUtils.getId(result);
+                int deletedRow = 0;
+                if (id != null) {
+                    deletedRow = DAO.delete((int) id, clazz);
+                }
                 int expected = 1;
                 deleteTestObject(result, clazz);
 

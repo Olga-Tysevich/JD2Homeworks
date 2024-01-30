@@ -38,7 +38,8 @@ class HouseDAOImplTest {
         try {
             MockUtils.createDatabase(DATABASE);
             MockUtils.createTable(CREATE_TABLE_HOUSES);
-            houseDTOS.forEach(ThrowingConsumerWrapper.accept(d -> HOUSE_DAO.save(d, HouseDTO.class), SQLException.class));
+            List<HouseDTO> forDelete = new ArrayList<>();
+            houseDTOS.forEach(ThrowingConsumerWrapper.accept(d -> forDelete.add(HOUSE_DAO.save(d, HouseDTO.class)), SQLException.class));
 
             List<HouseDTO> whiteHouses = HOUSE_DAO.getByColor(HOUSES_COLOR.get(0));
             int whiteHousesExpectedSize = 2;
@@ -51,11 +52,7 @@ class HouseDAOImplTest {
             List<HouseDTO> redHouses = HOUSE_DAO.getByColor(HOUSES_COLOR.get(4));
             int redHousesExpectedSize = 1;
 
-            whiteHouses.forEach(this::deleteTestHouse);
-            blackHouses.forEach(this::deleteTestHouse);
-            greenHouses.forEach(this::deleteTestHouse);
-            blackAndWhiteHouses.forEach(this::deleteTestHouse);
-            redHouses.forEach(this::deleteTestHouse);
+            forDelete.forEach(this::deleteTestHouse);
             assertTrue(whiteHouses.size() >= whiteHousesExpectedSize, "White houses expected list size: " + whiteHousesExpectedSize);
             assertTrue(blackHouses.size() >= blackHousesExpectedSize, "Black houses expected list size: " + blackHousesExpectedSize);
             assertTrue(greenHouses.size() >= greenHousesExpectedSize, "Green houses expected list size: " + greenHousesExpectedSize);
