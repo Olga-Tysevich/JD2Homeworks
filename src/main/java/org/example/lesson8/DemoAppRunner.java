@@ -13,7 +13,6 @@ import org.example.lesson8.utils.GsonManager;
 import org.example.lesson8.utils.wrappers.ThrowingConsumerWrapper;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -36,7 +35,7 @@ public class DemoAppRunner<T> {
         Method doorsUniqueMethod = DoorDAO.class.getDeclaredMethod("getBySize", double.class, double.class);
         Method housesUniqueMethod = HouseDAO.class.getDeclaredMethod("getByColor", String.class);
         doorDemo.runner(DOORS_IN_FILE_PATH, DOORS_OUT_FILE_PATH, DoorDTO.class, DOORS_DAO, doorsUniqueMethod, 900D, 1300D);
-        houseDemo.runner(HOUSES_IN_FILE_PATH, HOUSES_OUT_FILE_PATH, HouseDTO.class, HOUSE_DAO, housesUniqueMethod, "белый");
+        houseDemo.runner(HOUSES_IN_FILE_PATH, HOUSES_OUT_FILE_PATH, HouseDTO.class, HOUSE_DAO, housesUniqueMethod, "черный");
     }
 
 
@@ -66,8 +65,7 @@ public class DemoAppRunner<T> {
 
             if (method.getParameterCount() != 0) {
                 var result = method.invoke(dao, methodParameters);
-                System.out.println("Unique method: " + method.getName() + "()");
-                System.out.println("Unique method parameters: " + Arrays.toString(methodParameters));
+                System.out.println("Unique method: " + method.getName() + "(" + Arrays.toString(methodParameters) + ")");
                 if (result != null) {
                     System.out.println(result);
                 } else {

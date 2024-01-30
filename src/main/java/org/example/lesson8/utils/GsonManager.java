@@ -25,7 +25,7 @@ public class GsonManager {
                 .create();
     }
 
-    public<T> void writeDTOList(String filePath, Object dtoList) throws FileNotFoundException {
+    public void writeDTOList(String filePath, Object dtoList) throws FileNotFoundException {
         String doorsDTOList = gson.toJson(dtoList);
         try (PrintWriter writer = new PrintWriter(filePath)) {
             writer.println(doorsDTOList);
