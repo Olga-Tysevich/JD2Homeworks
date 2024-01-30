@@ -101,8 +101,8 @@ public class ObjectMapper<T> {
         return filterByAnnotation(fields.stream(), PrimaryKey.class,false);
     }
 
-    private List<Field> filterByAnnotation(Stream<Field> stream, Class<? extends Annotation> annotation, boolean equals) {
-        return stream.filter(f -> equals == f.isAnnotationPresent(annotation))
+    private List<Field> filterByAnnotation(Stream<Field> stream, Class<? extends Annotation> annotation, boolean isPresent) {
+        return stream.filter(f -> isPresent == f.isAnnotationPresent(annotation))
                 .peek(f -> f.setAccessible(true))
                 .collect(Collectors.toList());
     }
