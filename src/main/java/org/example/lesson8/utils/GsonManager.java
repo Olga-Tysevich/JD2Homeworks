@@ -34,6 +34,13 @@ public class GsonManager {
         }
     }
 
+    public<T> void writeDTOList(String filePath, Object dtoList) throws FileNotFoundException {
+        String doorsDTOList = gson.toJson(dtoList);
+        try (PrintWriter writer = new PrintWriter(filePath)) {
+            writer.println(doorsDTOList);
+        }
+    }
+
     public<T> List<T> readDTOList(String filePath, Class<T> dtoClass) throws IOException {
         String DTOList = readAsString(filePath);
         return gson.fromJson(DTOList, setModelAndGetCorrespondingList2(dtoClass));

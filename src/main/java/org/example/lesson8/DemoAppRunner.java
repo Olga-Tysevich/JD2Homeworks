@@ -16,7 +16,9 @@ import org.example.lesson8.utils.wrappers.ThrowingConsumerWrapper;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,36 +33,19 @@ public class DemoAppRunner<T> {
     private static final DoorDAO DOORS_DAO = new DoorDAOImpl();
     private static final HouseDAO HOUSE_DAO = new HouseDAOImpl();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NoSuchMethodException {
         DemoAppRunner<DoorDTO> doorDemo = new DemoAppRunner<>();
         DemoAppRunner<HouseDTO> houseDemo = new DemoAppRunner<>();
-        doorDemo.runner(DOORS_IN_FILE_PATH, DoorDTO.class, DOORS_DAO);
-        houseDemo.runner(HOUSES_IN_FILE_PATH, HouseDTO.class, HOUSE_DAO);
-
-        try {
-            List<DoorDTO> doors = DOORS_DAO.getBySize(900, 1300);
-            List<HouseDTO> houses = HOUSE_DAO.getByColor("белый");
-            if (houses != null && !houses.isEmpty()) {
-                System.out.println("Get doors by size: ");
-                doors.forEach(System.out::println);
-                System.out.println("Get houses by color: ");
-                houses.forEach(System.out::println);
-
-                GSON_MANAGER.writeDTOList(DOORS_OUT_FILE_PATH, doors);
-                GSON_MANAGER.writeDTOList(HOUSES_OUT_FILE_PATH, houses);
-            } else {
-                System.out.println("Sorry, nothing found");
-            }
-            SQLConnection.closeConnection();
-        } catch (SQLException | FileNotFoundException exception) {
-            exception.printStackTrace();
-        }
+        Method doorsUniqueMethod = DoorDAO.class.getDeclaredMethod("getBySize", double.class, double.class);
+        Method housesUniqueMethod = HouseDAO.class.getDeclaredMethod("getByColor", String.class);
+        doorDemo.runner(DOORS_IN_FILE_PATH, DOORS_OUT_FILE_PATH, DoorDTO.class, DOORS_DAO, doorsUniqueMethod, 900D, 1300D);
+        houseDemo.runner(HOUSES_IN_FILE_PATH, HOUSES_OUT_FILE_PATH, HouseDTO.class, HOUSE_DAO, housesUniqueMethod, "белый");
     }
 
 
-    private void runner(String inFileName, Class<T> clazz, DAO<T> DAO) {
+    private void runner(String inFilePath, String outFilePath, Class<T> clazz, DAO<T> DAO, Method method, Object... methodParameters) {
         try {
-            List<T> DTOList = GSON_MANAGER.readDTOList(inFileName, clazz);
+            List<T> DTOList = GSON_MANAGER.readDTOList(inFilePath, clazz);
             System.out.println("List before save:");
             DTOList.forEach(System.out::println);
 
@@ -82,8 +67,15 @@ public class DemoAppRunner<T> {
             System.out.println("Updated rows: " + DAO.update(objectForUpdate));
             System.out.println("Deleted rows: " + DAO.delete(randomObjectId, clazz));
 
-        } catch (IOException | SQLException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
+
+            var result = method.invoke(DAO, methodParameters);
+            System.out.println("Unique method: " + method.getName());
+            System.out.println(result);
+
+            GSON_MANAGER.writeDTOList(outFilePath, result);
+            SQLConnection.closeConnection();
+        } catch (InvocationTargetException | IOException | SQLException | IllegalAccessException fileNotFoundException) {
+            fileNotFoundException.printStackTrace();
         }
 
     }
