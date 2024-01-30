@@ -19,7 +19,7 @@ import static org.example.lesson8.utils.Constants.*;
 
 public class ObjectMapper<T> {
 
-    public String insert(T object) {
+    public String generateInsert(T object) {
         Map<String, String> columns = getFieldsForQuery(object, getUngeneratedColumns(getAllFields(object)));
         List<Field> fields = getUngeneratedColumns(getAllFields(object));
 
@@ -29,7 +29,7 @@ public class ObjectMapper<T> {
         return SQLQueryGenerator.createInsert(getDatabaseName(object.getClass()), getTableName(object.getClass()), columns);
     }
 
-    public String update(T object) {
+    public String generateUpdate(T object) {
         Map<String, String> columns = getFieldsForQuery(object, getUngeneratedColumns(getAllFields(object)));
         Map<String, String> keys = getFieldsForQuery(object, getAllKeys(object));
 
@@ -39,11 +39,11 @@ public class ObjectMapper<T> {
         return SQLQueryGenerator.createUpdate(getDatabaseName(object.getClass()), getTableName(object.getClass()), keys, columns);
     }
 
-    public String createGet(int id, Class<T> clazz) {
+    public String generateGet(int id, Class<T> clazz) {
         return createSelectOrDelete(SELECT_QUERY_PATTERN, id, clazz);
     }
 
-    public T get(ResultSet resultSet, Class<T> clazz) {
+    public T getObject(ResultSet resultSet, Class<T> clazz) {
         T instance = getInstance(clazz);
         if (instance != null) {
             List<Field> fields = getAllFields(instance);
@@ -55,7 +55,7 @@ public class ObjectMapper<T> {
         return instance;
     }
 
-    public String delete(int id, Class<T> clazz) {
+    public String generateDelete(int id, Class<T> clazz) {
         return createSelectOrDelete(DELETE_QUERY_PATTERN, id, clazz);
     }
 

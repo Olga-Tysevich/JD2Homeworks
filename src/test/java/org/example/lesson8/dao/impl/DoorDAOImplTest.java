@@ -27,6 +27,7 @@ class DoorDAOImplTest {
         doorDTOS.add(MockUtils.buildDoor(DOORS_SIZE.get(4), DOORS_TYPE.get(4)));
     }
 
+
     @Test
     public void getBySizeTest() {
         try {

@@ -59,17 +59,17 @@ public class DemoAppRunner<T> {
 
             T objectForUpdate = dao.get(randomObjectId, clazz);
 
-            System.out.println("Get object by id: " + randomObjectId + ": " + objectForUpdate);
+            System.out.println("Get object by id " + randomObjectId + ": " + objectForUpdate);
             System.out.println("Updated rows: " + dao.update(objectForUpdate));
             System.out.println("Deleted rows: " + dao.delete(randomObjectId, clazz));
 
             if (method.getParameterCount() != 0) {
                 var result = method.invoke(dao, methodParameters);
-                System.out.println("Unique method: " + method.getName() + "(" + Arrays.toString(methodParameters) + ")");
+                System.out.println("Unique method: " + method.getName() + "(" + Arrays.toString(methodParameters) + ")\n");
                 if (result != null) {
                     System.out.println(result);
                 } else {
-                    System.out.println("Sorry, nothing found...");
+                    System.out.println("Sorry, nothing found...\n");
                 }
                 GSON_MANAGER.writeDTOList(outFilePath, result);
             }

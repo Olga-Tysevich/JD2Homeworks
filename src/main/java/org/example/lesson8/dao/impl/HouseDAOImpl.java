@@ -21,7 +21,7 @@ public class HouseDAOImpl extends DAOImpl<HouseDTO> implements HouseDAO {
             statement.setString(1, color);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    houseDTOList.add(super.getMapper().get(resultSet, HouseDTO.class));
+                    houseDTOList.add(super.getMapper().getObject(resultSet, HouseDTO.class));
                 }
             }
         }

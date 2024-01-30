@@ -18,7 +18,8 @@ public class DAOImpl<T> implements DAO<T> {
     public T save(T object, Class<T> clazz) throws SQLException {
         T result;
         if (object != null) {
-            try (PreparedStatement statement = SQLConnection.getConnection().prepareStatement(mapper.insert(object), Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement statement = SQLConnection.getConnection()
+                    .prepareStatement(mapper.generateInsert(object), Statement.RETURN_GENERATED_KEYS)) {
                 int affectedRaw = statement.executeUpdate();
                 int id = getId(statement, affectedRaw);
                 result = get(id, clazz);
@@ -32,7 +33,8 @@ public class DAOImpl<T> implements DAO<T> {
     @Override
     public int update(T object) throws SQLException {
         if (object != null) {
-            try (PreparedStatement statement = SQLConnection.getConnection().prepareStatement(mapper.update(object))) {
+            try (PreparedStatement statement = SQLConnection.getConnection()
+                    .prepareStatement(mapper.generateUpdate(object))) {
                 return statement.executeUpdate();
             }
         } else {
@@ -43,15 +45,15 @@ public class DAOImpl<T> implements DAO<T> {
     @Override
     public T get(int id, Class<T> clazz) throws SQLException {
         try (Statement statement = SQLConnection.getConnection().createStatement()) {
-            ResultSet resultSet = statement.executeQuery(mapper.createGet(id, clazz));
-            return resultSet.next() ? mapper.get(resultSet, clazz) : null;
+            ResultSet resultSet = statement.executeQuery(mapper.generateGet(id, clazz));
+            return resultSet.next() ? mapper.getObject(resultSet, clazz) : null;
         }
     }
 
     @Override
     public int delete(int id, Class<T> clazz) throws SQLException {
         try (Statement statement = SQLConnection.getConnection().createStatement()) {
-            return statement.executeUpdate(mapper.delete(id, clazz));
+            return statement.executeUpdate(mapper.generateDelete(id, clazz));
         }
     }
 

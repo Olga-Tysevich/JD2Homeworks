@@ -34,10 +34,10 @@ public class GsonManager {
 
     public<T> List<T> readDTOList(String filePath, Class<T> dtoClass) throws IOException {
         String DTOList = readAsString(filePath);
-        return gson.fromJson(DTOList, setModelAndGetCorrespondingList2(dtoClass));
+        return gson.fromJson(DTOList, setModelAndGetCorrespondingList(dtoClass));
     }
 
-    private Type setModelAndGetCorrespondingList2(Class<?> typeArgument) {
+    private Type setModelAndGetCorrespondingList(Class<?> typeArgument) {
         return TypeToken.getParameterized(ArrayList.class, typeArgument).getType();
     }
 

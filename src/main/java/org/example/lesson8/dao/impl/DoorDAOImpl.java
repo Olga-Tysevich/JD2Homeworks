@@ -21,7 +21,7 @@ public class DoorDAOImpl extends DAOImpl<DoorDTO> implements DoorDAO {
             statement.setDouble(2, toSize);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    doorDTOList.add(super.getMapper().get(resultSet, DoorDTO.class));
+                    doorDTOList.add(super.getMapper().getObject(resultSet, DoorDTO.class));
                 }
             }
         }
