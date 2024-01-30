@@ -67,12 +67,17 @@ public class DemoAppRunner<T> {
             System.out.println("Updated rows: " + DAO.update(objectForUpdate));
             System.out.println("Deleted rows: " + DAO.delete(randomObjectId, clazz));
 
+            if (method.getParameterCount() != 0 ){
+                var result = method.invoke(DAO, methodParameters);
+                System.out.println("Unique method: " + method.getName());
+                if (result != null) {
+                    System.out.println(result);
+                } else {
+                    System.out.println("Sorry, nothing found...");
+                }
+                GSON_MANAGER.writeDTOList(outFilePath, result);
+            }
 
-            var result = method.invoke(DAO, methodParameters);
-            System.out.println("Unique method: " + method.getName());
-            System.out.println(result);
-
-            GSON_MANAGER.writeDTOList(outFilePath, result);
             SQLConnection.closeConnection();
         } catch (InvocationTargetException | IOException | SQLException | IllegalAccessException fileNotFoundException) {
             fileNotFoundException.printStackTrace();
