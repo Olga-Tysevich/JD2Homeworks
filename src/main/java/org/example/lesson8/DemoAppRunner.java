@@ -13,6 +13,7 @@ import org.example.lesson8.utils.GsonManager;
 import org.example.lesson8.utils.wrappers.ThrowingConsumerWrapper;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -65,7 +66,8 @@ public class DemoAppRunner<T> {
 
             if (method.getParameterCount() != 0) {
                 var result = method.invoke(dao, methodParameters);
-                System.out.println("Unique method: " + method.getName());
+                System.out.println("Unique method: " + method.getName() + "()");
+                System.out.println("Unique method parameters: " + Arrays.toString(methodParameters));
                 if (result != null) {
                     System.out.println(result);
                 } else {

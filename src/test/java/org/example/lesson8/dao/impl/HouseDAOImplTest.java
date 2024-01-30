@@ -2,7 +2,6 @@ package org.example.lesson8.dao.impl;
 
 
 import org.example.lesson8.dao.HouseDAO;
-import org.example.lesson8.dto.DoorDTO;
 import org.example.lesson8.dto.HouseDTO;
 import org.example.lesson8.utils.wrappers.ThrowingConsumerWrapper;
 import org.junit.jupiter.api.BeforeAll;
