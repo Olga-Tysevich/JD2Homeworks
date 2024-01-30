@@ -45,7 +45,10 @@ public class ObjectMapper<T> {
         T instance = getInstance(clazz);
         if (instance != null) {
             List<Field> fields = getAllFields(instance);
-            fields.forEach(ThrowingConsumerWrapper.accept(f -> f.set(instance, resultSet.getObject(getColumnName(instance, f), f.getType())), Exception.class));
+            fields.forEach(
+                    ThrowingConsumerWrapper.accept(f ->
+                            f.set(instance, resultSet.getObject(getColumnName(f), f.getType())),
+                            Exception.class));
         }
         return instance;
     }
@@ -54,7 +57,7 @@ public class ObjectMapper<T> {
         return createSelectOrDelete(DELETE_QUERY_PATTERN, id, clazz);
     }
 
-    private String getColumnName(T object, Field field) {
+    private String getColumnName(Field field) {
         return field.getAnnotation(Column.class).name();
     }
 
@@ -84,15 +87,10 @@ public class ObjectMapper<T> {
 
     private List<Field> getAllFields(T object) {
         Class<?> clazz = object.getClass();
-        List<Field> fields = Arrays.stream(clazz.getDeclaredFields())
+        return Arrays.stream(clazz.getDeclaredFields())
                 .filter(f -> f.isAnnotationPresent(Column.class))
                 .peek(f -> f.setAccessible(true))
                 .collect(Collectors.toList());
-        if (!fields.isEmpty()) {
-            return fields;
-        } else {
-            throw new IllegalArgumentException(COLUMN_ERROR);
-        }
     }
 
     private List<Field> getAllKeys(T object) {
