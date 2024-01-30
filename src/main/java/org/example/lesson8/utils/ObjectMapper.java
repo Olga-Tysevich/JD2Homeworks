@@ -20,8 +20,8 @@ import static org.example.lesson8.utils.Constants.*;
 public class ObjectMapper<T> {
 
     public String generateInsert(T object) {
-        Map<String, String> columns = getFieldsForQuery(object, getUngeneratedColumns(getAllFields(object)));
-        List<Field> fields = getUngeneratedColumns(getAllFields(object));
+        Map<String, String> columns = getFieldsForQuery(object, getNonGeneratedColumns(getAllFields(object)));
+        List<Field> fields = getNonGeneratedColumns(getAllFields(object));
 
         if (fields.isEmpty()) {
             throw new IllegalArgumentException(FIELDS_ERROR);
@@ -30,7 +30,7 @@ public class ObjectMapper<T> {
     }
 
     public String generateUpdate(T object) {
-        Map<String, String> columns = getFieldsForQuery(object, getUngeneratedColumns(getAllFields(object)));
+        Map<String, String> columns = getFieldsForQuery(object, getNonGeneratedColumns(getAllFields(object)));
         Map<String, String> keys = getFieldsForQuery(object, getAllKeys(object));
 
         if (columns.isEmpty() || keys.size() != 1) {
@@ -96,8 +96,7 @@ public class ObjectMapper<T> {
         return filterByAnnotation(getAllFields(object).stream(), PrimaryKey.class, true);
     }
 
-    private List<Field> getUngeneratedColumns(List<Field> fields) {
-        List<Field> t = filterByAnnotation(fields.stream(), PrimaryKey.class,false);
+    private List<Field> getNonGeneratedColumns(List<Field> fields) {
         return filterByAnnotation(fields.stream(), PrimaryKey.class,false);
     }
 
