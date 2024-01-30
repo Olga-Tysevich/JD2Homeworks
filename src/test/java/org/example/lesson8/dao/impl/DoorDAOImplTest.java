@@ -33,6 +33,9 @@ class DoorDAOImplTest {
     @Test
     public void getBySizeTest() {
         try {
+            MockUtils.dropDatabase(DATABASE);
+            MockUtils.createDatabase(DATABASE);
+            MockUtils.createTable(CREATE_TABLE_DOORS);
             doorDTOS.forEach(ThrowingConsumerWrapper.accept(d -> DOOR_DAO.save(d, DoorDTO.class), SQLException.class));
 
             List<DoorDTO> doorDTOList = DOOR_DAO.getBySize(FROM_SIZE, TO_SIZE);

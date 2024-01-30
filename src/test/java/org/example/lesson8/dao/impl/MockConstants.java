@@ -13,6 +13,19 @@ public class MockConstants {
     public static final List<String> HOUSES_COLOR = List.of("белый", "черный", "зеленый", "черно-белый", "красный");
     public static final List<Integer> HOUSES_ROOM = List.of(5, 3, 4, 7, 3);
 
+    public static final String DATABASE = "lesson8";
+    public static final String CREATE_DATABASE_PATTERN = "create database ?";
+    public static final String DROP_DATABASE_PATTERN = "drop database ?";
+    public static final String CREATE_TABLE_HOUSES = "create table lesson8.houses"
+            + "(id int primary key auto_increment, "
+            + "size decimal(32,2), "
+            + "color varchar(50), "
+            + "room_count INT)";
+    public static final String CREATE_TABLE_DOORS = "create table lesson8.doors"
+            + "(id int primary key auto_increment, "
+            + "size decimal(32, 2), "
+            + "type varchar(50))";
+
     private MockConstants() {
     }
 }

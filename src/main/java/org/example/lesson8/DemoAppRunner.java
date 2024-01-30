@@ -14,8 +14,10 @@ import org.example.lesson8.dto.HouseDTO;
 import org.example.lesson8.utils.GsonManager;
 import org.example.lesson8.utils.wrappers.ThrowingConsumerWrapper;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,12 +34,31 @@ public class DemoAppRunner<T> {
     public static void main(String[] args) {
         DemoAppRunner<DoorDTO> doorDemo = new DemoAppRunner<>();
         DemoAppRunner<HouseDTO> houseDemo = new DemoAppRunner<>();
-        doorDemo.runner(DOORS_IN_FILE_PATH, DOORS_OUT_FILE_PATH, DoorDTO.class, DOORS_DAO);
-        houseDemo.runner(HOUSES_IN_FILE_PATH, HOUSES_OUT_FILE_PATH, HouseDTO.class, HOUSE_DAO);
+        doorDemo.runner(DOORS_IN_FILE_PATH, DoorDTO.class, DOORS_DAO);
+        houseDemo.runner(HOUSES_IN_FILE_PATH, HouseDTO.class, HOUSE_DAO);
+
+        try {
+            List<DoorDTO> doors = DOORS_DAO.getBySize(900, 1300);
+            List<HouseDTO> houses = HOUSE_DAO.getByColor("белый");
+            if (houses != null && !houses.isEmpty()) {
+                System.out.println("Get doors by size: ");
+                doors.forEach(System.out::println);
+                System.out.println("Get houses by color: ");
+                houses.forEach(System.out::println);
+
+                GSON_MANAGER.writeDTOList(DOORS_OUT_FILE_PATH, doors);
+                GSON_MANAGER.writeDTOList(HOUSES_OUT_FILE_PATH, houses);
+            } else {
+                System.out.println("Sorry, nothing found");
+            }
+            SQLConnection.closeConnection();
+        } catch (SQLException | FileNotFoundException exception) {
+            exception.printStackTrace();
+        }
     }
 
 
-    private void runner(String inFileName, String outFileName, Class<T> clazz, DAO<T> DAO) {
+    private void runner(String inFileName, Class<T> clazz, DAO<T> DAO) {
         try {
             List<T> DTOList = GSON_MANAGER.readDTOList(inFileName, clazz);
             System.out.println("List before save:");
@@ -53,25 +74,14 @@ public class DemoAppRunner<T> {
             }
 
             int randomObject = RANDOM.nextInt(dtoAfterSave.size());
-            int randomObjectId = (int) getId(dtoAfterSave.get(randomObject));
+            Object id = getId(dtoAfterSave.get(randomObject));
+            int randomObjectId = id != null ? (int) id : 1;
 
             T objectForUpdate = DAO.get(randomObjectId, clazz);
 
             System.out.println("Get object by id: " + randomObjectId + ": " + objectForUpdate);
             System.out.println("Updated rows: " + DAO.update(objectForUpdate));
             System.out.println("Deleted rows: " + DAO.delete(randomObjectId, clazz));
-
-//            List<DoorDTO> dto = DAO.getBySize(900, 1300);
-//            if (dto != null && !dto.isEmpty()) {
-//                System.out.println("Get by size from 900 to 1300: ");
-//                dto.forEach(System.out::println);
-//
-//                GSON_MANAGER.writeDTOList(outFileName, dto);
-//            } else {
-//                System.out.println("Sorry, nothing found");
-//            }
-
-            SQLConnection.closeConnection();
 
         } catch (IOException | SQLException e) {
             System.out.println(Arrays.toString(e.getStackTrace()));
@@ -95,6 +105,4 @@ public class DemoAppRunner<T> {
         }
         return null;
     }
-
-//    private void executeMethod(T object, Class<T> clazz, DAO<T> DAO)
 }

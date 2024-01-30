@@ -21,7 +21,8 @@ class HouseDAOImplTest {
     private static final List<HouseDTO> houseDTOS = new ArrayList<>();
 
     @BeforeAll
-    public static void createDB() {
+    public static void createHouseList() {
+
         houseDTOS.add(MockUtils.buildHouse(HOUSES_SIZE.get(0), HOUSES_COLOR.get(0), HOUSES_ROOM.get(0)));
         houseDTOS.add(MockUtils.buildHouse(HOUSES_SIZE.get(0), HOUSES_COLOR.get(0), HOUSES_ROOM.get(0)));
         houseDTOS.add(MockUtils.buildHouse(HOUSES_SIZE.get(1), HOUSES_COLOR.get(1), HOUSES_ROOM.get(1)));
@@ -36,6 +37,10 @@ class HouseDAOImplTest {
     @Test
     public void getBySizeTest() {
         try {
+
+            MockUtils.dropDatabase(DATABASE);
+            MockUtils.createDatabase(DATABASE);
+            MockUtils.createTable(CREATE_TABLE_HOUSES);
             houseDTOS.forEach(ThrowingConsumerWrapper.accept(d -> HOUSE_DAO.save(d, HouseDTO.class), SQLException.class));
 
             List<HouseDTO> whiteHouses = HOUSE_DAO.getByColor(HOUSES_COLOR.get(0));
