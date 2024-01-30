@@ -89,22 +89,20 @@ public class ObjectMapper<T> {
 
     private List<Field> getAllFields(T object) {
         Class<?> clazz = object.getClass();
-        return filterByAnnotation(Arrays.stream(clazz.getDeclaredFields()), Column.class);
+        return filterByAnnotation(Arrays.stream(clazz.getDeclaredFields()), Column.class, true);
     }
 
     private List<Field> getAllKeys(T object) {
-        return filterByAnnotation(getAllFields(object).stream(), PrimaryKey.class);
+        return filterByAnnotation(getAllFields(object).stream(), PrimaryKey.class, true);
     }
 
     private List<Field> getUngeneratedColumns(List<Field> fields) {
-        return fields.stream()
-                .filter(f -> !f.isAnnotationPresent(PrimaryKey.class))
-                .peek(f -> f.setAccessible(true))
-                .collect(Collectors.toList());
+        List<Field> t = filterByAnnotation(fields.stream(), PrimaryKey.class,false);
+        return filterByAnnotation(fields.stream(), PrimaryKey.class,false);
     }
 
-    private List<Field> filterByAnnotation(Stream<Field> stream, Class<? extends Annotation> annotation) {
-        return stream.filter(f -> f.isAnnotationPresent(annotation))
+    private List<Field> filterByAnnotation(Stream<Field> stream, Class<? extends Annotation> annotation, boolean equals) {
+        return stream.filter(f -> equals == f.isAnnotationPresent(annotation))
                 .peek(f -> f.setAccessible(true))
                 .collect(Collectors.toList());
     }
