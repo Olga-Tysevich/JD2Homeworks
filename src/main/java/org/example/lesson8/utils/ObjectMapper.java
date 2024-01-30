@@ -32,7 +32,7 @@ public class ObjectMapper<T> {
         Map<String, String> keys = getFieldsForQuery(object, getAllKeys(object));
 
         if (columns.isEmpty() || keys.size() != 1) {
-            throw new IllegalArgumentException(columns.isEmpty()? FIELDS_ERROR : PRIMARY_KEY_ERROR);
+            throw new IllegalArgumentException(columns.isEmpty() ? FIELDS_ERROR : PRIMARY_KEY_ERROR);
         }
         return SQLQueryGenerator.createUpdate(getDatabaseName(object.getClass()), getTableName(object.getClass()), keys, columns);
     }
@@ -45,13 +45,17 @@ public class ObjectMapper<T> {
         T instance = getInstance(clazz);
         if (instance != null) {
             List<Field> fields = getAllFields(instance);
-            fields.forEach(ThrowingConsumerWrapper.accept(f -> f.set(instance, resultSet.getObject(f.getName(), f.getType())), Exception.class));
+            fields.forEach(ThrowingConsumerWrapper.accept(f -> f.set(instance, resultSet.getObject(getColumnName(instance, f), f.getType())), Exception.class));
         }
         return instance;
     }
 
     public String delete(int id, Class<T> clazz) {
         return createSelectOrDelete(DELETE_QUERY_PATTERN, id, clazz);
+    }
+
+    private String getColumnName(T object, Field field) {
+        return field.getAnnotation(Column.class).name();
     }
 
     private String createSelectOrDelete(String queryPattern, int id, Class<T> clazz) {
