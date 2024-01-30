@@ -63,7 +63,6 @@ public class DemoAppRunner<T> {
             List<T> DTOList = GSON_MANAGER.readDTOList(inFileName, clazz);
             System.out.println("List before save:");
             DTOList.forEach(System.out::println);
-            System.out.println(DTOList.get(0).getClass());
 
             List<T> dtoAfterSave = new ArrayList<>();
             DTOList.forEach(ThrowingConsumerWrapper.accept(dto -> dtoAfterSave.add(DAO.save(dto, clazz)), SQLException.class));

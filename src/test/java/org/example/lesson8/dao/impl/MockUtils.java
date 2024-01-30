@@ -1,12 +1,8 @@
 package org.example.lesson8.dao.impl;
 
-import org.example.lesson8.annotations.Table;
 import org.example.lesson8.connection.SQLConnection;
 import org.example.lesson8.dto.DoorDTO;
 import org.example.lesson8.dto.HouseDTO;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.sql.Statement;
 
