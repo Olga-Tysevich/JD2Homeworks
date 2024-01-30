@@ -6,12 +6,14 @@ import org.example.lesson8.annotations.Table;
 import org.example.lesson8.utils.generators.SQLQueryGenerator;
 import org.example.lesson8.utils.wrappers.ThrowingConsumerWrapper;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.example.lesson8.utils.Constants.*;
 
@@ -87,22 +89,22 @@ public class ObjectMapper<T> {
 
     private List<Field> getAllFields(T object) {
         Class<?> clazz = object.getClass();
-        return Arrays.stream(clazz.getDeclaredFields())
-                .filter(f -> f.isAnnotationPresent(Column.class))
-                .peek(f -> f.setAccessible(true))
-                .collect(Collectors.toList());
+        return filterByAnnotation(Arrays.stream(clazz.getDeclaredFields()), Column.class);
     }
 
     private List<Field> getAllKeys(T object) {
-        return getAllFields(object).stream()
-                .filter(f -> f.isAnnotationPresent(PrimaryKey.class))
-                .peek(f -> f.setAccessible(true))
-                .collect(Collectors.toList());
+        return filterByAnnotation(getAllFields(object).stream(), PrimaryKey.class);
     }
 
     private List<Field> getUngeneratedColumns(List<Field> fields) {
         return fields.stream()
                 .filter(f -> !f.isAnnotationPresent(PrimaryKey.class))
+                .peek(f -> f.setAccessible(true))
+                .collect(Collectors.toList());
+    }
+
+    private List<Field> filterByAnnotation(Stream<Field> stream, Class<? extends Annotation> annotation) {
+        return stream.filter(f -> f.isAnnotationPresent(annotation))
                 .peek(f -> f.setAccessible(true))
                 .collect(Collectors.toList());
     }
