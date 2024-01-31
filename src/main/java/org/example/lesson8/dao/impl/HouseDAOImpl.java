@@ -3,6 +3,8 @@ package org.example.lesson8.dao.impl;
 import org.example.lesson8.connection.SQLConnection;
 import org.example.lesson8.dao.HouseDAO;
 import org.example.lesson8.dto.HouseDTO;
+import org.example.lesson8.utils.ReflectionManager;
+import org.example.lesson8.utils.ResultSetHandler;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,7 +23,7 @@ public class HouseDAOImpl extends DAOImpl<HouseDTO> implements HouseDAO {
             statement.setString(1, color);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    houseDTOList.add(super.getMapper().getObject(resultSet, HouseDTO.class));
+                    houseDTOList.add(ResultSetHandler.getObject(resultSet, HouseDTO.class));
                 }
             }
         }

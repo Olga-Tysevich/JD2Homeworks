@@ -3,11 +3,16 @@ package org.example.lesson8.dao.impl;
 import org.example.lesson8.connection.SQLConnection;
 import org.example.lesson8.dao.DAO;
 import org.example.lesson8.utils.ObjectMapper;
+import org.example.lesson8.utils.ReflectionManager;
+import org.example.lesson8.utils.ResultSetHandler;
+import org.example.lesson8.utils.wrappers.ThrowingConsumerWrapper;
 
+import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 import static org.example.lesson8.utils.Constants.PERSON_IS_NULL;
 
@@ -44,10 +49,13 @@ public class DAOImpl<T> implements DAO<T> {
 
     @Override
     public T get(int id, Class<T> clazz) throws SQLException {
+        T object;
         try (Statement statement = SQLConnection.getConnection().createStatement()) {
-            ResultSet resultSet = statement.executeQuery(mapper.generateGet(id, clazz));
-            return resultSet.next() ? mapper.getObject(resultSet, clazz) : null;
-        }
+            try (ResultSet resultSet = statement.executeQuery(mapper.generateGet(id, clazz))) {
+                    object = ResultSetHandler.getObject(resultSet, clazz);
+                }
+            }
+        return object;
     }
 
     @Override

@@ -11,16 +11,15 @@ import org.example.lesson8.dto.DoorDTO;
 import org.example.lesson8.dto.HouseDTO;
 import org.example.lesson8.utils.GsonManager;
 import org.example.lesson8.utils.wrappers.ThrowingConsumerWrapper;
+import org.example.lesson8.utils.wrappers.ThrowingFunctionWrapper;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.example.lesson8.utils.Constants.*;
 
@@ -73,7 +72,6 @@ public class DemoAppRunner<T> {
                 }
                 GSON_MANAGER.writeDTOList(outFilePath, result);
             }
-
             SQLConnection.closeConnection();
         } catch (InvocationTargetException | IOException | SQLException | IllegalAccessException fileNotFoundException) {
             fileNotFoundException.printStackTrace();
@@ -82,19 +80,12 @@ public class DemoAppRunner<T> {
     }
 
     private Object getId(T object) {
-        List<Field> idFields = Arrays.stream(object.getClass().getDeclaredFields())
+        return Arrays.stream(object.getClass().getDeclaredFields())
                 .filter(f -> f.isAnnotationPresent(PrimaryKey.class))
                 .peek(f -> f.setAccessible(true))
-                .collect(Collectors.toList());
-        if (idFields.size() == 1) {
-            try {
-                return idFields.get(0).get(object);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        } else {
-            throw new IllegalArgumentException(PRIMARY_KEY_ERROR);
-        }
-        return null;
+                .map(f -> ThrowingFunctionWrapper.apply(q -> f.get(object), IllegalAccessException.class)
+                        .apply(object))
+                .findFirst()
+                .orElse(null);
     }
 }

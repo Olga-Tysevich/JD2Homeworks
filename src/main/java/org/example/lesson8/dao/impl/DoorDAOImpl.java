@@ -3,6 +3,8 @@ package org.example.lesson8.dao.impl;
 import org.example.lesson8.connection.SQLConnection;
 import org.example.lesson8.dao.DoorDAO;
 import org.example.lesson8.dto.DoorDTO;
+import org.example.lesson8.dto.HouseDTO;
+import org.example.lesson8.utils.ResultSetHandler;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,7 +23,7 @@ public class DoorDAOImpl extends DAOImpl<DoorDTO> implements DoorDAO {
             statement.setDouble(2, toSize);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    doorDTOList.add(super.getMapper().getObject(resultSet, DoorDTO.class));
+                    doorDTOList.add(ResultSetHandler.getObject(resultSet, DoorDTO.class));
                 }
             }
         }
