@@ -3,13 +3,14 @@ package org.example.lesson9.dao.impl;
 
 import org.example.lesson9.dao.DoorDAO;
 import org.example.lesson9.dto.DoorDTO;
-import org.example.lesson9.utils.wrappers.ThrowingConsumerWrapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.sql.SQLException;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.example.lesson9.dao.impl.MockConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,7 +20,7 @@ class DoorDAOImplTest {
     private static final List<DoorDTO> doorDTOS = new ArrayList<>();
 
     @BeforeAll
-    public static void createDB() {
+    public static void createDoorList() {
         doorDTOS.add(MockUtils.buildDoor(DOORS_SIZE.get(0), DOORS_TYPE.get(0)));
         doorDTOS.add(MockUtils.buildDoor(DOORS_SIZE.get(1), DOORS_TYPE.get(1)));
         doorDTOS.add(MockUtils.buildDoor(DOORS_SIZE.get(2), DOORS_TYPE.get(2)));
@@ -27,36 +28,48 @@ class DoorDAOImplTest {
         doorDTOS.add(MockUtils.buildDoor(DOORS_SIZE.get(4), DOORS_TYPE.get(4)));
     }
 
+    @ParameterizedTest()
+    @MethodSource("cases")
+    public void updateTest(DoorDTO dto) {
+        if (dto != null) {
+            String expected = dto.getType();
+            DOOR_DAO.save(dto, DoorDTO.class);
+            dto.setType("another");
+            DOOR_DAO.update(dto);
+            String actual = DOOR_DAO.get(dto.getId(), DoorDTO.class).getType();
 
-    @Test
-    public void getBySizeTest() {
-        try {
-            MockUtils.createDatabase(DATABASE);
-            MockUtils.createTable(CREATE_TABLE_DOORS);
-            List<DoorDTO> forDelete = new ArrayList<>();
-            doorDTOS.forEach(ThrowingConsumerWrapper.accept(d -> forDelete.add(DOOR_DAO.save(d, DoorDTO.class)), SQLException.class));
-
-            List<DoorDTO> doorDTOList = DOOR_DAO.getBySize(FROM_SIZE, TO_SIZE);
-            int expected = 3;
-            forDelete.forEach(this::deleteTestDoor);
-            assertNotNull(doorDTOList);
-            assertTrue(doorDTOList.size() >= expected, "Expected: " + expected + ", actual: " + doorDTOList.size());
-
-        } finally {
-
+            assertNotEquals(expected, actual, "Expected type: " + expected + ", actual: " + actual);
+        } else {
+            assertThrows(IllegalArgumentException.class, () -> DOOR_DAO.update(dto));
         }
     }
 
-    private void deleteTestDoor(DoorDTO doorDTO)  {
+    @Test
+    public void getBySizeTest() {
+        doorDTOS.forEach(d -> DOOR_DAO.save(d, DoorDTO.class));
 
-        Object idForDelete = MockUtils.getId(doorDTO);
-        if (idForDelete != null) {
-            try {
-                DOOR_DAO.delete((int) idForDelete, DoorDTO.class);
-            } finally {
+        List<DoorDTO> doorDTOList = DOOR_DAO.getBySize(FROM_SIZE, TO_SIZE);
+        int expected = 3;
+        assertNotNull(doorDTOList);
+        assertTrue(doorDTOList.size() >= expected, "Expected: " + expected + ", actual: " + doorDTOList.size());
+    }
 
-            }
-        }
+    static Stream<Arguments> cases() {
+        return Stream.of(
+
+                Arguments.of(MockUtils.buildDoor(DOORS_SIZE.get(0), DOORS_TYPE.get(0))),
+
+                Arguments.of(MockUtils.buildDoor(DOORS_SIZE.get(1), DOORS_TYPE.get(1))),
+
+                Arguments.of(MockUtils.buildDoor(DOORS_SIZE.get(2), DOORS_TYPE.get(2))),
+
+                Arguments.of(MockUtils.buildDoor(DOORS_SIZE.get(3), DOORS_TYPE.get(3))),
+
+                Arguments.of(MockUtils.buildDoor(DOORS_SIZE.get(4), DOORS_TYPE.get(4))),
+
+                Arguments.of((Object) null)
+
+        );
     }
 
 }

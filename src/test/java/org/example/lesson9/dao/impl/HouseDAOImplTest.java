@@ -1,15 +1,15 @@
 package org.example.lesson9.dao.impl;
 
-
 import org.example.lesson9.dao.HouseDAO;
 import org.example.lesson9.dto.HouseDTO;
-import org.example.lesson9.utils.wrappers.ThrowingConsumerWrapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.sql.SQLException;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.example.lesson9.dao.impl.MockConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,12 +32,25 @@ class HouseDAOImplTest {
         houseDTOS.add(MockUtils.buildHouse(HOUSES_SIZE.get(4), HOUSES_COLOR.get(4), HOUSES_ROOM.get(4)));
     }
 
+    @ParameterizedTest()
+    @MethodSource("cases")
+    public void updateTest(HouseDTO dto) {
+        if (dto != null) {
+            String expected = dto.getColor();
+            HOUSE_DAO.save(dto, HouseDTO.class);
+            dto.setColor("another");
+            HOUSE_DAO.update(dto);
+            String actual = HOUSE_DAO.get(dto.getId(), HouseDTO.class).getColor();
+
+            assertNotEquals(expected, actual, "Expected color: " + expected + ", actual: " + actual);
+        } else {
+            assertThrows(IllegalArgumentException.class, () -> HOUSE_DAO.update(dto));
+        }
+    }
+
     @Test
     public void getBySizeTest() {
-        MockUtils.createDatabase(DATABASE);
-        MockUtils.createTable(CREATE_TABLE_HOUSES);
-        List<HouseDTO> forDelete = new ArrayList<>();
-        houseDTOS.forEach(ThrowingConsumerWrapper.accept(d -> forDelete.add(HOUSE_DAO.save(d, HouseDTO.class)), SQLException.class));
+        houseDTOS.forEach(h -> HOUSE_DAO.save(h, HouseDTO.class));
 
         List<HouseDTO> whiteHouses = HOUSE_DAO.getByColor(HOUSES_COLOR.get(0));
         int whiteHousesExpectedSize = 2;
@@ -50,7 +63,6 @@ class HouseDAOImplTest {
         List<HouseDTO> redHouses = HOUSE_DAO.getByColor(HOUSES_COLOR.get(4));
         int redHousesExpectedSize = 1;
 
-        forDelete.forEach(this::deleteTestHouse);
         assertTrue(whiteHouses.size() >= whiteHousesExpectedSize, "White houses expected list size: " + whiteHousesExpectedSize);
         assertTrue(blackHouses.size() >= blackHousesExpectedSize, "Black houses expected list size: " + blackHousesExpectedSize);
         assertTrue(greenHouses.size() >= greenHousesExpectedSize, "Green houses expected list size: " + greenHousesExpectedSize);
@@ -59,12 +71,22 @@ class HouseDAOImplTest {
         assertTrue(redHouses.size() >= redHousesExpectedSize, "Red houses expected list size: " + redHousesExpectedSize);
 
     }
-    private void deleteTestHouse(HouseDTO houseDTO)  {
 
-        Object idForDelete = MockUtils.getId(houseDTO);
-        if (idForDelete != null) {
-            HOUSE_DAO.delete((int) idForDelete, HouseDTO.class);
-        }
+    static Stream<Arguments> cases() {
+        return Stream.of(
+
+                Arguments.of(MockUtils.buildHouse(HOUSES_SIZE.get(0), HOUSES_COLOR.get(0), HOUSES_ROOM.get(0))),
+
+                Arguments.of(MockUtils.buildHouse(HOUSES_SIZE.get(1), HOUSES_COLOR.get(1), HOUSES_ROOM.get(1))),
+
+                Arguments.of(MockUtils.buildHouse(HOUSES_SIZE.get(2), HOUSES_COLOR.get(2), HOUSES_ROOM.get(2))),
+
+                Arguments.of(MockUtils.buildHouse(HOUSES_SIZE.get(3), HOUSES_COLOR.get(3), HOUSES_ROOM.get(3))),
+
+                Arguments.of(MockUtils.buildHouse(HOUSES_SIZE.get(4), HOUSES_COLOR.get(4), HOUSES_ROOM.get(4))),
+
+                Arguments.of((Object) null)
+        );
     }
 
 }

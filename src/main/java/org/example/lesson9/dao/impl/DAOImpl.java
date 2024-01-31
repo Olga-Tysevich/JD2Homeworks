@@ -7,6 +7,8 @@ import org.example.lesson9.utils.ReflectionManager;
 import javax.persistence.EntityManager;
 import java.io.Serializable;
 
+import static org.example.lesson9.utils.Constants.PERSON_IS_NULL;
+
 public class DAOImpl<T extends Serializable> implements DAO<T> {
     private EntityManager manager;
 
@@ -20,6 +22,8 @@ public class DAOImpl<T extends Serializable> implements DAO<T> {
                 manager.merge(object);
             }
             commit();
+        } else {
+            throw new IllegalArgumentException(PERSON_IS_NULL);
         }
         return object;
     }
@@ -30,6 +34,8 @@ public class DAOImpl<T extends Serializable> implements DAO<T> {
             startTransaction();
             manager.merge(object);
             commit();
+        } else {
+            throw new IllegalArgumentException(PERSON_IS_NULL);
         }
         return object;
     }
@@ -45,7 +51,7 @@ public class DAOImpl<T extends Serializable> implements DAO<T> {
     @Override
     public void delete(int id, Class<T> clazz) {
         startTransaction();
-        T objectForDelete = manager.find(clazz,id);
+        T objectForDelete = manager.find(clazz, id);
         if (objectForDelete != null) {
             manager.remove(objectForDelete);
         }
