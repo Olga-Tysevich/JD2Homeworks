@@ -1,6 +1,5 @@
 package org.example.lesson8;
 
-import org.example.lesson8.annotations.PrimaryKey;
 import org.example.lesson8.connection.SQLConnection;
 import org.example.lesson8.dao.DAO;
 import org.example.lesson8.dao.DoorDAO;
@@ -10,8 +9,8 @@ import org.example.lesson8.dao.impl.HouseDAOImpl;
 import org.example.lesson8.dto.DoorDTO;
 import org.example.lesson8.dto.HouseDTO;
 import org.example.lesson8.utils.GsonManager;
+import org.example.lesson8.utils.ReflectionManager;
 import org.example.lesson8.utils.wrappers.ThrowingConsumerWrapper;
-import org.example.lesson8.utils.wrappers.ThrowingFunctionWrapper;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -53,7 +52,7 @@ public class DemoAppRunner<T> {
             }
 
             int randomObject = RANDOM.nextInt(dtoAfterSave.size());
-            Object id = getId(dtoAfterSave.get(randomObject));
+            Object id = ReflectionManager.getId(dtoAfterSave.get(randomObject));
             int randomObjectId = id != null ? (int) id : 1;
 
             T objectForUpdate = dao.get(randomObjectId, clazz);
@@ -77,15 +76,5 @@ public class DemoAppRunner<T> {
             fileNotFoundException.printStackTrace();
         }
 
-    }
-
-    private Object getId(T object) {
-        return Arrays.stream(object.getClass().getDeclaredFields())
-                .filter(f -> f.isAnnotationPresent(PrimaryKey.class))
-                .peek(f -> f.setAccessible(true))
-                .map(f -> ThrowingFunctionWrapper.apply(q -> f.get(object), IllegalAccessException.class)
-                        .apply(object))
-                .findFirst()
-                .orElse(null);
     }
 }

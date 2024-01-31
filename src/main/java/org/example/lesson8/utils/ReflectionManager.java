@@ -3,6 +3,7 @@ package org.example.lesson8.utils;
 import org.example.lesson8.annotations.Column;
 import org.example.lesson8.annotations.PrimaryKey;
 import org.example.lesson8.annotations.Table;
+import org.example.lesson8.utils.wrappers.ThrowingFunctionWrapper;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -65,5 +66,15 @@ public abstract class ReflectionManager {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static <T> Object getId(T object) {
+        return Arrays.stream(object.getClass().getDeclaredFields())
+                .filter(f -> f.isAnnotationPresent(PrimaryKey.class))
+                .peek(f -> f.setAccessible(true))
+                .map(f -> ThrowingFunctionWrapper.apply(q -> f.get(object), IllegalAccessException.class)
+                        .apply(object))
+                .findFirst()
+                .orElse(null);
     }
 }
