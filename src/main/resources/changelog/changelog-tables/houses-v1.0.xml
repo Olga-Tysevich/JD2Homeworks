@@ -11,8 +11,8 @@
             </not>
         </preConditions>
         <createTable tableName="houses">
-            <column name="id" type="int" autoIncrement="${autoIncrement}">
-                <constraints nullable="false" primaryKey="true"/>
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
             <column name="size" type="decimal(32,2)"/>
             <column name="color" type="varchar(255)"/>
