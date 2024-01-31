@@ -42,7 +42,7 @@ public class DemoAppRunner<T extends Serializable> {
     private void runner(String inFilePath, String outFilePath, Class<T> clazz, DAO<T> dao, Method method, Object... methodParameters) {
         try {
             List<T> dtoList = GSON_MANAGER.readDTOList(inFilePath, clazz);
-            System.out.println("List before save:");
+            System.out.println("\nList before save:");
             dtoList.forEach(System.out::println);
 
             List<T> dtoAfterSave = new ArrayList<>();
@@ -71,7 +71,7 @@ public class DemoAppRunner<T extends Serializable> {
 
             if (method.getParameterCount() != 0) {
                 var result = method.invoke(dao, methodParameters);
-                System.out.println("Unique method: " + method.getName() + "(" + Arrays.toString(methodParameters) + ")\n");
+                System.out.println("Unique method: " + method.getName() + "(" + Arrays.toString(methodParameters) + ")");
                 if (result != null) {
                     System.out.println(result);
                 } else {
