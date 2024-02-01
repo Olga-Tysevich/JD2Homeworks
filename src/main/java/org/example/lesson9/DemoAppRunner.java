@@ -27,7 +27,7 @@ public class DemoAppRunner<T extends Serializable> {
     private static final GsonManager GSON_MANAGER = new GsonManager();
     private static final DoorDAO DOORS_DAO = new DoorDAOImpl();
     private static final HouseDAO HOUSE_DAO = new HouseDAOImpl();
-    int a = 7;
+
 
     public static void main(String[] args) throws NoSuchMethodException {
         DemoAppRunner<DoorDTO> doorDemo = new DemoAppRunner<>();
@@ -39,15 +39,8 @@ public class DemoAppRunner<T extends Serializable> {
         HibernateUtil.close();
     }
 
-
     private void runner(String inFilePath, String outFilePath, Class<T> clazz, DAO<T> dao, Method method, Object... methodParameters) {
         try {
-            {
-                {
-
-                }
-                System.out.println("afaf");
-            }
             List<T> dtoList = GSON_MANAGER.readDTOList(inFilePath, clazz);
             System.out.println("\nList before save:");
             dtoList.forEach(System.out::println);

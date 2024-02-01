@@ -16,10 +16,13 @@ import java.io.Serializable;
 @Entity
 @Table(name = "doors")
 @NamedNativeQuery(name = "getBySize",
-query = "select * from doors where size between :fromSize and :toSize",
-resultClass = DoorDTO.class)
+        query = "select * from doors where size between :fromSize and :toSize",
+        resultClass = DoorDTO.class)
 public class DoorDTO implements Serializable {
-    @Id    @GeneratedValue(strategy = GenerationType.IDENTITY)    @Column(name = "id")    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
     @Column(name = "size")
     private double size;
     @Column(name = "type")

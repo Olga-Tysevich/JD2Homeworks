@@ -16,8 +16,8 @@ import java.io.Serializable;
 @Entity
 @Table(name = "houses")
 @NamedNativeQuery(name = "getByColor",
-query = "select * from houses where color = :color",
-resultClass = HouseDTO.class)
+        query = "select * from houses where color = :color",
+        resultClass = HouseDTO.class)
 public class HouseDTO implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
