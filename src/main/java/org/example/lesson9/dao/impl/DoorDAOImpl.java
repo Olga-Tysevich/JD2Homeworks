@@ -11,7 +11,8 @@ public class DoorDAOImpl extends DAOImpl<DoorDTO> implements DoorDAO {
     @Override
     public List<DoorDTO> getBySize(double fromSize, double toSize) {
         startTransaction();
-        TypedQuery<DoorDTO> query = getManager().createNamedQuery("getBySize", DoorDTO.class);
+        TypedQuery<DoorDTO> query = getManager()
+                .createNamedQuery("getBySize", DoorDTO.class);
         query.setParameter("fromSize", fromSize);
         query.setParameter("toSize", toSize);
         List<DoorDTO> doorDTOList = query.getResultList();
