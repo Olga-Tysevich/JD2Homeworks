@@ -25,5 +25,12 @@
         <module name="LeftCurly"/>
         <module name="MemberName"/>
         <module name="MethodName"/>
+        <module name="ModifierOrder"/>
+        <module name="MultipleStringLiterals"/>
+        <module name="NeedBraces"/>
+        <module name="NoWhitespaceAfter"/>
+        <module name="OverloadMethodsDeclarationOrder"/>
+        <module name="UnusedImports"/>
+        <module name="WhitespaceAround"/>
     </module>
 </module>
