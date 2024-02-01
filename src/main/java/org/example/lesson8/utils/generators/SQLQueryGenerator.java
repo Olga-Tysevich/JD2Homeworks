@@ -10,14 +10,14 @@ import static org.example.lesson8.utils.Constants.*;
 public class SQLQueryGenerator {
     private static final CustomBinaryOperator<Map<String, String>, String> namesTransformation = (m, c) -> c;
     private static final CustomBinaryOperator<Map<String, String>, String> valuesTransformation = Map::get;
-    private static final CustomBinaryOperator<Map<String, String>, String> parameterTransformation = (m, c) -> c + " = " + m.get(c);
+    private static final CustomBinaryOperator<Map<String, String>, String> parameterTransformation = (m, c) -> c + EQUALS + m.get(c);
 
     private static final StringBuilder currentQuery = new StringBuilder();
 
     public static String createInsert(String databaseName, String tableName, Map<String, String> columns) {
         cleanCurrentQuery();
-        String fieldsNames = String.join(", ", getParametersAsString(namesTransformation, columns));
-        String fieldsValues = String.join(", ", getParametersAsString(valuesTransformation, columns));
+        String fieldsNames = String.join(COMMA, getParametersAsString(namesTransformation, columns));
+        String fieldsValues = String.join(COMMA, getParametersAsString(valuesTransformation, columns));
         createQuery(INSERT_QUERY_PATTERN, databaseName, tableName, fieldsNames, fieldsValues);
         return currentQuery.toString();
     }
@@ -26,8 +26,8 @@ public class SQLQueryGenerator {
         cleanCurrentQuery();
         Map<String, String> temp = new LinkedHashMap<>();
         columns.keySet().forEach(k -> temp.put(parameterTransformation.apply(columns, k), columns.get(k)));
-        String result = String.join(", ", getParametersAsString(namesTransformation, temp));
-        String primaryKey = String.join(", ", getParametersAsString(parameterTransformation, primaryKeys));
+        String result = String.join(COMMA, getParametersAsString(namesTransformation, temp));
+        String primaryKey = String.join(COMMA, getParametersAsString(parameterTransformation, primaryKeys));
         createQuery(UPDATE_QUERY_PATTERN, databaseName, tableName, result, primaryKey);
         return currentQuery.toString();
     }
@@ -35,8 +35,8 @@ public class SQLQueryGenerator {
     public static String createSelectOrDelete(String databaseName, String queryPattern, String tableName, String primaryKey, String primaryKeyValue) {
         cleanCurrentQuery();
         currentQuery.append(queryPattern);
-        setParameterValue(databaseName + "." + tableName);
-        setParameterValue(primaryKey + " = " + primaryKeyValue);
+        setParameterValue(databaseName + POINT + tableName);
+        setParameterValue(primaryKey + EQUALS + primaryKeyValue);
         return currentQuery.toString();
     }
 
@@ -47,7 +47,7 @@ public class SQLQueryGenerator {
     }
 
     private static void setTableName(String queryPattern, String databaseName, String tableName) {
-        currentQuery.append(queryPattern.replaceFirst(PARAMETER_PATTERN, databaseName + "." + tableName));
+        currentQuery.append(queryPattern.replaceFirst(PARAMETER_PATTERN, databaseName + POINT + tableName));
     }
 
     private static void setParameterValue(String value) {
