@@ -3,6 +3,8 @@ package org.example.lesson9.dao.impl;
 
 import org.example.lesson9.dao.DoorDAO;
 import org.example.lesson9.dto.DoorDTO;
+import org.example.lesson9.utils.HibernateUtil;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
