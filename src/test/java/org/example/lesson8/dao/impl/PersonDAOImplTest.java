@@ -14,7 +14,7 @@ import static org.example.lesson8.dao.impl.MockConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PersonDAOImplTest {
-    private static final PersonDAO DAO = new PersonDAOImpl();
+    private final PersonDAO DAO = new PersonDAOImpl();
 
     @Test
     void getPersonsOverAge() {
