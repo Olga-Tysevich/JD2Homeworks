@@ -127,7 +127,6 @@
     </build>
 
 
-
     <reporting>
         <plugins>
             <plugin>
@@ -143,11 +142,6 @@
                     <artifactId>maven-jxr-plugin</artifactId>
                     <version>3.3.2</version>
                 </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco-maven-plugin.version}</version>
-            </plugin>
         </plugins>
     </reporting>
 
@@ -222,11 +216,6 @@
             <artifactId>h2</artifactId>
             <version>2.1.212</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-            <version>4.9.1</version>
         </dependency>
        </dependencies>
 
