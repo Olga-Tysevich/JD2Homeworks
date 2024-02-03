@@ -9,4 +9,9 @@ public class DarkRoast extends Beverage {
         super(CoffeePrice.DARK_ROAST.getName(), CoffeePrice.DARK_ROAST.getPrice());
     }
 
+
+    @Override
+    public double cost() {
+        return super.cost() * getSize().getPriceFactor();
+    }
 }
