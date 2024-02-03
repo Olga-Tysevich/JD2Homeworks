@@ -16,9 +16,10 @@ public class CurrentConditionsDisplay implements PropertyChangeListener {
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(TEMPERATURE)) {
+
+        if (TEMPERATURE.equals(evt.getPropertyName())) {
             this.temperature = ((double) evt.getNewValue());
-        } else if (evt.getPropertyName().equals(HUMIDITY)) {
+        } else if (HUMIDITY.equals(evt.getPropertyName())) {
             this.humidity = ((double) evt.getNewValue());
         }
         display();

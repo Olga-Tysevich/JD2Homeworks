@@ -24,10 +24,10 @@ public class ForecastDisplay implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(TEMPERATURE)) {
+        if (TEMPERATURE.equals(evt.getPropertyName())) {
             this.lastTemperature = currentTemperature;
             this.currentTemperature = ((double) evt.getNewValue());
-        } else if (evt.getPropertyName().equals(PRESSURE)) {
+        } else if (PRESSURE.equals(evt.getPropertyName())) {
             this.lastPressure = currentPressure;
             this.currentPressure = ((double) evt.getNewValue());
         }

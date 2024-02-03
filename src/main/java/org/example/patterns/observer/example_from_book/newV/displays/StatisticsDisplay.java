@@ -24,7 +24,7 @@ public class StatisticsDisplay implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(TEMPERATURE)) {
+        if (TEMPERATURE.equals(evt.getPropertyName())) {
             double newTemperature = (double) evt.getNewValue();
             this.maxTemperature = Math.max(this.temperature, newTemperature);
             this.minTemperature = Math.min(this.temperature, newTemperature);
