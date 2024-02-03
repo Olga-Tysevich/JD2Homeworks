@@ -5,7 +5,7 @@ import org.example.patterns.decorator.first_example.prices.Size;
 public abstract class Beverage {
     private String name;
     private double price;
-    Size size = Size.TALL;
+    private Size size = Size.TALL;
 
     public Beverage(String name, double price) {
         this.name = name;
