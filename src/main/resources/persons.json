@@ -1,42 +1,27 @@
 [
   {
-    "age": 10,
-    "salary": 0.0,
-    "passport": "MP12345678",
-    "address": "г. Минск, ул. Кальварийская, д. 1, кв. 100",
-    "dateOfBirthday": "2014-01-11",
-    "timeToLunch": "11:00:00"
+    "name": "Demi",
+    "surname": "Smith",
+    "age": 20
   },
   {
-    "age": 22,
-    "salary": 850.0,
-    "passport": "MP23145687",
-    "address": "г. Минск, ул. Ольшевского, д. 13, кв. 85",
-    "dateOfBirthday": "2001-12-15",
-    "timeToLunch": "13:30:00"
+    "name": "Mindy",
+    "surname": "Jones",
+    "age": 25
   },
   {
-    "age": 34,
-    "salary": 890.0,
-    "passport": "MP87546395",
-    "address": "г. Минск, ул. Васнецова, д. 13, кв. 63",
-    "dateOfBirthday": "1989-04-07",
-    "timeToLunch": "14:00:00"
+    "name": "Laren",
+    "surname": "Brown",
+    "age": 31
   },
   {
-    "age": 18,
-    "salary": 675.0,
-    "passport": "MP63546936",
-    "address": "г. Минск, ул. Воронянского, д. 25, кв. 187",
-    "dateOfBirthday": "2005-11-28",
-    "timeToLunch": "13:45:00"
+    "name": "Luci",
+    "surname": "Evans",
+    "age": 42
   },
   {
-    "age": 25,
-    "salary": 1200.0,
-    "passport": "MP26983652",
-    "address": "г. Минск, ул. Революционная, д. 9, кв. 1",
-    "dateOfBirthday": "1999-01-05",
-    "timeToLunch": "12:20:00"
+    "name": "Timmy",
+    "surname": "Walker",
+    "age": 23
   }
 ]
