@@ -12,17 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class JsonManager {
-    private static final Gson gson;
+    private static final Gson GSON;
 
     static {
-        gson = new GsonBuilder()
+        GSON = new GsonBuilder()
                 .setPrettyPrinting()
                 .create();
     }
 
     public static <T> List<T> readDTOList(String inFilePath, Class<T> dtoClass) throws IOException {
         String dtoList = readAsString(inFilePath);
-        return gson.fromJson(dtoList, getTypeToken(dtoClass));
+        return GSON.fromJson(dtoList, getTypeToken(dtoClass));
     }
 
     private static String readAsString(String inFilePath) throws IOException {

@@ -13,9 +13,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 @Table(name = "addresses")
-@NamedNativeQuery(name = "change_house_number",
-        query = "update addresses set house = house + :number where id = :id",
-        resultClass = Address.class)
 public class Address implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

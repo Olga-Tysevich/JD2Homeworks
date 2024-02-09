@@ -35,8 +35,8 @@ public class DemoApp {
                             || addresses.indexOf(h) == addresses.size() - 2)
                     .forEach(h -> ADDRESS_DAO.increaseHouseNumber(h.getId(), 1));
 
-            PERSON_DAO.delete(people.get(0).getId(), Person.class);
-            ADDRESS_DAO.delete(addresses.get(0).getId(), Address.class);
+            PERSON_DAO.delete(people.get(0).getId());
+            ADDRESS_DAO.delete(addresses.get(0).getId());
 
         } catch (IOException e) {
             e.printStackTrace();
