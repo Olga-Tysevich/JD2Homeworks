@@ -5,8 +5,18 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
     <changeSet author="Olga Tysevich" id="addForeignKeyConstraint-people-table-v1">
+        <addForeignKeyConstraint  baseColumnNames="person_id"
+                                  baseTableName="people_addresses"
+                                  baseTableCatalogName="people9"
+                                  constraintName="fk_person_id"
+                                  onDelete="CASCADE"
+                                  onUpdate="CASCADE"
+                                  referencedColumnNames="id"
+                                  referencedTableName="people"
+                                  referencedTableCatalogName="people9"
+                                  validate="true"/>
         <addForeignKeyConstraint  baseColumnNames="address_id"
-                                  baseTableName="people"
+                                  baseTableName="people_addresses"
                                   baseTableCatalogName="people9"
                                   constraintName="fk_address_id"
                                   onDelete="CASCADE"
