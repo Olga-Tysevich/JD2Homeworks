@@ -11,10 +11,11 @@ import org.example.lesson9.utils.JsonManager;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.example.lesson9.utils.Constants.ADDRESSES_IN_FILE_PATH;
-import static org.example.lesson9.utils.Constants.PEOPLE_IN_FILE_PATH;
+import static org.example.lesson9.utils.Constants.*;
 
 public class DemoApp {
     private static final PersonDAO PERSON_DAO = new PersonDAOImpl();
@@ -25,11 +26,9 @@ public class DemoApp {
             List<PersonDTO> people = JsonManager.readDTOList(PEOPLE_IN_FILE_PATH, PersonDTO.class);
             List<AddressDTO> addressDTOS = JsonManager.readDTOList(ADDRESSES_IN_FILE_PATH, AddressDTO.class);
 
-            IntStream.range(0, people.size())
-                    .forEach(i -> {
-                        people.get(i).setAddress(addressDTOS.get(i));
-                        PERSON_DAO.save(people.get(i));
-                    });
+            people.stream()
+                    .peek(p -> p.setAddresses(getRandomAddresses(addressDTOS)))
+                    .forEach(PERSON_DAO::save);
 
             people.stream()
                     .filter(p -> people.indexOf(p) == people.size() - 1
@@ -48,5 +47,12 @@ public class DemoApp {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static Set<AddressDTO> getRandomAddresses(List<AddressDTO> addressDTOS) {
+        return IntStream.range(0, RANDOM.nextInt(addressDTOS.size()))
+                .mapToObj(addressDTOS::get)
+                .peek(a -> a.setId(0))
+                .collect(Collectors.toSet());
     }
 }

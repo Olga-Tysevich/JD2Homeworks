@@ -4,12 +4,14 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Builder
 @Getter
 @Setter
-@EqualsAndHashCode
-@ToString
+@EqualsAndHashCode(exclude = "people")
+@ToString(exclude = "people")
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -23,4 +25,6 @@ public class AddressDTO implements Serializable {
     private String street;
     @Column(name = "house")
     private int house;
+    @ManyToMany(mappedBy = "addresses")
+    private Set<PersonDTO> people = new HashSet<>();
 }

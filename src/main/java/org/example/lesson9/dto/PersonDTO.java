@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Builder
 @Getter
@@ -25,7 +27,9 @@ public class PersonDTO implements Serializable {
     private String surname;
     @Column(name = "age")
     private int age;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "address_id")
-    private AddressDTO address;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "people_addresses",
+            joinColumns = {@JoinColumn(name = "person_id")},
+            inverseJoinColumns = {@JoinColumn(name = "address_id")})
+    private Set<AddressDTO> addresses = new HashSet<>();
 }
