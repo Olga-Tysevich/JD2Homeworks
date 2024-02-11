@@ -25,6 +25,6 @@ public class AddressDTO implements Serializable {
     private String street;
     @Column(name = "house")
     private int house;
-    @ManyToMany(mappedBy = "addresses")
+    @ManyToMany(mappedBy = "addresses", fetch = FetchType.LAZY)
     private Set<PersonDTO> people = new HashSet<>();
 }
