@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
     <changeSet author="Olga Tysevich" id="add-column-address-id-people-table-v1">
-        <addColumn schemaName= "people9" tableName="people">
+        <addColumn catalogName="people9" tableName="people">
             <column name="address_id" type="int"/>
         </addColumn>
     </changeSet>

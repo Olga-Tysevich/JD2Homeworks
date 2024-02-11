@@ -7,13 +7,13 @@
     <changeSet author="Olga Tysevich" id="addForeignKeyConstraint-people-table-v1">
         <addForeignKeyConstraint  baseColumnNames="address_id"
                                   baseTableName="people"
-                                  baseTableSchemaName="people9"
+                                  baseTableCatalogName="people9"
                                   constraintName="fk_address_id"
                                   onDelete="CASCADE"
                                   onUpdate="CASCADE"
                                   referencedColumnNames="id"
                                   referencedTableName="addresses"
-                                  referencedTableSchemaName="people9"
+                                  referencedTableCatalogName="people9"
                                   validate="true"/>
     </changeSet>
 </databaseChangeLog>
