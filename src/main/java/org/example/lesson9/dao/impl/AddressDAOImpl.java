@@ -1,31 +1,32 @@
 package org.example.lesson9.dao.impl;
 
 import org.example.lesson9.dao.AddressDAO;
-import org.example.lesson9.dto.Address;
+import org.example.lesson9.dto.AddressDTO;
 import org.example.lesson9.utils.HibernateUtil;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-public class AddressDAOImpl extends DAOImpl<Address> implements AddressDAO {
-    private final String changeHouseNumber = "update addresses set house = house + :number where id = :id";
+import static org.example.lesson9.utils.Constants.*;
+
+public class AddressDAOImpl extends DAOImpl<AddressDTO> implements AddressDAO {
 
     @Override
-    public Address increaseHouseNumber(int id, int number) {
+    public AddressDTO increaseHouseNumber(int id, int increment) {
         EntityManager manager = HibernateUtil.getEntityManager();
         manager.getTransaction().begin();
-        Query query = manager.createNativeQuery(changeHouseNumber, Address.class);
-        query.setParameter("number", number)
-                .setParameter("id", id);
+        Query query = manager.createNativeQuery(CHANGE_HOUSE_NUMBER, AddressDTO.class);
+        query.setParameter(INCREMENT, increment)
+                .setParameter(ID, id);
         query.executeUpdate();
-        Address result = manager.find(Address.class, id);
+        AddressDTO result = manager.find(AddressDTO.class, id);
         manager.getTransaction().commit();
         manager.close();
         return result;
     }
 
     @Override
-    protected Class<Address> getClazz() {
-        return Address.class;
+    protected Class<AddressDTO> getClazz() {
+        return AddressDTO.class;
     }
 }

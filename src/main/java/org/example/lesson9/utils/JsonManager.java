@@ -20,6 +20,9 @@ public abstract class JsonManager {
                 .create();
     }
 
+    private JsonManager() {
+    }
+
     public static <T> List<T> readDTOList(String inFilePath, Class<T> dtoClass) throws IOException {
         String dtoList = readAsString(inFilePath);
         return GSON.fromJson(dtoList, getTypeToken(dtoClass));

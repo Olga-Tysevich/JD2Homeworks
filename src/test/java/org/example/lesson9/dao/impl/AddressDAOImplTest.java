@@ -1,82 +1,97 @@
 package org.example.lesson9.dao.impl;
 
 import org.example.lesson9.dao.AddressDAO;
-import org.example.lesson9.dto.Address;
+import org.example.lesson9.dto.AddressDTO;
+import org.example.lesson9.utils.HibernateUtil;
 import org.example.lesson9.utils.JsonManager;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.example.lesson9.utils_src.MockConstants.ADDRESSES_JSON;
-import static org.example.lesson9.utils_src.MockConstants.TEST_UPDATE;
+import static org.example.lesson9.utils_src.MockConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AddressDAOImplTest {
+    private static List<AddressDTO> addressDTOS;
     private final AddressDAO addressDAO = new AddressDAOImpl();
 
-    @Test
-    public void saveTest() {
+    @BeforeAll
+    public static void readList() {
         try {
-            List<Address> expected = JsonManager.readDTOList(ADDRESSES_JSON, Address.class);
-            expected.forEach(addressDAO::save);
-            List<Address> actual = expected.stream()
-                    .peek(a -> addressDAO.get(a.getId()))
-                    .collect(Collectors.toList());
-
-            assertEquals(expected.get(0), actual.get(0));
-            assertEquals(expected.get(1), actual.get(1));
-            assertEquals(expected.get(2), actual.get(2));
-            assertEquals(expected.get(3), actual.get(3));
-            assertEquals(expected.get(4), actual.get(4));
-
+            addressDTOS = JsonManager.readDTOList(ADDRESSES_JSON, AddressDTO.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void saveTest() {
+        addressDTOS.forEach(addressDAO::save);
+        List<AddressDTO> actual = addressDTOS.stream()
+                .peek(a -> addressDAO.get(a.getId()))
+                .collect(Collectors.toList());
+
+        assertEquals(addressDTOS.get(0), actual.get(0));
+        assertEquals(addressDTOS.get(1), actual.get(1));
+        assertEquals(addressDTOS.get(2), actual.get(2));
+        assertEquals(addressDTOS.get(3), actual.get(3));
+        assertEquals(addressDTOS.get(4), actual.get(4));
     }
 
     @Test
     public void updateTest() {
-        try {
-            List<Address> actual = JsonManager.readDTOList(ADDRESSES_JSON, Address.class);
-            actual.forEach(addressDAO::save);
-            List<String> expected = actual.stream()
-                    .map(a -> a.getStreet() + TEST_UPDATE)
-                    .collect(Collectors.toList());
-            actual.forEach(a -> a.setStreet(a.getStreet() + TEST_UPDATE));
-            actual.forEach(addressDAO::update);
+        List<String> expected = addressDTOS.stream()
+                .map(a -> a.getStreet() + TEST_UPDATE)
+                .collect(Collectors.toList());
+        addressDTOS.forEach(a -> a.setStreet(a.getStreet() + TEST_UPDATE));
+        addressDTOS.forEach(addressDAO::update);
 
-
-            assertEquals(expected.get(0), actual.get(0).getStreet());
-            assertEquals(expected.get(1), actual.get(1).getStreet());
-            assertEquals(expected.get(2), actual.get(2).getStreet());
-            assertEquals(expected.get(3), actual.get(3).getStreet());
-            assertEquals(expected.get(4), actual.get(4).getStreet());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        assertEquals(expected.get(0), addressDTOS.get(0).getStreet());
+        assertEquals(expected.get(1), addressDTOS.get(1).getStreet());
+        assertEquals(expected.get(2), addressDTOS.get(2).getStreet());
+        assertEquals(expected.get(3), addressDTOS.get(3).getStreet());
+        assertEquals(expected.get(4), addressDTOS.get(4).getStreet());
     }
 
     @Test
     public void deleteTest() {
-        try {
-            List<Address> expected = JsonManager.readDTOList(ADDRESSES_JSON, Address.class);
-            expected.forEach(addressDAO::save);
-            expected.forEach(a -> addressDAO.delete(a.getId()));
-            List<Address> actual = expected.stream()
-                    .map(a -> addressDAO.get(a.getId()))
-                    .collect(Collectors.toList());
-            addressDAO.delete(0);
+        addressDTOS.forEach(a -> addressDAO.delete(a.getId()));
+        List<AddressDTO> actual = addressDTOS.stream()
+                .map(a -> addressDAO.get(a.getId()))
+                .collect(Collectors.toList());
+        addressDAO.delete(0);
 
-            assertNull(actual.get(0));
-            assertNull(actual.get(1));
-            assertNull(actual.get(2));
-            assertNull(actual.get(3));
-            assertNull(actual.get(4));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        assertNull(actual.get(0));
+        assertNull(actual.get(1));
+        assertNull(actual.get(2));
+        assertNull(actual.get(3));
+        assertNull(actual.get(4));
+    }
+
+    @Test
+    public void increaseHouseNumberTest() {
+        int id = addressDTOS.get(0).getId();
+        int expected = addressDTOS.get(0).getHouse() + 1;
+        addressDAO.increaseHouseNumber(id, 1);
+        int actual = addressDAO.get(id).getHouse();
+
+        assertEquals(expected, actual);
+    }
+
+    @AfterAll
+    public static void deleteAll() {
+        EntityManager manager = HibernateUtil.getEntityManager();
+        manager.getTransaction().begin();
+        Query query = manager.createNativeQuery(DELETE_ALL_ADDRESSES);
+        query.executeUpdate();
+        manager.getTransaction().commit();
+        manager.close();
     }
 
 }

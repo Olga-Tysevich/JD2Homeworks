@@ -1,8 +1,8 @@
 package org.example.lesson9.dao;
 
-import org.example.lesson9.dto.Person;
+import org.example.lesson9.dto.PersonDTO;
 
-public interface PersonDAO extends DAO<Person> {
+public interface PersonDAO extends DAO<PersonDTO> {
 
-    Person increaseAge(int id, int number);
+    PersonDTO increaseAge(int id, int increment);
 }

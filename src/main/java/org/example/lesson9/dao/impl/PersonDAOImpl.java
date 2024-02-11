@@ -1,31 +1,32 @@
 package org.example.lesson9.dao.impl;
 
 import org.example.lesson9.dao.PersonDAO;
-import org.example.lesson9.dto.Person;
+import org.example.lesson9.dto.PersonDTO;
 import org.example.lesson9.utils.HibernateUtil;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-public class PersonDAOImpl extends DAOImpl<Person> implements PersonDAO {
-    private final String increaseAge = "update people set age = age + :number where id = :id";
+import static org.example.lesson9.utils.Constants.*;
+
+public class PersonDAOImpl extends DAOImpl<PersonDTO> implements PersonDAO {
 
     @Override
-    public Person increaseAge(int id, int number) {
+    public PersonDTO increaseAge(int id, int increment) {
         EntityManager manager = HibernateUtil.getEntityManager();
         manager.getTransaction().begin();
-        Query query = manager.createNativeQuery(increaseAge, Person.class);
-        query.setParameter("number", number)
-                .setParameter("id", id);
+        Query query = manager.createNativeQuery(INCREASE_AGE, PersonDTO.class);
+        query.setParameter(INCREMENT, increment)
+                .setParameter(ID, id);
         query.executeUpdate();
-        Person result = manager.find(Person.class, id);
+        PersonDTO result = manager.find(PersonDTO.class, id);
         manager.getTransaction().commit();
         manager.close();
         return result;
     }
 
     @Override
-    protected Class<Person> getClazz() {
-        return Person.class;
+    protected Class<PersonDTO> getClazz() {
+        return PersonDTO.class;
     }
 }

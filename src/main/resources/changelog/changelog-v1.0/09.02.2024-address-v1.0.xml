@@ -4,8 +4,8 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
-    <changeSet author="Olga Tysevich" id="addresses-table-v1">
-        <createTable tableName="addresses">
+    <changeSet author="Olga Tysevich" id="addressDTOS-table-v1">
+        <createTable tableName="addressDTOS">
             <column name="id" type="int" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>

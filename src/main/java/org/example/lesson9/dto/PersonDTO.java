@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 
+@Builder
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -13,7 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 @Table(name = "people")
-public class Person implements Serializable {
+public class PersonDTO implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

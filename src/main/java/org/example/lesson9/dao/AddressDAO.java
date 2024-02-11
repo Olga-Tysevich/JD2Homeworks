@@ -1,7 +1,7 @@
 package org.example.lesson9.dao;
 
-import org.example.lesson9.dto.Address;
+import org.example.lesson9.dto.AddressDTO;
 
-public interface AddressDAO extends DAO<Address> {
-    Address increaseHouseNumber(int id, int number);
+public interface AddressDAO extends DAO<AddressDTO> {
+    AddressDTO increaseHouseNumber(int id, int increment);
 }
