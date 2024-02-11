@@ -8,7 +8,7 @@
         <addForeignKeyConstraint  baseColumnNames="address_id"
                                   baseTableName="people"
                                   baseTableCatalogName="people9"
-                                  constraintName="fk_address_id"
+                                  constraintName="br2_fk_address_id"
                                   onDelete="CASCADE"
                                   onUpdate="CASCADE"
                                   referencedColumnNames="id"
