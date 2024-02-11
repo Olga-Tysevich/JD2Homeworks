@@ -25,4 +25,7 @@ public class PersonDTO implements Serializable {
     private String surname;
     @Column(name = "age")
     private int age;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "address_id")
+    private AddressDTO address;
 }

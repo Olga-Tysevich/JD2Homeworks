@@ -11,6 +11,7 @@ import org.example.lesson9.utils.JsonManager;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.example.lesson9.utils.Constants.ADDRESSES_IN_FILE_PATH;
 import static org.example.lesson9.utils.Constants.PEOPLE_IN_FILE_PATH;
@@ -23,8 +24,12 @@ public class DemoApp {
         try {
             List<PersonDTO> people = JsonManager.readDTOList(PEOPLE_IN_FILE_PATH, PersonDTO.class);
             List<AddressDTO> addressDTOS = JsonManager.readDTOList(ADDRESSES_IN_FILE_PATH, AddressDTO.class);
-            people.forEach(PERSON_DAO::save);
-            addressDTOS.forEach(ADDRESS_DAO::save);
+
+            IntStream.range(0, people.size())
+                    .forEach(i -> {
+                        people.get(i).setAddress(addressDTOS.get(i));
+                        PERSON_DAO.save(people.get(i));
+                    });
 
             people.stream()
                     .filter(p -> people.indexOf(p) == people.size() - 1
@@ -37,7 +42,6 @@ public class DemoApp {
                     .forEach(h -> ADDRESS_DAO.increaseHouseNumber(h.getId(), 1));
 
             PERSON_DAO.delete(people.get(0).getId());
-            ADDRESS_DAO.delete(addressDTOS.get(0).getId());
 
             HibernateUtil.close();
 

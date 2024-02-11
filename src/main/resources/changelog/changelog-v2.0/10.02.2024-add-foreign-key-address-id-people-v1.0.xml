@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet author="Olga Tysevich" id="addForeignKeyConstraint-people-table-v1">
+        <addForeignKeyConstraint  baseColumnNames="address_id"
+                                  baseTableName="people"
+                                  baseTableSchemaName="people9"
+                                  constraintName="fk_address_id"
+                                  onDelete="CASCADE"
+                                  onUpdate="CASCADE"
+                                  referencedColumnNames="id"
+                                  referencedTableName="addresses"
+                                  referencedTableSchemaName="people9"
+                                  validate="true"/>
+    </changeSet>
+</databaseChangeLog>
