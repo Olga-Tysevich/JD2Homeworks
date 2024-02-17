@@ -27,9 +27,15 @@ public class DemoApp {
             List<AddressDTO> addressDTOS = JsonManager.readDTOList(ADDRESSES_IN_FILE_PATH, AddressDTO.class);
 
             people.stream()
-                    .peek(p -> p.setAddresses(getRandomAddresses(addressDTOS)))
+                    .peek(p -> getRandomAddresses(addressDTOS).forEach(a -> {
+                        p.addAddress(a);
+                        a.addPerson(p);
+                    }))
                     .forEach(PERSON_DAO::save);
 
+            addressDTOS.stream()
+                    .filter(a -> a.getId() == 0)
+                    .forEach(ADDRESS_DAO::save);
             people.stream()
                     .filter(p -> people.indexOf(p) == people.size() - 1
                             || people.indexOf(p) == people.size() - 2)
@@ -42,6 +48,8 @@ public class DemoApp {
 
             PERSON_DAO.delete(people.get(0).getId());
 
+            PERSON_DAO.closeSession();
+            ADDRESS_DAO.closeSession();
             HibernateUtil.close();
 
         } catch (IOException e) {
@@ -50,9 +58,8 @@ public class DemoApp {
     }
 
     private static Set<AddressDTO> getRandomAddresses(List<AddressDTO> addressDTOS) {
-        return IntStream.range(0, RANDOM.nextInt(addressDTOS.size()))
+        return IntStream.range(0, RANDOM.nextInt(addressDTOS.size() - 1) + 1)
                 .mapToObj(addressDTOS::get)
-                .peek(a -> a.setId(0))
                 .collect(Collectors.toSet());
     }
 }

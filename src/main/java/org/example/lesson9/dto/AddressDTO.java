@@ -15,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "addresses")
+@Table(name = "addresses_join_many_to_many")
 public class AddressDTO implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +27,16 @@ public class AddressDTO implements Serializable {
     private int house;
     @ManyToMany(mappedBy = "addresses", fetch = FetchType.LAZY)
     private Set<PersonDTO> people = new HashSet<>();
+
+    protected void setPeople(Set<PersonDTO> people) {
+        this.people = people;
+    }
+
+    public void addPerson(PersonDTO person) {
+        people.add(person);
+    }
+
+    public void deletePerson(PersonDTO person) {
+        people.remove(person);
+    }
 }

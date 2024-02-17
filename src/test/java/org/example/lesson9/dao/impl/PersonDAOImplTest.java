@@ -7,14 +7,13 @@ import org.example.lesson9.utils.HibernateUtil;
 import org.example.lesson9.utils.JsonManager;
 import org.example.lesson9.utils_src.MockUtils;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,19 +22,38 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 class PersonDAOImplTest {
-    private static List<AddressDTO> addressDTOS;
-    private static List<PersonDTO> personDTOList;
+    private List<AddressDTO> addressDTOS;
+    private List<PersonDTO> personDTOList;
     private final PersonDAO personDAO = new PersonDAOImpl();
 
-    @BeforeAll
-    public static void readList() {
+    @BeforeEach
+    public void readList() {
         try {
             addressDTOS = JsonManager.readDTOList(ADDRESSES_JSON, AddressDTO.class);
             personDTOList = JsonManager.readDTOList(PERSONS_JSON, PersonDTO.class);
-            personDTOList.forEach(a -> a.setAddresses(new HashSet<>(addressDTOS)));
+            personDTOList.forEach(p -> addressDTOS.forEach(a  -> {
+                a.addPerson(p);
+                p.addAddress(a);
+            }));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @AfterAll
+    public static void deletePersons() {
+        EntityManager manager = HibernateUtil.getEntityManager();
+        manager.getTransaction().begin();
+        Query deletePeopleAddressesQuery = manager.createNativeQuery(DELETE_ALL_PEOPLE_ADDRESSES);
+        deletePeopleAddressesQuery.executeUpdate();
+        manager.flush();
+        Query deletePeopleQuery = manager.createNativeQuery(DELETE_ALL_ADDRESSES);
+        deletePeopleQuery.executeUpdate();
+        manager.flush();
+        Query deleteAddressesQuery = manager.createNativeQuery(DELETE_ALL_PEOPLE);
+        deleteAddressesQuery.executeUpdate();
+        manager.getTransaction().commit();
+        manager.close();
     }
 
     @Test
@@ -96,19 +114,6 @@ class PersonDAOImplTest {
         int actual = personDAO.get(id).getAge();
 
         assertEquals(expected, actual);
-    }
-
-    @AfterAll
-    public static void deletePersons() {
-        EntityManager manager = HibernateUtil.getEntityManager();
-        manager.getTransaction().begin();
-        Query deletePeopleQuery = manager.createNativeQuery(DELETE_ALL_ADDRESSES);
-        deletePeopleQuery.executeUpdate();
-        manager.flush();
-        Query deleteAddressesQuery = manager.createNativeQuery(DELETE_ALL_PEOPLE);
-        deleteAddressesQuery.executeUpdate();
-        manager.getTransaction().commit();
-        manager.close();
     }
 
 }

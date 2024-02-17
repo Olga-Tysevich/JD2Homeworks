@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
     <changeSet author="Olga Tysevich" id="people-addresses-table-v1">
-        <createTable tableName="people_addresses">
+        <createTable tableName="people_addresses_join_many_to_many">
             <column name="person_id" type="int"/>
             <column name="address_id" type="int"/>
         </createTable>

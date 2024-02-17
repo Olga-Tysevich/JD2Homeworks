@@ -6,23 +6,23 @@
 
     <changeSet author="Olga Tysevich" id="addForeignKeyConstraint-people-table-v1">
         <addForeignKeyConstraint  baseColumnNames="person_id"
-                                  baseTableName="people_addresses"
+                                  baseTableName="people_addresses_join_many_to_many"
                                   baseTableCatalogName="people9"
                                   constraintName="fk_person_id"
-                                  onDelete="CASCADE"
+                                  onDelete="NO ACTION"
                                   onUpdate="CASCADE"
                                   referencedColumnNames="id"
-                                  referencedTableName="people"
+                                  referencedTableName="people_join_many_to_many"
                                   referencedTableCatalogName="people9"
                                   validate="true"/>
         <addForeignKeyConstraint  baseColumnNames="address_id"
-                                  baseTableName="people_addresses"
+                                  baseTableName="people_addresses_join_many_to_many"
                                   baseTableCatalogName="people9"
                                   constraintName="fk_address_id"
-                                  onDelete="CASCADE"
+                                  onDelete="NO ACTION"
                                   onUpdate="CASCADE"
                                   referencedColumnNames="id"
-                                  referencedTableName="addresses"
+                                  referencedTableName="addresses_join_many_to_many"
                                   referencedTableCatalogName="people9"
                                   validate="true"/>
     </changeSet>
