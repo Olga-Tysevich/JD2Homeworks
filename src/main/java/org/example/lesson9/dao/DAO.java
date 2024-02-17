@@ -8,4 +8,6 @@ public interface DAO<T> {
     T get(int id);
 
     void delete(int id);
+
+    void closeSession();
 }

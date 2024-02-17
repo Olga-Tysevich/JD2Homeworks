@@ -41,8 +41,21 @@ public class DemoApp {
                             || addressDTOS.indexOf(h) == addressDTOS.size() - 2)
                     .forEach(h -> ADDRESS_DAO.increaseHouseNumber(h.getId(), 1));
 
-            PERSON_DAO.delete(people.get(0).getId());
+            PersonDTO p = PERSON_DAO.get(people.get(0).getId());
 
+            AddressDTO addressDTO = p.getAddress();
+            System.out.println(addressDTO);
+
+            PersonDTO p2 = people.get(1);
+            p2.setAddress(addressDTOS.get(0));
+            PERSON_DAO.save(p2);
+            PERSON_DAO.update(p2);
+
+            PERSON_DAO.delete(p.getId());
+            PERSON_DAO.delete(p2.getId());
+
+            PERSON_DAO.closeSession();
+            ADDRESS_DAO.closeSession();
             HibernateUtil.close();
 
         } catch (IOException e) {

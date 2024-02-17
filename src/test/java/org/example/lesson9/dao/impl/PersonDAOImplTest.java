@@ -6,26 +6,33 @@ import org.example.lesson9.utils.HibernateUtil;
 import org.example.lesson9.utils.JsonManager;
 import org.example.lesson9.utils_src.MockUtils;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.example.lesson9.utils_src.MockConstants.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PersonDAOImplTest {
-    private static List<PersonDTO> personDTOList;
+    private List<PersonDTO> personDTOList;
     private final PersonDAO personDAO = new PersonDAOImpl();
 
-    @BeforeAll
-    public static void readList() {
+    @AfterAll
+    public static void deletePersons() {
+        EntityManager manager = HibernateUtil.getEntityManager();
+        manager.getTransaction().begin();
+        Query query = manager.createNativeQuery(DELETE_ALL_PERSONS);
+        query.executeUpdate();
+        manager.getTransaction().commit();
+        manager.close();
+    }
+
+    @BeforeEach
+    public void readList() {
         try {
             personDTOList = JsonManager.readDTOList(PERSONS_JSON, PersonDTO.class);
         } catch (IOException e) {
@@ -81,23 +88,13 @@ class PersonDAOImplTest {
     @Test
     public void increaseAgeTest() {
         PersonDTO personDTO = MockUtils.buildPerson();
+        int expected = personDTO.getAge() + 1;
         personDAO.save(personDTO);
         int id = personDTO.getId();
-        int expected = personDTO.getAge() + 1;
         personDAO.increaseAge(id, 1);
         int actual = personDAO.get(id).getAge();
 
         assertEquals(expected, actual);
-    }
-
-    @AfterAll
-    public static void deletePersons() {
-        EntityManager manager = HibernateUtil.getEntityManager();
-        manager.getTransaction().begin();
-        Query query = manager.createNativeQuery(DELETE_ALL_PERSONS);
-        query.executeUpdate();
-        manager.getTransaction().commit();
-        manager.close();
     }
 
 }

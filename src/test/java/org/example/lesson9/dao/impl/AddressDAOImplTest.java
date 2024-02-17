@@ -4,8 +4,9 @@ import org.example.lesson9.dao.AddressDAO;
 import org.example.lesson9.dto.AddressDTO;
 import org.example.lesson9.utils.HibernateUtil;
 import org.example.lesson9.utils.JsonManager;
+import org.example.lesson9.utils_src.MockUtils;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
@@ -18,11 +19,21 @@ import static org.example.lesson9.utils_src.MockConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AddressDAOImplTest {
-    private static List<AddressDTO> addressDTOS;
+    private List<AddressDTO> addressDTOS;
     private final AddressDAO addressDAO = new AddressDAOImpl();
 
-    @BeforeAll
-    public static void readList() {
+    @AfterAll
+    public static void deleteAll() {
+        EntityManager manager = HibernateUtil.getEntityManager();
+        manager.getTransaction().begin();
+        Query query = manager.createNativeQuery(DELETE_ALL_ADDRESSES);
+        query.executeUpdate();
+        manager.getTransaction().commit();
+        manager.close();
+    }
+
+    @BeforeEach
+    public void readList() {
         try {
             addressDTOS = JsonManager.readDTOList(ADDRESSES_JSON, AddressDTO.class);
         } catch (IOException e) {
@@ -76,22 +87,14 @@ class AddressDAOImplTest {
 
     @Test
     public void increaseHouseNumberTest() {
-        int id = addressDTOS.get(0).getId();
-        int expected = addressDTOS.get(0).getHouse() + 1;
+        AddressDTO addressDTO = MockUtils.buildAddress();
+        addressDAO.save(addressDTO);
+        int id = addressDTO.getId();
+        int expected = addressDTO.getHouse() + 1;
         addressDAO.increaseHouseNumber(id, 1);
         int actual = addressDAO.get(id).getHouse();
 
         assertEquals(expected, actual);
-    }
-
-    @AfterAll
-    public static void deleteAll() {
-        EntityManager manager = HibernateUtil.getEntityManager();
-        manager.getTransaction().begin();
-        Query query = manager.createNativeQuery(DELETE_ALL_ADDRESSES);
-        query.executeUpdate();
-        manager.getTransaction().commit();
-        manager.close();
     }
 
 }

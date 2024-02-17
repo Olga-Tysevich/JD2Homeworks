@@ -6,13 +6,13 @@
 
     <changeSet author="Olga Tysevich" id="addForeignKeyConstraint-people-table-v1">
         <addForeignKeyConstraint  baseColumnNames="address_id"
-                                  baseTableName="people"
+                                  baseTableName="people_join_one_to_many"
                                   baseTableCatalogName="people9"
                                   constraintName="br2_fk_address_id"
-                                  onDelete="CASCADE"
+                                  onDelete="NO ACTION"
                                   onUpdate="CASCADE"
                                   referencedColumnNames="id"
-                                  referencedTableName="addresses"
+                                  referencedTableName="addresses_join_one_to_many"
                                   referencedTableCatalogName="people9"
                                   validate="true"/>
     </changeSet>

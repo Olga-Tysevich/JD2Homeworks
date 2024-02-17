@@ -13,7 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "addresses")
+@Table(name = "addresses_join_one_to_many")
 public class AddressDTO implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

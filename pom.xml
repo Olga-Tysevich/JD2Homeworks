@@ -57,14 +57,13 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>tests</id>
+                        <id>testsID</id>
                         <phase>test-compile</phase>
                         <goals>
                             <goal>update</goal>
                         </goals>
                         <configuration>
                             <propertyFile>src\test\resources\changelog\liquibase.properties</propertyFile>
-                            <driver>org.h2.Driver</driver>
                         </configuration>
                     </execution>
                 </executions>

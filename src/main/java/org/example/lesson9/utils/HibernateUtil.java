@@ -18,4 +18,8 @@ public abstract class HibernateUtil {
     public static void close() {
         FACTORY.close();
     }
+
+    public static EntityManagerFactory getFactory() {
+        return FACTORY;
+    }
 }
