@@ -13,7 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "people")
+@Table(name = "people_join")
 public class PersonDTO implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
