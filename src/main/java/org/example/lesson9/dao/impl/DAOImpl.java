@@ -1,15 +1,15 @@
 package org.example.lesson9.dao.impl;
 
 import org.example.lesson9.dao.DAO;
-import org.example.lesson9.utils.QueryExecutor;
 import org.example.lesson9.utils.HibernateUtil;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.function.Supplier;
 
 public abstract class DAOImpl<T> implements DAO<T> {
     private EntityManager manager = HibernateUtil.getEntityManager();
-    private QueryExecutor<T> currentMethod;
+    private Supplier<T> currentMethod;
 
     protected abstract Class<T> getClazz();
 
@@ -59,9 +59,9 @@ public abstract class DAOImpl<T> implements DAO<T> {
         manager.refresh(object);
     }
 
-    protected final T executeTransaction(QueryExecutor<T> executor) {
+    protected final T executeTransaction(Supplier<T> executor) {
         startTransaction();
-        T result = executor.executeQuery();
+        T result = executor.get();
         commitTransaction();
         return result;
     }

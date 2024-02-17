@@ -2,9 +2,10 @@ package org.example.lesson9.dao.impl;
 
 import org.example.lesson9.dao.AddressDAO;
 import org.example.lesson9.dto.AddressDTO;
-import org.example.lesson9.utils.QueryExecutor;
 
 import javax.persistence.Query;
+
+import java.util.function.Supplier;
 
 import static org.example.lesson9.utils.Constants.*;
 
@@ -12,7 +13,7 @@ public class AddressDAOImpl extends DAOImpl<AddressDTO> implements AddressDAO {
 
     @Override
     public AddressDTO increaseHouseNumber(int id, int increment) {
-        QueryExecutor<AddressDTO> increaseHouse = () -> {
+        Supplier<AddressDTO> increaseHouse = () -> {
             Query query = createNativeQuery(CHANGE_HOUSE_NUMBER, AddressDTO.class);
             query.setParameter(INCREMENT, increment)
                     .setParameter(ID, id);
@@ -21,7 +22,7 @@ public class AddressDAOImpl extends DAOImpl<AddressDTO> implements AddressDAO {
             refreshObject(result);
             return result;
         };
-        return  executeTransaction(increaseHouse);
+        return executeTransaction(increaseHouse);
     }
 
     @Override
