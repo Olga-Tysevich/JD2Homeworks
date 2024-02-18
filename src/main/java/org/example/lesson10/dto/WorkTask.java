@@ -1,12 +1,14 @@
 package org.example.lesson10.dto;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
@@ -17,10 +19,4 @@ import javax.persistence.Table;
 public class WorkTask extends Task {
     @Column
     private double cost;
-
-    @Builder(builderMethodName = "WorkTaskBuilder")
-    public WorkTask(Integer id, String name, String description, double cost) {
-        super(id, name, description);
-        this.cost = cost;
-    }
 }

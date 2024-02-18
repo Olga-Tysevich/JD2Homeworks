@@ -41,7 +41,7 @@ public final class Builder {
 
     private static Task buildHomeTask(TaskTypes type) {
         int taskNumber = RANDOM.nextInt(MAX_RANDOM_NUMBER) + 1;
-        return HomeTask.HomeTaskBuilder()
+        return HomeTask.builder()
                 .name(type.getName() + taskNumber)
                 .description(type.getDescription() + taskNumber)
                 .startDate(type.getStartDate().plusDays(taskNumber))
@@ -52,7 +52,7 @@ public final class Builder {
 
     private static Task buildWorkTask(TaskTypes type) {
         int taskNumber = RANDOM.nextInt(MAX_RANDOM_NUMBER) + 1;
-        return WorkTask.WorkTaskBuilder()
+        return WorkTask.builder()
                 .name(type.getName() + taskNumber)
                 .description(type.getDescription() + taskNumber)
                 .cost(type.getCost() + taskNumber)

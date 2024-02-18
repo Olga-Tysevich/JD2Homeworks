@@ -1,10 +1,12 @@
 package org.example.lesson10.dto;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
+@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
@@ -24,12 +26,4 @@ public class HomeTask extends Task {
         @AttributeOverride(name = "street", column = @Column(name = "home_task_street"))
     })
     private Address address;
-
-    @Builder(builderMethodName = "HomeTaskBuilder")
-    public HomeTask(Integer id, String name, String description, LocalDate startDate, LocalDate endDate, Address address) {
-        super(id, name, description);
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.address = address;
-    }
 }

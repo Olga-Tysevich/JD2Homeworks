@@ -4,17 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-
+@SuperBuilder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity
-@Table(name = "tasks_table_br_1")
+@Table(name = "tasks_br_1")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TASK_TYPE",
         discriminatorType = DiscriminatorType.CHAR)
