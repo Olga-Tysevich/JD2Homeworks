@@ -8,11 +8,12 @@ import java.time.LocalDate;
 
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "home_tasks_br_1")
+@Table
 @DiscriminatorValue("H")
 public class HomeTask extends Task {
     @Column(name = "start_date")

@@ -15,6 +15,7 @@ public final class Constants {
     public static final String CITY = "Some city No.";
     public static final String STREET = "Some street No.";
     public static final Random RANDOM = new Random();
+    public static final String UPDATE = " updated";
 
     private Constants() {
     }

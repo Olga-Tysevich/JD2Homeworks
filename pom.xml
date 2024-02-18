@@ -20,6 +20,7 @@
         <hibernate-entitymanager.version>5.6.10.Final</hibernate-entitymanager.version>
         <h2.version>2.1.214</h2.version>
         <mysql-connector-j.version>8.3.0</mysql-connector-j.version>
+        <junit.platform.version>1.9.2</junit.platform.version>
     </properties>
 
     <build>
@@ -76,9 +77,11 @@
                 <version>${jacoco-maven-plugin.version}</version>
                 <configuration>
                     <excludes>
-                        <exclude>org/example/lesson10/dto/*DTO*.*</exclude>
+                        <exclude>org/example/lesson10/dto/</exclude>
                         <exclude>org/example/lesson10/DemoApp.class</exclude>
                         <exclude>org/example/lesson10/utils/Constants.class</exclude>
+                        <exclude>org/example/lesson10/utils/Builder.class</exclude>
+                        <exclude>org/example/lesson10/utils/TaskTypes.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -93,6 +96,7 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <phase>test</phase>
                         <configuration>
                             <dataFile>target/jacoco.exec</dataFile>
                             <outputDirectory>target/site</outputDirectory>
@@ -101,6 +105,11 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+            </plugin>
         </plugins>
     </build>
 
@@ -122,6 +131,13 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
             <version>${junit-jupiter-engine.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <version>${junit.platform.version}</version>
             <scope>test</scope>
         </dependency>
 

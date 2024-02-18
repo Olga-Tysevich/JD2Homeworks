@@ -10,11 +10,12 @@ import javax.persistence.Table;
 
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "work_tasks_br_1")
+@Table
 @DiscriminatorValue("W")
 public class WorkTask extends Task {
     @Column
