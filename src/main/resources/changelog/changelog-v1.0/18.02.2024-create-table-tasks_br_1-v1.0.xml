@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.25.xsd">
+    <changeSet id="tasks_br_1_id" author="Olga Tysevich">
+        <createTable tableName="tasks_br_1">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="description" type="varchar(255)"/>
+            <column name="start_date" type="date"/>
+            <column name="end_date" type="date"/>
+            <column name="city" type="varchar(255)"/>
+            <column name="street" type="varchar(255)"/>
+            <column name="cost" type="dec(32,2)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
