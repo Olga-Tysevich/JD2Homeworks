@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table
 @DiscriminatorValue("H")
 public class HomeTask extends Task {
     @Column(name = "start_date")

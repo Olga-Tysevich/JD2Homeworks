@@ -16,6 +16,7 @@ public final class Constants {
     public static final String STREET = "Some street No.";
     public static final Random RANDOM = new Random();
     public static final String UPDATE = " updated";
+    public static final int NUMBER_OF_TASKS_TO_DELETE = 3;
 
     private Constants() {
     }

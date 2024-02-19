@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.example.lesson10.utils.Constants.MAX_NUMBER_OF_TASKS;
-import static org.example.lesson10.utils.Constants.UPDATE;
+import static org.example.lesson10.utils.Constants.*;
 
 public class DemoApp {
 
@@ -24,14 +23,15 @@ public class DemoApp {
                 .peek(t -> t.setDescription(t.getDescription() + UPDATE))
                 .forEach(taskDao::update);
         tasks.stream()
-                .peek(t -> taskDao.get(t.getId()))
+                .map(t -> taskDao.get(t.getId()))
                 .forEach(System.out::println);
 
-        tasks.forEach(t -> taskDao.delete(t.getId()));
+        tasks.stream()
+                .limit(NUMBER_OF_TASKS_TO_DELETE)
+                .forEach(t -> taskDao.delete(t.getId()));
 
         taskDao.closeSession();
         HibernateUtil.close();
-        HibernateUtil.getEntityManager();
     }
 
     private static List<Task> getRandomTasks() {

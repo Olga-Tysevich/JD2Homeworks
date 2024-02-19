@@ -7,7 +7,6 @@ import org.example.lesson10.utils.MockUtils;
 import org.example.lesson10.utils.TaskTypes;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
