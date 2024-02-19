@@ -48,7 +48,7 @@ public abstract class DAOImpl<T> implements DAO<T> {
         executeTransaction(currentMethod);
     }
 
-    private T executeTransaction(Supplier<T> executor) {
+    protected T executeTransaction(Supplier<T> executor) {
         startTransaction();
         T result = executor.get();
         commitTransaction();
