@@ -19,7 +19,9 @@ public class PersonDAOImpl extends DAOImpl<PersonDTO> implements PersonDAO {
                     .setParameter(ID, id);
             query.executeUpdate();
             PersonDTO result = get(id);
-            refreshObject(result);
+            if (result != null) {
+                refreshObject(result);
+            }
             return result;
         };
         return executeTransaction(increaseAge);

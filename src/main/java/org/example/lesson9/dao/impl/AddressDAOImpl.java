@@ -19,7 +19,9 @@ public class AddressDAOImpl extends DAOImpl<AddressDTO> implements AddressDAO {
                     .setParameter(ID, id);
             query.executeUpdate();
             AddressDTO result = get(id);
-            refreshObject(result);
+            if (result != null) {
+                refreshObject(result);
+            }
             return result;
         };
         return  executeTransaction(increaseHouse);
