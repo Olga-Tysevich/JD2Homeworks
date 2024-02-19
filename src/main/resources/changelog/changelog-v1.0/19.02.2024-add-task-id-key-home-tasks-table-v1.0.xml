@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.25.xsd ">
+    <changeSet id="add_task_id_key_home_tasks_v1.0" author="Olga Tysevich">
+        <addForeignKeyConstraint baseTableName="home_tasks_b2"
+                                 baseColumnNames="task_id"
+                                 constraintName="fk_h_task_id"
+                                 referencedTableName="tasks_br2"
+                                 referencedColumnNames="id"
+                                 validate="true"/>
+    </changeSet>
+</databaseChangeLog>
