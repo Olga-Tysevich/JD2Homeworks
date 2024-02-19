@@ -1,0 +1,30 @@
+package org.example.lesson10b3.dto;
+
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDate;
+
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "home_tasks_b3")
+public class HomeTask extends Task implements Serializable {
+    @Column(name = "start_date")
+    private LocalDate startDate;
+    @Column(name = "end_date")
+    private LocalDate endDate;
+    @Column
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "city", column = @Column(name = "home_task_city")),
+        @AttributeOverride(name = "street", column = @Column(name = "home_task_street"))
+    })
+    private Address address;
+}
