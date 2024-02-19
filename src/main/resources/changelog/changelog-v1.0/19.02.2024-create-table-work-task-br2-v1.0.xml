@@ -6,10 +6,9 @@
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.25.xsd ">
     <changeSet id="create_work_tasks_br2_v1.0" author="Olga Tysevich">
         <createTable tableName="work_tasks_b2">
-            <column name="id" type="integer" autoIncrement="true">
-                <constraints nullable="false" unique="true" primaryKey="true"/>
+            <column name="task_id" type="integer" autoIncrement="false">
+                <constraints primaryKey="true" unique="true" nullable="false"/>
             </column>
-            <column name="task_id" type="integer"/>
             <column name="cost" type="double"/>
         </createTable>
     </changeSet>
