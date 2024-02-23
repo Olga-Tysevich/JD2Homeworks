@@ -16,6 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class PersonDAOImplTest {
     private final PersonDAO personDAO = new PersonDAOImpl();
 
+    @AfterAll
+    public static void deletePersons() {
+        EntityManager manager = HibernateUtil.getEntityManager();
+        manager.getTransaction().begin();
+        Query query = manager.createNativeQuery(DELETE_ALL_PERSONS);
+        query.executeUpdate();
+        manager.getTransaction().commit();
+        manager.close();
+    }
+
     @Test
     public void increaseAgeTest() {
         PersonDTO personDTO = MockUtils.buildPerson();
@@ -26,16 +36,6 @@ class PersonDAOImplTest {
         int actual = personDAO.get(id).getAge();
 
         assertEquals(expected, actual);
-    }
-
-    @AfterAll
-    public static void deletePersons() {
-        EntityManager manager = HibernateUtil.getEntityManager();
-        manager.getTransaction().begin();
-        Query query = manager.createNativeQuery(DELETE_ALL_PERSONS);
-        query.executeUpdate();
-        manager.getTransaction().commit();
-        manager.close();
     }
 
 }
