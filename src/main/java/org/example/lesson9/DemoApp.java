@@ -23,9 +23,9 @@ public class DemoApp {
         try {
             List<PersonDTO> people = JsonManager.readDTOList(PEOPLE_IN_FILE_PATH, PersonDTO.class);
             List<AddressDTO> addressDTOS = JsonManager.readDTOList(ADDRESSES_IN_FILE_PATH, AddressDTO.class);
+
             people.forEach(PERSON_DAO::save);
             addressDTOS.forEach(ADDRESS_DAO::save);
-
             people.stream()
                     .filter(p -> people.indexOf(p) == people.size() - 1
                             || people.indexOf(p) == people.size() - 2)
@@ -39,6 +39,8 @@ public class DemoApp {
             PERSON_DAO.delete(people.get(0).getId());
             ADDRESS_DAO.delete(addressDTOS.get(0).getId());
 
+            PERSON_DAO.closeSession();
+            ADDRESS_DAO.closeSession();
             HibernateUtil.close();
 
         } catch (IOException e) {
