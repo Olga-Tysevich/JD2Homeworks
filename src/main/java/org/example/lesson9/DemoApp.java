@@ -48,7 +48,6 @@ public class DemoApp {
 
             PersonDTO p2 = people.get(1);
             p2.setAddress(addressDTOS.get(0));
-            PERSON_DAO.save(p2);
             PERSON_DAO.update(p2);
 
             PERSON_DAO.delete(p.getId());
