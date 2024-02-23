@@ -2,6 +2,7 @@ package org.example.lesson9.dao.impl;
 
 import org.example.lesson9.dao.DAO;
 import org.example.lesson9.utils.HibernateUtil;
+
 import javax.persistence.EntityManager;
 import java.util.function.Consumer;
 
@@ -45,6 +46,11 @@ public abstract class DAOImpl<T> implements DAO<T> {
         commitTransaction();
     }
 
+    protected EntityManager getManager() {
+        checkManager();
+        return manager;
+    }
+
     private void commitTransaction() {
         if (manager.getTransaction().isActive()) {
             try {
@@ -61,11 +67,6 @@ public abstract class DAOImpl<T> implements DAO<T> {
         } else if (manager.getTransaction().isActive()) {
             commitTransaction();
         }
-    }
-
-    protected EntityManager getManager() {
-        checkManager();
-        return manager;
     }
 
     public final void closeSession() {
