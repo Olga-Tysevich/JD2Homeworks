@@ -10,4 +10,5 @@ public class TaskDAOImpl extends DAOImpl<Task> implements TaskDAO {
     protected Class<Task> getObjectClass() {
         return Task.class;
     }
+
 }
