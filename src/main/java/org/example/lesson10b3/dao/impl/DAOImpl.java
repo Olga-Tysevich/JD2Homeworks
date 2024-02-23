@@ -4,71 +4,51 @@ import org.example.lesson10b3.dao.DAO;
 import org.example.lesson10b3.utils.HibernateUtil;
 
 import javax.persistence.EntityManager;
-import java.util.function.Supplier;
+import java.util.function.Consumer;
 
 public abstract class DAOImpl<T, R> implements DAO<T, R> {
     private EntityManager manager = HibernateUtil.getEntityManager();
-    private Supplier<T> currentMethod;
 
     protected abstract Class<T> getClazz();
 
     @Override
     public T save(T object) {
-        currentMethod = () -> {
-            manager.persist(object);
-            return object;
-        };
-        return executeTransaction(currentMethod);
+        checkManager();
+        executeTransaction(manager::persist, object);
+        return object;
     }
 
     @Override
     public T update(T object) {
-        currentMethod = () -> {
-            manager.merge(object);
-            return object;
-        };
-        return executeTransaction(currentMethod);
+        checkManager();
+        executeTransaction(manager::merge, object);
+        return object;
     }
 
     @Override
     public T get(R id) {
-        currentMethod = () -> manager.find(getClazz(), id);
-        return executeTransaction(currentMethod);
+        checkManager();
+        return manager.find(getClazz(), id);
     }
 
     @Override
     public void delete(R id) {
-        currentMethod = () -> {
-            T object = manager.find(getClazz(), id);
-            if (object != null) {
-                manager.remove(object);
-            }
-            return object;
-        };
-        executeTransaction(currentMethod);
-    }
-
-    @Override
-    public void closeSession() {
-        if (manager.isOpen()) {
-            manager.close();
+        checkManager();
+        T objectForDelete = manager.find(getClazz(), id);
+        if (objectForDelete != null) {
+            executeTransaction(manager::remove, objectForDelete);
         }
     }
 
-    protected T executeTransaction(Supplier<T> method) {
-        startTransaction();
-        T result = method.get();
-        commitTransaction();
-        return result;
-    }
-
-    private void startTransaction() {
-        if (!manager.isOpen()) {
-            manager = HibernateUtil.getEntityManager();
-        } else {
-            commitTransaction();
-        }
+    protected final void executeTransaction(Consumer<T> method, T object) {
         manager.getTransaction().begin();
+        method.accept(object);
+        commitTransaction();
+    }
+
+    protected EntityManager getManager() {
+        checkManager();
+        return manager;
     }
 
     private void commitTransaction() {
@@ -81,4 +61,18 @@ public abstract class DAOImpl<T, R> implements DAO<T, R> {
         }
     }
 
+    private void checkManager() {
+        if (!manager.isOpen()) {
+            manager = HibernateUtil.getEntityManager();
+        } else if (manager.getTransaction().isActive()) {
+            commitTransaction();
+        }
+    }
+
+    public final void closeSession() {
+        if (manager.isOpen()) {
+            commitTransaction();
+            manager.close();
+        }
+    }
 }
