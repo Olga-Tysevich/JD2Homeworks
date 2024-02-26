@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDate;
 
 @SuperBuilder
@@ -15,7 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Table(name = "home_tasks_b3")
-public class HomeTask extends Task implements Serializable {
+public class HomeTask extends Task {
     @Column(name = "start_date")
     private LocalDate startDate;
     @Column(name = "end_date")
